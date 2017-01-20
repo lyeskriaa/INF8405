@@ -32,10 +32,15 @@ public class MenuPrincipal extends AppCompatActivity {
     }
 
     private void exit() {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        finish();
+        // plus utilisé pour passer d une activité à une autre
+        // en presisant l'intant de départ et celui où on va
+        /*
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        */
     }
 
 
