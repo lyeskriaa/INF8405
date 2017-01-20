@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">TP1_INF8405</string>
+    <string name="start_btn">Demarrer</string>
+    <string name="regles_btn">Regles</string>
+    <string name="exit_btn">Quitter</string>
+</resources>
