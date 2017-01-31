@@ -14,15 +14,7 @@ public class Niveaux extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_niveaux);
 
-        GridView gridview = (GridView) findViewById(R.id.gridview);
-        gridview.setAdapter(new ImageAdapter(this));
 
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                Toast.makeText(Niveaux.this, "" + position,
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
 }
