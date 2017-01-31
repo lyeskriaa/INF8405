@@ -17,7 +17,7 @@
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="77dp"
-        android:id="@+id/button1"
+        android:id="@+id/demarrerBtn"
         tools:text="@string/start_btn"
         tools:ignore="UnknownId" />
 
@@ -26,9 +26,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="45dp"
-        android:id="@+id/button2"
-        android:layout_below="@+id/button1"
-        android:layout_alignStart="@+id/button1"
+        android:id="@+id/reglagesBtn"
+        android:layout_below="@+id/demarrerBtn"
+        android:layout_alignStart="@+id/demarrerBtn"
         tools:text="@string/regles_btn" />
 
     <Button
@@ -36,8 +36,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="38dp"
-        android:id="@+id/button3"
+        android:id="@+id/quitterBtn"
         tools:text="@string/exit_btn"
-        android:layout_below="@+id/button2"
-        android:layout_alignStart="@+id/button2" />
+        android:layout_below="@+id/reglagesBtn"
+        android:layout_alignStart="@+id/reglagesBtn" />
 </RelativeLayout>

@@ -30,15 +30,16 @@ public class Logique {
 
     @Nullable
     static public Logique creerPartie(int idNiveau) {
-        if (idNiveau == 1) return new Logique(idNiveau,  6,  800, 8, 5);
-        if (idNiveau == 2) return new Logique(idNiveau, 10, 1200, 8, 6);
+        if (idNiveau == 1) return new Logique(idNiveau,  6,  800, 5, 8);
+        if (idNiveau == 2) return new Logique(idNiveau, 10, 1200, 6, 8);
         if (idNiveau == 3) return new Logique(idNiveau, 10, 1400, 7, 7);
-        if (idNiveau == 4) return new Logique(idNiveau, 10, 1800, 7, 8);
+        if (idNiveau == 4) return new Logique(idNiveau, 10, 1800, 8, 7);
         return null;
     }
 
     public boolean bougerPiece(int range, int colone, int direction){
-        if (coupRestant <= 0 || !testCoupValide(range, colone, direction) return false;
+        if (coupRestant <= 0 || !testCoupValide(range, colone, direction))
+            return false;
 
         coupRestant--;
         pret = true;
@@ -187,6 +188,7 @@ public class Logique {
                         return true;
             }
         }
+        return false;
     }
 
     private Logique(int idNiveau, int nbCoup, int pointVoulu, int nbRange, int nbColone){
