@@ -1,5 +1,6 @@
 package com.example.lyeskriaa.tp1_inf8405;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -34,9 +35,16 @@ public class Niveaux extends AppCompatActivity {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 Toast.makeText(Niveaux.this, "" + position, Toast.LENGTH_SHORT).show();
+                showJeu();
             }
         });
 
+
+    }
+
+    private void showJeu() {
+        Intent intent = new Intent(this, Jeu.class);
+        startActivity(intent);
     }
 
     public ArrayList<Boolean> getGrilleNiveaux() {

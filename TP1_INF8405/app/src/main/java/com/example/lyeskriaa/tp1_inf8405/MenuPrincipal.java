@@ -32,7 +32,7 @@ public class MenuPrincipal extends AppCompatActivity {
         reglages_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //showReglages();
+                showRegles();
             }
         });
 
@@ -52,6 +52,11 @@ public class MenuPrincipal extends AppCompatActivity {
         startActivity(intent);
     }
 
+
+    private void showRegles() {
+        Intent intent = new Intent(this, ReglesJeu.class);
+        startActivity(intent);
+    }
 
     private void quitterJeu() {
         finish();
