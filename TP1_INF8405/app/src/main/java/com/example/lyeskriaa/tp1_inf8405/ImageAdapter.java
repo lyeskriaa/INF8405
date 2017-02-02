@@ -17,6 +17,10 @@ public class ImageAdapter extends BaseAdapter {
     private Context mContext;
     private Niveaux nivGrid;
 
+    public ImageAdapter(Context c) {
+        mContext = c;
+    }
+
     public ImageAdapter(Context c, Niveaux nGrid) {
         mContext = c;
         nivGrid = nGrid;
