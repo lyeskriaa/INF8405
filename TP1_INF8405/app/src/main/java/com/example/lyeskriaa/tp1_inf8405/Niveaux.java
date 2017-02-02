@@ -36,6 +36,7 @@ public class Niveaux extends AppCompatActivity {
                 Toast.makeText(Niveaux.this, "" + position, Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
     public ArrayList<Boolean> getGrilleNiveaux() {
