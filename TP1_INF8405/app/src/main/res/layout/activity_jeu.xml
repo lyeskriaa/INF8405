@@ -35,14 +35,6 @@
         android:textSize="12sp"
         android:textAlignment="textEnd" />
 
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/scoreField"
-        android:layout_alignParentStart="true">
-
-    </GridLayout>
-
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -67,5 +59,19 @@
         android:id="@+id/movesField"
         android:textSize="12sp"
         android:textAlignment="textEnd"/>
+
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/gridLayoutJeu"
+            android:layout_below="@+id/scoreField"
+            android:layout_alignStart="@+id/scoreField"
+            android:layout_alignEnd="@+id/movesField"
+            android:layout_marginTop="30dp">
+
+        </GridLayout>
+
+
 
 </RelativeLayout>

@@ -25,7 +25,7 @@ public class Niveaux extends AppCompatActivity {
         setContentView(R.layout.activity_niveaux);
 
         grilleNiveaux.add(true);
-        grilleNiveaux.add(false);
+        grilleNiveaux.add(true);
         grilleNiveaux.add(false);
         grilleNiveaux.add(false);
 
@@ -35,15 +35,18 @@ public class Niveaux extends AppCompatActivity {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 Toast.makeText(Niveaux.this, "" + position, Toast.LENGTH_SHORT).show();
-                showJeu();
+                if (grilleNiveaux.get(position)) {
+                    showJeu(position+1);
+                }
             }
         });
 
 
     }
 
-    private void showJeu() {
+    private void showJeu(int idJeu) {
         Intent intent = new Intent(this, Jeu.class);
+        intent.putExtra("NiveauId",idJeu);
         startActivity(intent);
     }
 

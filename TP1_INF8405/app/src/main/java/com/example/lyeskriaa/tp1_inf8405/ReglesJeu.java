@@ -10,6 +10,7 @@ import android.widget.TextView;
  */
 
 public class ReglesJeu extends Activity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,7 +18,7 @@ public class ReglesJeu extends Activity {
         TextView tv = (TextView) findViewById(R.id.textView2);
         tv.setPadding(20, 40, 20, 10);
         tv.setTextColor(Color.parseColor("#000000"));
-        tv.setText("The Game Rules\n" +
+        tv.setText("The Game Rules :\n" +
 
                 "The simplified game will include a rectangular grid (of potentially variable size)." +
                 "Items in the grid will be solid, red, blue, green, orange, yellow and purple circles." +
@@ -35,3 +36,4 @@ public class ReglesJeu extends Activity {
                 "number of moves is decreased by one (1).\"\n");
     }
 }
+
