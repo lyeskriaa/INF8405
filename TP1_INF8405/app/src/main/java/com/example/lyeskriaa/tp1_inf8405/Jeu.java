@@ -85,22 +85,22 @@ public class Jeu extends AppCompatActivity {
     private int verifierCouleur(int i) {
         int couleur = Color.BLACK;
         switch (i) {
-            case 0:
+            case Logique.ROUGE:
                 couleur = Color.RED;
                 break;
-            case 1:
+            case Logique.BLEU:
                 couleur = Color.BLUE;
                 break;
-            case 2:
+            case Logique.VERT:
                 couleur = GREEN;
                 break;
-            case 3:
+            case Logique.N_ORANGE:
                 couleur = ORANGE;
                 break;
-            case 4:
+            case Logique.JAUNE:
                 couleur = YELLOW;
                 break;
-            case 5:
+            case Logique.VIOLET:
                 couleur = PURPLE;
                 break;
         }
