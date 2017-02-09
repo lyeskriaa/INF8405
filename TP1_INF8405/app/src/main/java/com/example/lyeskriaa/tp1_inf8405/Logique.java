@@ -10,12 +10,18 @@ import java.util.Random;
  */
 
 public class Logique {
-    public final static int ROUGE = 0;
-    public final static int BLEU = 1;
-    public final static int VERT = 2;
-    public final static int ORANGE = 3;
-    public final static int JAUNE = 4;
-    public final static int VIOLET = 5;
+    public final static int ROUGE = 1;
+    public final static int BLEU = 2;
+    public final static int VERT = 3;
+    public final static int ORANGE = 4;
+    public final static int JAUNE = 5;
+    public final static int VIOLET = 6;
+    public final static int N_ROUGE = -1;
+    public final static int N_BLEU = -2;
+    public final static int N_VERT = -3;
+    public final static int N_ORANGE = -4;
+    public final static int N_JAUNE = -5;
+    public final static int N_VIOLET = -6;
     public final static int NB_COULEUR = 6;
 
     public final static int HAUT = 10;
@@ -68,27 +74,35 @@ public class Logique {
         int tempPoint = this.points;
         for (int i = 0; i < nbRange; ++i){
             for (int j = 0; j < nbColone; ++j){
-                if (i < nbRange - 2 && (this.grille[i][j] == this.grille[i + 1][j] && this.grille[i][j] == this.grille[i + 2][j]) ) {
-                    this.grille[i][j] = -1;
-                    this.grille[i + 1][j] = -1;
-                    this.grille[i + 2][j] = -1;
+                if (this.grille[i][j] > 0
+                        && i < nbRange - 2
+                        && (Math.abs(this.grille[i][j]) == Math.abs(this.grille[i + 1][j])
+                        && Math.abs(this.grille[i][j]) == Math.abs(this.grille[i + 2][j])) ) {
+                    int couleur = Math.abs(this.grille[i][j]);
+                    this.grille[i][j] = 0 - couleur;
+                    this.grille[i + 1][j] = 0 - couleur;
+                    this.grille[i + 2][j] = 0 - couleur;
                     this.points += 100 * chaine;
                     for (int k = i + 3; i < nbRange; ++i) {
-                        if (this.grille[i][j] == this.grille[k][j]) {
+                        if (Math.abs(this.grille[i][j]) == couleur) {
                             this.grille[k][j] = -1;
                             if (k <= i + 4) this.points += 100 * chaine;
                         }
                         else break;
                     }
                 }
-                if (j < nbColone && (this.grille[i][j] == this.grille[i][j + 1] && this.grille[i][j] == this.grille[i][j + 2]) ){
-                    this.grille[i][j] = -1;
-                    this.grille[i][j + 1] = -1;
-                    this.grille[i][j + 2] = -1;
+                if (this.grille[i][j] > 0
+                        && j < nbColone
+                        && (Math.abs(this.grille[i][j]) == Math.abs(this.grille[i][j + 1])
+                        && Math.abs(this.grille[i][j]) == Math.abs(this.grille[i][j + 2])) ){
+                    int couleur = Math.abs(this.grille[i][j]);
+                    this.grille[i][j] = 0 - couleur;
+                    this.grille[i][j + 1] = 0 - couleur;
+                    this.grille[i][j + 2] = 0 - couleur;
                     this.points += 100 * chaine;
                     for (int k = j + 3; i < nbRange; ++i) {
-                        if (this.grille[i][j] == this.grille[i][k]) {
-                            this.grille[i][k] = -1;
+                        if (Math.abs(this.grille[i][j]) == couleur) {
+                            this.grille[i][k] = 0 - couleur;
                             if (k <= j + 4) this.points += 100 * chaine;
                         }
                         else break;
@@ -216,7 +230,7 @@ public class Logique {
     }
 
     private int couleurAleatoire(){
-        return this.rand.nextInt(NB_COULEUR);
+        return this.rand.nextInt(NB_COULEUR) + 1;
     }
 
     public int[][] getGrille(){
