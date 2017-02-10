@@ -62,10 +62,11 @@
 
     <GridLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/gridLayoutJeu"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:layout_below="@+id/movesField"
+        android:layout_marginTop="60dp"
+        >
 
     </GridLayout>
 
