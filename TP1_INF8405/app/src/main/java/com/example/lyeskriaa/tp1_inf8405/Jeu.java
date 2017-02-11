@@ -15,6 +15,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.Timer;
 
 
 public class Jeu extends AppCompatActivity {
@@ -24,10 +28,19 @@ public class Jeu extends AppCompatActivity {
     @ColorInt public static final int YELLOW      = 0xFFF4F405;
 
     public static Logique log;
-    private GridLayout gridLayout;
     private GridLayout gridJeu;
     private float x_start, x_end, y_start, y_end;
-    private static final int MIN_SWIPE = 140;
+    private static final int MIN_SWIPE = 100;
+    public boolean BLOCK_SWIPE = false;
+    public Timer timer = new Timer();
+    public TextView score;
+    public TextView coupsRestants;
+    public TextView niveauJeu;
+    public TextView but;
+    public final String SCORE_INIT="Score : ";
+    public final String NIVEAU_INIT="Niveau : ";
+    public final String BUT_INIT="But : ";
+    public final String COUPS_RESTANTS_INIT="Coups restants : ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,23 +48,35 @@ public class Jeu extends AppCompatActivity {
         setContentView(R.layout.activity_jeu);
         Intent mIntent = getIntent();
         log = Logique.creerPartie(mIntent.getIntExtra("NiveauId",-1));
-        gridLayout = (GridLayout) findViewById(R.id.gridLayoutJeu);
-        dessinerGrilleJeu(log.getGrille(), gridLayout);
-       // gridLayout.addView(gridJeu);
-       // Toast.makeText(Jeu.this,log.getGrille().length + " / " + log.getGrille()[0].length, Toast.LENGTH_LONG).show();
+        // recuperer les champs
+        score = (TextView) findViewById(R.id.scoreField);
+        coupsRestants = (TextView) findViewById(R.id.movesField);
+        niveauJeu     = (TextView) findViewById(R.id.levelIdField);
+        but = (TextView) findViewById(R.id.targetField);
+        // initialiser les textView
+        score.setText(SCORE_INIT+"0");
+        but.setText(BUT_INIT+log.getPointVoulu());
+        niveauJeu.setText(NIVEAU_INIT+log.getIdNiveau());
+        coupsRestants.setText(COUPS_RESTANTS_INIT+log.getCoupRestant());
+
+        timer.schedule(new AnimationThread(this), 0, 500);
+
+        gridJeu = (GridLayout) findViewById(R.id.gridLayoutJeu);
+
+        dessinerGrilleJeu(log.getGrille(), gridJeu);
+
     }
 
-    private void dessinerGrilleJeu(int[][] grilleLogique, GridLayout gridLayout){
-       // GridLayout grilleJeu = new GridLayout(this);
+    private void dessinerGrilleJeu(int[][] grilleLogique, GridLayout gridJeu){
 
-        gridLayout.removeAllViews();
+        gridJeu.removeAllViews();
 
         final int column = grilleLogique[0].length;
         final int row = grilleLogique.length;
         int total = column * row;
 
-        gridLayout.setColumnCount(column);
-        gridLayout.setRowCount(row);
+        gridJeu.setColumnCount(column);
+        gridJeu.setRowCount(row);
         for(int i =0, c = 0, r = 0; i < total; i++, c++)
         {
             if(c == column)
@@ -86,50 +111,63 @@ public class Jeu extends AppCompatActivity {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     int action = MotionEventCompat.getActionMasked(event);
-
-                    switch(action) {
-                        case (MotionEvent.ACTION_DOWN) :
-                            x_start = event.getX();
-                            y_start = event.getY();
-                            return true;
-
-                        case (MotionEvent.ACTION_UP) :
-
-                            x_end = event.getX();
-                            y_end = event.getY();
-                            float deltaX = x_start - x_end;
-                            float deltaY = y_start - y_end;
-                            if ((Math.abs(deltaX) > MIN_SWIPE)  || (Math.abs(deltaY) > MIN_SWIPE))
-                            {
-                                int dir = 0;
-                                int x = oImageView.getId() / row ;
-                                int y = oImageView.getId() % row ;
-
-                                if(deltaX > 0 && (Math.abs(deltaX) > Math.abs(deltaY)*2))
-                                    dir = Logique.DROITE;
-                                if(deltaX < 0 && (Math.abs(deltaX) > Math.abs(deltaY)*2))
-                                    dir = Logique.GAUCHE;
-                                if(deltaY > 0 && (Math.abs(deltaY) > Math.abs(deltaX)*2))
-                                    dir = Logique.BAS;
-                                if(deltaY < 0 && (Math.abs(deltaY) > Math.abs(deltaX)*2))
-                                    dir = Logique.HAUT;
-
-                                log.bougerPiece(x,y,dir);
-                                //boolean animating = true;
+                    if(!BLOCK_SWIPE){
+                        switch(action) {
+                            case (MotionEvent.ACTION_DOWN) :
+                                x_start = event.getX();
+                                y_start = event.getY();
                                 return true;
-                            }
-                            else
-                            {
-                                return false;
-                            }
 
-                        default :
-                            return false;
+                            case (MotionEvent.ACTION_UP) :
+
+                                x_end = event.getX();
+                                y_end = event.getY();
+                                float deltaX = x_start - x_end;
+                                float deltaY = y_start - y_end;
+                                if ((Math.abs(deltaX) > MIN_SWIPE)  || (Math.abs(deltaY) > MIN_SWIPE))
+                                {
+                                    int dir = 0;
+                                    int colId = oImageView.getId() % column ;
+                                    int rowId = oImageView.getId() / column ;
+
+                                    if(deltaX > 0 && (Math.abs(deltaX) > Math.abs(deltaY)*2)){
+                                        dir = Logique.GAUCHE;
+                                        Toast.makeText(Jeu.this,"Gauche "+rowId+", "+colId, Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    if(deltaX < 0 && (Math.abs(deltaX) > Math.abs(deltaY)*2)){
+                                        dir = Logique.DROITE;
+                                        Toast.makeText(Jeu.this,"Droite "+rowId+", "+colId, Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    if(deltaY > 0 && (Math.abs(deltaY) > Math.abs(deltaX)*2)){
+                                        dir = Logique.HAUT;
+                                        Toast.makeText(Jeu.this,"Haut "+rowId+", "+colId, Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    if(deltaY < 0 && (Math.abs(deltaY) > Math.abs(deltaX)*2)){
+                                        dir = Logique.BAS;
+                                        Toast.makeText(Jeu.this,"Bas "+rowId+", "+colId, Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    log.bougerPiece(rowId,colId,dir);
+                                    BLOCK_SWIPE = true;
+                                    return true;
+                                }
+                                else
+                                {
+                                    return false;
+                                }
+
+                            default :
+                                return false;
+                        }
                     }
+                    return false;
                 }
             });
 
-            gridLayout.addView(oImageView);
+            gridJeu.addView(oImageView);
 
         }
     }
@@ -163,6 +201,19 @@ public class Jeu extends AppCompatActivity {
 
         return couleur;
 
+    }
+
+    public void animer() {
+        if(BLOCK_SWIPE){
+            if(log.prochaineReaction()){
+                score.setText(SCORE_INIT+log.getPoints());
+                coupsRestants.setText(COUPS_RESTANTS_INIT+log.getCoupRestant());
+
+            }
+            else {
+                BLOCK_SWIPE = false;
+            }
+        }
     }
 
 }

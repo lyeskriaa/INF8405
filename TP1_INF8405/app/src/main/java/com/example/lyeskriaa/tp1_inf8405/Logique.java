@@ -198,7 +198,7 @@ public class Logique {
             for (int j = 0; j < nbColone; ++j){
                 if (i < nbRange - 2 && (this.grille[i][j] == this.grille[i + 1][j] && this.grille[i][j] == this.grille[i + 2][j]) )
                         return true;
-                if (j < nbColone && (this.grille[i][j] == this.grille[i][j + 1] && this.grille[i][j] == this.grille[i][j + 2]) )
+                if (j < nbColone - 2 && (this.grille[i][j] == this.grille[i][j + 1] && this.grille[i][j] == this.grille[i][j + 2]) )
                         return true;
             }
         }
