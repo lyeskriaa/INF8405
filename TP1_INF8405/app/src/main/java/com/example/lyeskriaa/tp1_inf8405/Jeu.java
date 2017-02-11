@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.ColorInt;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -59,7 +60,15 @@ public class Jeu extends AppCompatActivity {
         niveauJeu.setText(NIVEAU_INIT+log.getIdNiveau());
         coupsRestants.setText(COUPS_RESTANTS_INIT+log.getCoupRestant());
 
-        timer.schedule(new AnimationThread(this), 0, 500);
+        final Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            int i=0;
+            public void run() {
+                animer();
+                handler.postDelayed(this, 500);  //for interval...
+            }
+        };
+        handler.postDelayed(runnable, 500); //for initial delay..
 
         gridJeu = (GridLayout) findViewById(R.id.gridLayoutJeu);
 
