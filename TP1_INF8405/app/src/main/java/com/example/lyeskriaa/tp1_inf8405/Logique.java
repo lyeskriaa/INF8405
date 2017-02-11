@@ -36,10 +36,10 @@ public class Logique {
 
     @Nullable
     static public Logique creerPartie(int idNiveau) {
-        if (idNiveau == 1) return new Logique(idNiveau,  6,  800, 5, 8);
-        if (idNiveau == 2) return new Logique(idNiveau, 10, 1200, 6, 8);
-        if (idNiveau == 3) return new Logique(idNiveau, 10, 1400, 7, 7);
-        if (idNiveau == 4) return new Logique(idNiveau, 10, 1800, 8, 7);
+        if (idNiveau == 1) return new Logique(idNiveau, 1, 100, 5, 8);//6  800
+        if (idNiveau == 2) return new Logique(idNiveau, 10, 100, 6, 8);//10  1200
+        if (idNiveau == 3) return new Logique(idNiveau, 1, 300, 7, 7);//10 1400
+        if (idNiveau == 4) return new Logique(idNiveau, 1, 130, 8, 7);//10  1800
         return null;
     }
 
@@ -54,14 +54,14 @@ public class Logique {
     }
 
     public boolean prochaineReaction(){
-        if (pret = false) return false;
+        if (pret == false) return false;
 
         boolean fall = false;
         for (int i = 0; i < nbRange; ++i){
             for (int j = 0; j < nbColone; ++j) {
-                if (this.grille[i][j] == -1){
+                if (this.grille[i][j] < 0){
                     fall = true;
-                    for (int k = i; i > 0; --i) {
+                    for (int k = i; k > 0; --k) {
                         grille[k][j] = grille[k - 1][j];
                     }
                     grille[0][j] = couleurAleatoire();
@@ -69,7 +69,7 @@ public class Logique {
             }
         }
 
-        if (fall = true) return true;
+        if (fall == true) return true;
 
         int tempPoint = this.points;
         for (int i = 0; i < nbRange; ++i){
@@ -83,16 +83,16 @@ public class Logique {
                     this.grille[i + 1][j] = 0 - couleur;
                     this.grille[i + 2][j] = 0 - couleur;
                     this.points += 100 * chaine;
-                    for (int k = i + 3; i < nbRange; ++i) {
-                        if (Math.abs(this.grille[i][j]) == couleur) {
-                            this.grille[k][j] = -1;
+                    for (int k = i + 3; k < nbRange; ++k) {
+                        if (Math.abs(this.grille[k][j]) == couleur) {
+                            this.grille[k][j] = 0 - couleur;
                             if (k <= i + 4) this.points += 100 * chaine;
                         }
                         else break;
                     }
                 }
                 if (this.grille[i][j] > 0
-                        && j < nbColone
+                        && j < nbColone - 2
                         && (Math.abs(this.grille[i][j]) == Math.abs(this.grille[i][j + 1])
                         && Math.abs(this.grille[i][j]) == Math.abs(this.grille[i][j + 2])) ){
                     int couleur = Math.abs(this.grille[i][j]);
@@ -100,8 +100,8 @@ public class Logique {
                     this.grille[i][j + 1] = 0 - couleur;
                     this.grille[i][j + 2] = 0 - couleur;
                     this.points += 100 * chaine;
-                    for (int k = j + 3; i < nbRange; ++i) {
-                        if (Math.abs(this.grille[i][j]) == couleur) {
+                    for (int k = j + 3; k < nbColone; ++k) {
+                        if (Math.abs(this.grille[i][k]) == couleur) {
                             this.grille[i][k] = 0 - couleur;
                             if (k <= j + 4) this.points += 100 * chaine;
                         }
@@ -159,7 +159,7 @@ public class Logique {
         }
 
         if (direction == GAUCHE){
-            if (range == 0) return false;
+            if (colone == 0) return false;
             int temp0 = this.grille[range][colone];
             int temp1 = this.grille[range][colone - 1];
             this.grille[range][colone] = temp1;
@@ -175,7 +175,7 @@ public class Logique {
         }
 
         if (direction == DROITE){
-            if (range == nbColone - 1) return false;
+            if (colone == nbColone - 1) return false;
             int temp0 = this.grille[range][colone];
             int temp1 = this.grille[range][colone + 1];
             this.grille[range][colone] = temp1;

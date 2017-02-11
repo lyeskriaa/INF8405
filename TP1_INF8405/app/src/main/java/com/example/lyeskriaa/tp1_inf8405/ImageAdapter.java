@@ -57,7 +57,7 @@ public class ImageAdapter extends BaseAdapter {
     }
 
     // references to our images
-    private Integer[] mThumbIds = new Integer[21];
+    private Integer[] mThumbIds = new Integer[4];
 
     private void fillGrid(ArrayList<Boolean> nivTab) {
 
@@ -66,8 +66,8 @@ public class ImageAdapter extends BaseAdapter {
         mThumbIds[2] = (nivTab.get(2)) ? R.mipmap.level_3 : R.mipmap.lock_level;
         mThumbIds[3] = (nivTab.get(3)) ? R.mipmap.level_4 : R.mipmap.lock_level;
 
-        for(int j=4; j<21; j++){
-            mThumbIds[j] = R.mipmap.lock_level;
-        }
+//        for(int j=4; j<21; j++){
+//            mThumbIds[j] = R.mipmap.lock_level;
+//        }
     }
 }
