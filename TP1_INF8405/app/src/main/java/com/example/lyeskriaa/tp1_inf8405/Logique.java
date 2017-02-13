@@ -36,10 +36,10 @@ public class Logique {
 
     @Nullable
     static public Logique creerPartie(int idNiveau) {
-        if (idNiveau == 1) return new Logique(idNiveau, 1, 100, 5, 8);//6  800
-        if (idNiveau == 2) return new Logique(idNiveau, 10, 100, 6, 8);//10  1200
-        if (idNiveau == 3) return new Logique(idNiveau, 1, 300, 7, 7);//10 1400
-        if (idNiveau == 4) return new Logique(idNiveau, 1, 130, 8, 7);//10  1800
+        if (idNiveau == 1) return new Logique(idNiveau, 6, 800, 5, 8);//6  800
+        if (idNiveau == 2) return new Logique(idNiveau, 10, 1200, 6, 8);//10  1200
+        if (idNiveau == 3) return new Logique(idNiveau, 10, 1400, 7, 7);//10 1400
+        if (idNiveau == 4) return new Logique(idNiveau, 10, 1800, 8, 7);//10  1800
         return null;
     }
 

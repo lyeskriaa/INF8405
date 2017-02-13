@@ -20,7 +20,6 @@ import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 public class Jeu extends AppCompatActivity {
@@ -179,22 +178,22 @@ public class Jeu extends AppCompatActivity {
 
                                     if(deltaX > 0 && (Math.abs(deltaX) > Math.abs(deltaY)*2)){
                                         dir = Logique.GAUCHE;
-                                        Toast.makeText(Jeu.this,"Gauche "+rowId+", "+colId, Toast.LENGTH_SHORT).show();
+                                       // Toast.makeText(Jeu.this,"Gauche "+rowId+", "+colId, Toast.LENGTH_SHORT).show();
                                     }
 
                                     if(deltaX < 0 && (Math.abs(deltaX) > Math.abs(deltaY)*2)){
                                         dir = Logique.DROITE;
-                                        Toast.makeText(Jeu.this,"Droite "+rowId+", "+colId, Toast.LENGTH_SHORT).show();
+                                       // Toast.makeText(Jeu.this,"Droite "+rowId+", "+colId, Toast.LENGTH_SHORT).show();
                                     }
 
                                     if(deltaY > 0 && (Math.abs(deltaY) > Math.abs(deltaX)*2)){
                                         dir = Logique.HAUT;
-                                        Toast.makeText(Jeu.this,"Haut "+rowId+", "+colId, Toast.LENGTH_SHORT).show();
+                                       // Toast.makeText(Jeu.this,"Haut "+rowId+", "+colId, Toast.LENGTH_SHORT).show();
                                     }
 
                                     if(deltaY < 0 && (Math.abs(deltaY) > Math.abs(deltaX)*2)){
                                         dir = Logique.BAS;
-                                        Toast.makeText(Jeu.this,"Bas "+rowId+", "+colId, Toast.LENGTH_SHORT).show();
+                                       // Toast.makeText(Jeu.this,"Bas "+rowId+", "+colId, Toast.LENGTH_SHORT).show();
                                     }
 
                                     log.bougerPiece(rowId,colId,dir);
