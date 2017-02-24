@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_jeu"
     android:layout_width="match_parent"
@@ -10,73 +11,109 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.lyeskriaa.tp1_inf8405.Jeu">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="0dp"
-        android:inputType="textPersonName"
-        android:text="Score : "
-        android:ems="10"
-        android:id="@+id/scoreField"
-        android:textSize="14sp"
-        android:layout_below="@+id/levelIdField"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="0dp"
-        android:inputType="textPersonName"
-        android:text="But : "
-        android:ems="10"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/targetField"
-        android:textSize="14sp"
-        android:textAlignment="textEnd" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="0dp"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/levelIdField"
-        android:text="Niveau : "
-        android:textSize="14sp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="0dp"
-        android:inputType="textPersonName"
-        android:text="Coups restants : "
-        android:ems="10"
-        android:layout_below="@+id/targetField"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/movesField"
-        android:textSize="14sp"
-        android:textAlignment="textEnd"/>
-
-    <GridLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/gridLayoutJeu"
-        android:layout_below="@+id/movesField"
-        android:layout_marginTop="60dp"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
         >
 
-    </GridLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <Button
-        android:text="Reinitialiser"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/reinitialiserBtn" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp"
+                    android:inputType="textPersonName"
+                    android:ems="10"
+                    android:id="@+id/levelIdField"
+                    android:text="Niveau : "
+                    android:textSize="14sp"
+                    android:gravity="left|start"
+                    />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp"
+                    android:inputType="textPersonName"
+                    android:text="But : "
+                    android:ems="10"
+                    android:gravity="right|end"
+                    android:id="@+id/targetField"
+                    android:textSize="14sp"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp"
+                    android:inputType="textPersonName"
+                    android:text="Score : "
+                    android:ems="10"
+                    android:id="@+id/scoreField"
+                    android:textSize="14sp"
+                    android:gravity="left|start"
+                    />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp"
+                    android:inputType="textPersonName"
+                    android:text="Coups restants : "
+                    android:ems="10"
+                    android:gravity="right|end"
+                    android:id="@+id/movesField"
+                    android:textSize="14sp"
+                    android:textAlignment="textEnd"/>
+
+                <Button
+                    android:text="Reinitialiser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/reinitialiserBtn"
+                    android:layout_below="@+id/movesField"
+                    android:layout_marginTop="10dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:drawableLeft="@android:drawable/ic_popup_sync"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/gridLayoutJeu"
+                    android:layout_marginTop="15dp"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    >
+
+                </GridLayout>
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </RelativeLayout>

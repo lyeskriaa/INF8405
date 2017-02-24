@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import java.util.Random;
 
 /**
- * La logique de jeu. Fonction et data permettant de jouer le jeu.
+ * Cette Classe représente la logique de jeu. Fonction et data permettant de jouer le jeu.
  * Created by Louise on 2017-01-24.
  */
 
@@ -36,10 +36,10 @@ public class Logique {
 
     @Nullable
     static public Logique creerPartie(int idNiveau) {
-        if (idNiveau == 1) return new Logique(idNiveau, 6, 800, 5, 8);//6  800
-        if (idNiveau == 2) return new Logique(idNiveau, 10, 1200, 6, 8);//10  1200
-        if (idNiveau == 3) return new Logique(idNiveau, 10, 1400, 7, 7);//10 1400
-        if (idNiveau == 4) return new Logique(idNiveau, 10, 1800, 8, 7);//10  1800
+        if (idNiveau == 1) return new Logique(idNiveau, 6, 800, 5, 8);
+        if (idNiveau == 2) return new Logique(idNiveau, 10, 1200, 6, 8);
+        if (idNiveau == 3) return new Logique(idNiveau, 10, 1400, 7, 7);
+        if (idNiveau == 4) return new Logique(idNiveau, 10, 1800, 8, 7);
         return null;
     }
 
@@ -53,6 +53,12 @@ public class Logique {
 
     }
 
+    /**
+     * Cette methode verifie la séquence des réactions apres un test valide de match
+     * ceci permet de traiter les cascades des cercles à cet issue.
+     * @return true s'il y a encore une reaction apres
+     *         false sinon
+     */
     public boolean prochaineReaction(){
         if (pret == false) return false;
 
@@ -229,6 +235,11 @@ public class Logique {
         }
     }
 
+    /**
+     * Cette methode permet de generer une valeur au hasard
+     * qui représente une couleur dans la grille logique
+     * @return une valeur int au hasard
+     */
     private int couleurAleatoire(){
         return this.rand.nextInt(NB_COULEUR) + 1;
     }

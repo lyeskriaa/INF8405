@@ -21,7 +21,13 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
+/**
+ * Cette classe est utilisée pour simuler un niveau de jeu (match-3)
+ * et s'occupe de la représentation graphique de la grille du jeu
+ * en utilisant le layout "activity_jeu"
+ * @author LyesKriaa
+ * @see android.app.Activity
+ */
 public class Jeu extends AppCompatActivity {
     @ColorInt public static final int PURPLE       = 0xFF660066;
     @ColorInt public static final int ORANGE      = 0xFFFFAE00;
@@ -44,9 +50,12 @@ public class Jeu extends AppCompatActivity {
     public final String BUT_INIT="But : ";
     public final String COUPS_RESTANTS_INIT="Coups restants : ";
 
-    public int counterLog =0;
-    public int counter =0;
 
+    /**
+     * Cette methode permet de créer et d'initialiser l'activité courante
+     * à partir du niveau séléctionné depuis la grille des niveaux
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,9 +110,12 @@ public class Jeu extends AppCompatActivity {
 
     }
 
+    /**
+     * L'activité init() est utilisée pour initialiser les affichages d'une partie
+     * ainsi que la reinitialisation de la grille de jeu au passage d'un niveau
+     * à l'autre depuis la même scène
+     */
     private void init(){
-
-
         // initialiser les textView
         score.setText(SCORE_INIT+"0");
         but.setText(BUT_INIT+log.getPointVoulu());
@@ -113,6 +125,13 @@ public class Jeu extends AppCompatActivity {
         dessinerGrilleJeu(log.getGrille(), gridJeu);
     }
 
+    /**
+     * Cette methode permet de parcourir la grille logique pour la traduire en grille graphique.
+     * Elle permet aussi de detecter le mouvement sur les cercles et gènere un évènement à gérer
+     * pour la partie logique.
+     * @param grilleLogique : la grille qui contient les valeurs des cercles
+     * @param gridJeu : la partie de la vue xml où on doit dessiner la grille avec les cercles
+     */
     private void dessinerGrilleJeu(int[][] grilleLogique, GridLayout gridJeu){
 
         gridJeu.removeAllViews();
@@ -140,6 +159,7 @@ public class Jeu extends AppCompatActivity {
             paint.setStyle(Paint.Style.FILL);
             paint.setColor(verifierCouleur(grilleLogique[r][c]));
 
+            // dessiner un cercle aux coordonnées (c,r)
             canvas.drawCircle(c+50,r+50,50,paint);
 
             oImageView.setImageDrawable(new BitmapDrawable(getResources(),tempBitmap));
@@ -154,6 +174,8 @@ public class Jeu extends AppCompatActivity {
 
             oImageView.setLayoutParams(param);
             oImageView.setOnTouchListener(new View.OnTouchListener() {
+                // si on détecte un toucher de l'écran
+                // et un mouvement des cercles
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     int action = MotionEventCompat.getActionMasked(event);
@@ -218,6 +240,12 @@ public class Jeu extends AppCompatActivity {
         }
     }
 
+    /**
+     * Cette methode permet d'assigner la bonne couleur au canvas
+     * selon la valeur de la couleur dans la grille logique
+     * @param i la couleur donnée dans la grille logique
+     * @return une valeur hexadécimale de la couleur correspondante
+     */
     private int verifierCouleur(int i) {
         int couleur = Color.BLACK;
         switch (i) {
@@ -249,6 +277,10 @@ public class Jeu extends AppCompatActivity {
 
     }
 
+    /**
+     * Cette methode permet de faire la séquence des événement
+     * de façon animée
+     */
     public void animer() {
         if(BLOCK_SWIPE){
             //Log.v("Jeu Block Swipe", " "+counterLog++ );
@@ -333,6 +365,11 @@ public class Jeu extends AppCompatActivity {
         }
     }
 
+    /**
+     * Cette methode permet de gérer l'appuis sur le bouton retour
+     * en plein dans une partie, pour demander la confirmation
+     * de l'utilisateur à vouloir quitter la partie
+     */
     @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)

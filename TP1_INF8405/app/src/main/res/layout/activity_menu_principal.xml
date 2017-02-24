@@ -9,35 +9,47 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.lyeskriaa.tp1_inf8405.MenuPrincipal">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <Button
-        android:text="@string/start_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="77dp"
-        android:id="@+id/demarrerBtn"
-        tools:text="@string/start_btn"
-        tools:ignore="UnknownId" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <Button
-        android:text="@string/regles_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
-        android:id="@+id/reglagesBtn"
-        android:layout_below="@+id/demarrerBtn"
-        android:layout_alignStart="@+id/demarrerBtn"
-        tools:text="@string/regles_btn" />
+            <Button
+                android:text="@string/start_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="100dp"
+                android:id="@+id/demarrerBtn"
+                tools:text="@string/start_btn"
+                tools:ignore="UnknownId" />
 
-    <Button
-        android:text="@string/exit_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="38dp"
-        android:id="@+id/quitterBtn"
-        tools:text="@string/exit_btn"
-        android:layout_below="@+id/reglagesBtn"
-        android:layout_alignStart="@+id/reglagesBtn" />
+            <Button
+                android:text="@string/regles_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="38dp"
+                android:id="@+id/reglagesBtn"
+                android:layout_below="@+id/demarrerBtn"
+                android:layout_alignStart="@+id/demarrerBtn"
+                tools:text="@string/regles_btn" />
+
+            <Button
+                android:text="@string/exit_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="38dp"
+                android:id="@+id/quitterBtn"
+                tools:text="@string/exit_btn"
+                android:layout_below="@+id/reglagesBtn"
+                android:layout_alignStart="@+id/reglagesBtn" />
+
+        </RelativeLayout>
+
+    </ScrollView>
+
 </RelativeLayout>
