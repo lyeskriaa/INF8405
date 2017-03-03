@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "222332930852",
+    "firebase_url": "https://lopiolykri.firebaseio.com",
+    "project_id": "lopiolykri",
+    "storage_bucket": "lopiolykri.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:222332930852:android:cedd3954a933b84f",
+        "android_client_info": {
+          "package_name": "com.inf8405.tp2_inf8405"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "222332930852-s3rhu44m62pkcueb61cu22onvfteb40d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGu3p5qk1fv5q6uwjJARwW1E37qZdkKz4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

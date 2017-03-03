@@ -14,6 +14,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+
 import java.io.File;
 import java.io.IOException;
 
@@ -25,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String PICTFILE_PREF  = "pictFile_preference";
 
     private SharedPreferences settings = getSharedPreferences(PREFS_FILENAME, 0);
-
+    Firebase
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
