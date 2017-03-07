@@ -23,4 +23,5 @@ public class Profile {
     public static void setPictFile(String pictFile) {
         Profile.pictFile = pictFile;
     }
+
 }
