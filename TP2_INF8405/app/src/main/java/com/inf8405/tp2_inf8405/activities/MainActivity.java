@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.firebase.client.Firebase;
 import com.inf8405.tp2_inf8405.R;
 import com.inf8405.tp2_inf8405.dao.ProfileDao;
-import com.inf8405.tp2_inf8405.model.Profile;
+import com.inf8405.tp2_inf8405.model.User;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,13 +54,13 @@ public class MainActivity extends AppCompatActivity {
                 EditText inputTxt = (EditText) findViewById(R.id.userNameEditText);
 
                 // Store EditText in Variable
-                Profile.username = inputTxt.getText().toString();
+                User.username = inputTxt.getText().toString();
 
-                if (Profile.username != null && Profile.pictFile != null) {
+                if (User.username != null && User.pictFile != null) {
                     // save data
                     SharedPreferences.Editor editor = settings.edit();
-                    editor.putString(USERNAME_PREF, Profile.username);
-                    editor.putString(PICTFILE_PREF, Profile.pictFile);
+                    editor.putString(USERNAME_PREF, User.username);
+                    editor.putString(PICTFILE_PREF, User.pictFile);
 
                     // continue to next activity with relevant data.
                     Intent myIntent = new Intent(MainActivity.this, MapActivity.class);
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
 
                 startActivityForResult(cameraIntent, 1);
-                Profile.pictFile = PHOTO_FILENAME;
+                User.pictFile = PHOTO_FILENAME;
 
                 if(newfile.exists()){
 
