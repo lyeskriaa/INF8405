@@ -7,6 +7,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import com.google.firebase.provider.FirebaseInitProvider;
+
 /**
  * Created by LyesKriaa on 17-03-07.
  */
@@ -14,7 +16,7 @@ import com.google.firebase.database.IgnoreExtraProperties;
 @IgnoreExtraProperties
 public class ProfileDao {
 
-    private DatabaseReference tp2Database;
+    private DatabaseReference db;
     private Context context;
 
     private RencontreDao rencontreDao;
@@ -22,7 +24,7 @@ public class ProfileDao {
 
     public ProfileDao(Context c) {
         context = c;
-        tp2Database = FirebaseDatabase.getInstance().getReference();
+        db = FirebaseDatabase.getInstance().getReference();
     }
 
 
