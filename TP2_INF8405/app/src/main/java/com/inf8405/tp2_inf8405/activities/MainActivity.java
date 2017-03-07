@@ -37,80 +37,83 @@ public class MainActivity extends AppCompatActivity {
         Firebase.setAndroidContext(this);
 
         if (profileDao.isEmpty()) {
-            Toast.makeText(this, "First Use : Create your own profile", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(TitleActivity.this, ProfileCreationActivity.class);
-            startActivity(intent);
+            Toast.makeText(this, "Veuillez créer votre profile", Toast.LENGTH_SHORT).show();
+
         } else {
-            Toast.makeText(TitleActivity.this, "Choose your option", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(TitleActivity.this, MenuActivity.class);
-            startActivity(intent);
+            Toast.makeText(this, "Veuillez choisir une action", Toast.LENGTH_SHORT).show();
+//            Intent intent = new Intent(this, MenuActivity.class);
+//            startActivity(intent);
         }
 
 
         final Button okButton = (Button) findViewById(R.id.okButton);
         okButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // get EditText by id
-                EditText inputTxt = (EditText) findViewById(R.id.userNameEditText);
-
-                // Store EditText in Variable
-                Profile.username = inputTxt.getText().toString();
-
-                if (Profile.username != null && Profile.pictFile != null) {
-                    // save data
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putString(USERNAME_PREF, Profile.username);
-                    editor.putString(PICTFILE_PREF, Profile.pictFile);
-
-                    // continue to next activity with relevant data.
-                    Intent myIntent = new Intent(MainActivity.this, MapActivity.class);
-                    startActivity(myIntent);
-                }
-                else
-                {
-                    AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
-                            .setTitle("Erreur")
-                            .setMessage("Il faut un nom d'utilisateur et une photo.")
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
-                }
+                creerProfile();
             }
         });
 
         final Button photoButton = (Button) findViewById(R.id.pictureButton);
         photoButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String file = PHOTO_FILENAME;
-                File newfile = new File(file);
-                if (newfile.exists()) {
-                    newfile.delete();
-                    newfile = new File(file);
-                }
-                try {
-                    newfile.createNewFile();
-                }
-                catch (IOException e)
-                {
-                }
-
-                Uri outputFileUri = Uri.fromFile(newfile);
-
-                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-
-                startActivityForResult(cameraIntent, 1);
-                Profile.pictFile = PHOTO_FILENAME;
-
-                if(newfile.exists()){
-
-                    Bitmap myBitmap = BitmapFactory.decodeFile(newfile.getAbsolutePath());
-
-                    ImageView myImage = (ImageView) findViewById(R.id.photoIamgeView);
-                    myImage.setImageBitmap(myBitmap);
-                }
+//                String file = PHOTO_FILENAME;
+//                File newfile = new File(file);
+//                if (newfile.exists()) {
+//                    newfile.delete();
+//                    newfile = new File(file);
+//                }
+//                try {
+//                    newfile.createNewFile();
+//                }
+//                catch (IOException e)
+//                {
+//                }
+//
+//                Uri outputFileUri = Uri.fromFile(newfile);
+//
+//                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+//
+//                startActivityForResult(cameraIntent, 1);
+//                Profile.pictFile = PHOTO_FILENAME;
+//
+//                if(newfile.exists()){
+//
+//                    Bitmap myBitmap = BitmapFactory.decodeFile(newfile.getAbsolutePath());
+//
+//                    ImageView myImage = (ImageView) findViewById(R.id.photoIamgeView);
+//                    myImage.setImageBitmap(myBitmap);
+//                }
             }
         });
 
+    }
+
+    private void creerProfile() {
+        // get EditText by id
+        EditText inputTxt = (EditText) findViewById(R.id.userNameEditText);
+
+        // Store EditText in Variable
+        Profile.username = inputTxt.getText().toString();
+
+        if (Profile.username != null && Profile.pictFile != null) {
+            // save data
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString(USERNAME_PREF, Profile.username);
+            editor.putString(PICTFILE_PREF, Profile.pictFile);
+
+            // continue to next activity with relevant data.
+            Intent myIntent = new Intent(MainActivity.this, MapActivity.class);
+            startActivity(myIntent);
+        }
+        else
+        {
+            AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Erreur")
+                    .setMessage("Il faut un nom d'utilisateur et une photo.")
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
     }
 
     @Override
