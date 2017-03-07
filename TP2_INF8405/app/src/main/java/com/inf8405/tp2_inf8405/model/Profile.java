@@ -4,7 +4,7 @@ package com.inf8405.tp2_inf8405.model;
  * Created by Louise on 2017-02-16.
  */
 
-public class UserProfile {
+public class Profile {
     public static String username = null;
     public static String pictFile = null;
 
@@ -13,7 +13,7 @@ public class UserProfile {
     }
 
     public static void setUsername(String username) {
-        UserProfile.username = username;
+        Profile.username = username;
     }
 
     public static String getPictFile() {
@@ -21,6 +21,6 @@ public class UserProfile {
     }
 
     public static void setPictFile(String pictFile) {
-        UserProfile.pictFile = pictFile;
+        Profile.pictFile = pictFile;
     }
 }
