@@ -13,40 +13,12 @@ import java.util.List;
 public class GroupDao {
 
     private Context context;
-    private String group;
-
-    private List<User> users;
 
 
 
     public GroupDao(Context c, String groupName) {
         context = c;
-        group = groupName;
-
-        //firebase
-        //put in users
     }
 
 
-    public class User {
-        public String username;
-        public String PictureURI;
-        public boolean organisateur;
-        public Coordinate coordinate;
-
-        User(String username, String PictureURI, boolean organisateur, double longitude, double latitude){
-            this.username = username;
-            this.PictureURI = PictureURI;
-            this.organisateur= organisateur;
-            this.coordinate = new Coordinate(longitude, latitude);
-        }
-    }
-    public class Coordinate {
-        public double longitude;
-        public double latitude;
-        Coordinate(double longitude, double latitude){
-            this.longitude = longitude;
-            this.latitude = latitude;
-        }
-    }
 }
