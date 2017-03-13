@@ -1,10 +1,10 @@
 package com.inf8405.tp2_inf8405.dao;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.location.Location;
-
-import java.util.List;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * Created by Louise on 2017-03-07.
@@ -12,13 +12,38 @@ import java.util.List;
 
 public class GroupDao {
 
-    private Context context;
+    private DatabaseReference groupRef;
+    private boolean childExist = false;
 
-
-
-    public GroupDao(Context c, String groupName) {
-        context = c;
+    public GroupDao() {
+        groupRef = FirebaseDatabase.getInstance().getReference("groups");
     }
 
+    public DatabaseReference getGroupRef() {
+        return groupRef;
+    }
 
+    public boolean childExist(final String childName) {
+        groupRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.hasChild(childName)) {
+                    childExist = true;
+                }
+                else {
+                    childExist = false;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // nothing here
+            }
+        });
+        return childExist;
+    }
+
+//    public boolean addGroupChild(String groupName) {
+//        return groupRef.
+//    }
 }

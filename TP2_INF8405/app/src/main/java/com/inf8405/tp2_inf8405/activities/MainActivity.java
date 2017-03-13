@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,9 +19,12 @@ import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 import com.inf8405.tp2_inf8405.R;
+import com.inf8405.tp2_inf8405.dao.GroupDao;
 import com.inf8405.tp2_inf8405.dao.ProfileDao;
 import com.inf8405.tp2_inf8405.model.Group;
 import com.inf8405.tp2_inf8405.model.User;
+
+import java.io.ByteArrayOutputStream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private User user;
     private Group group;
     private static final int REQUEST_IMAGE_CAPTURE = 111;
+    private Bitmap capturedImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,18 +105,22 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == this.RESULT_OK) {
             Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            capturedImage = (Bitmap) extras.get("data");
             ImageView mImageLabel = (ImageView) findViewById(R.id.photoIamgeView);
-            mImageLabel.setImageBitmap(imageBitmap);
-            encodeBitmapAndSaveToFirebase(imageBitmap);
+            mImageLabel.setImageBitmap(capturedImage);
         }
     }
 
-    // parcourir la bd pour stocker la reference a l image capture
-    private void encodeBitmapAndSaveToFirebase(Bitmap imageBitmap) {
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//        imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-//        String imageEncoded = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+    // copresser l'image en PNG et l'encoder en string
+    private String encodeBitmapAndSaveToFirebase(Bitmap imageBitmap) {
+        if(imageBitmap != null) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            return Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+        } else {
+            return null;
+        }
+
 //        DatabaseReference ref = FirebaseDatabase.getInstance()
 //                .getReference("groups")
 //                .child("group2").child("users").child("user1")
@@ -121,29 +130,28 @@ public class MainActivity extends AppCompatActivity {
 
     private void creerProfile() {
 
-        user = new User();
-//        user = new User(nomUtilisateur.getText().toString(), String pictureURI, boolean organisateur, double longitude, double latitude,
-//        Group group, boolean writePermission);
         // get EditText by id
         EditText nomUtilisateur = (EditText) findViewById(R.id.userNameEditText);
-        // Store EditText in Variable
-        user.setUsername(nomUtilisateur.getText().toString());
 
         EditText nomGroupe = (EditText) findViewById(R.id.groupEditText);
-        group = new Group();
-        group.setNomGroupe(nomGroupe.getText().toString());
 
         ImageView photoImageView = (ImageView) findViewById(R.id.photoIamgeView);
-        Bitmap imageBitmap = photoImageView.getDrawingCache();
-        user.setPictureURI(imageBitmap.toString());
+        String imageURI = encodeBitmapAndSaveToFirebase(capturedImage);
 
-        if (user.getUsername() != null && group.getNomGroupe() != null && user.getPictureURI() != null) {
+        if (nomUtilisateur != null && nomGroupe != null && imageURI != null) {
             // save data
+            group = new Group();
+            group.setNomGroupe(nomGroupe.getText().toString());
+            GroupDao groupDao = new GroupDao();
+            if(!groupDao.childExist(group.getNomGroupe())) {
+                groupDao.
+            } else {
 
+            }
 
             // continue to next activity with relevant data.
-            Intent myIntent = new Intent(MainActivity.this, MapActivity.class);
-            startActivity(myIntent);
+//            Intent myIntent = new Intent(MainActivity.this, MapActivity.class);
+//            startActivity(myIntent);
         }
         else
         {

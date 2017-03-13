@@ -37,7 +37,9 @@ public class User {
         if(writePermission) this.username = username;
     }
     public void setPictureURI(String pictureURI){
-        if(writePermission) this.pictureURI = pictureURI;
+        if(writePermission) {
+            this.pictureURI = pictureURI;
+        }
     }
     public void setCoordinate(double longitute, double latitude){
         if(writePermission) coordinate = new Coordinate(longitute, latitude);
