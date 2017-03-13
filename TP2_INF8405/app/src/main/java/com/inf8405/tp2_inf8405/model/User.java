@@ -12,14 +12,18 @@ public class User {
     private Group group;
     private boolean writePermission;
 
-    User(String username, String pictureURI, boolean organisateur, double longitude, double latitude,
-         Group group, boolean writePermission){
+    public User() {
+
+    }
+
+    public User(String username, String pictureURI, boolean organisateur, double longitude, double latitude,
+         Group group, boolean writePermission) {
         this.username = username;
         this.pictureURI = pictureURI;
-        this.organisateur= organisateur;
+        this.organisateur = organisateur;
         this.coordinate = new Coordinate(longitude, latitude);
         this.group = group;
-        this.writePermission = writePermission
+        this.writePermission = writePermission;
     }
 
     public String getUsername(){ return  username; }

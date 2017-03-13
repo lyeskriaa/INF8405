@@ -15,7 +15,6 @@ public class ProfileDao {
 
     private DatabaseReference db;
     private Context context;
-
     private RencontreDao rencontreDao;
 
 
@@ -23,7 +22,6 @@ public class ProfileDao {
         context = c;
         db = FirebaseDatabase.getInstance().getReference();
     }
-
 
     public ProfileDao open() {
         rencontreDao = new RencontreDao(context);
