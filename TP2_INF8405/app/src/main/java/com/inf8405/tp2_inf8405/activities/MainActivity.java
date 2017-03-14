@@ -25,6 +25,8 @@ import com.inf8405.tp2_inf8405.model.Group;
 import com.inf8405.tp2_inf8405.model.User;
 
 import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -140,11 +142,20 @@ public class MainActivity extends AppCompatActivity {
 
         if (nomUtilisateur != null && nomGroupe != null && imageURI != null) {
             // save data
+            // TODO: 17-03-13 get position of user long lat
             group = new Group();
             group.setNomGroupe(nomGroupe.getText().toString());
+            user = new User(nomUtilisateur.getText().toString(), imageURI, false, 1, 1, group, true);
             GroupDao groupDao = new GroupDao();
             if(!groupDao.childExist(group.getNomGroupe())) {
-                groupDao.
+                user.setOrganisateur(true);
+                Map<String, String> userData = new HashMap<String, String>();
+                userData.put("username", user.getUsername());
+                userData.put("pictureURI", user.getPictureURI());
+                userData.put("organisateur", String.valueOf(user.getOrganisateur()));
+
+                groupDao.addGroupChild(group.getNomGroupe(), user.getCoordinate(), userData );
+
             } else {
 
             }

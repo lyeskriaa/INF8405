@@ -45,4 +45,7 @@ public class User {
         if(writePermission) coordinate = new Coordinate(longitute, latitude);
     }
 
+    public void setOrganisateur(boolean organisateur) {
+        this.organisateur = organisateur;
+    }
 }

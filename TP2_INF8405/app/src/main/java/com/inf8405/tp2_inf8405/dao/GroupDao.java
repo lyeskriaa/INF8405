@@ -5,6 +5,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.inf8405.tp2_inf8405.model.Coordinate;
+
+import java.util.Map;
 
 /**
  * Created by Louise on 2017-03-07.
@@ -43,7 +46,8 @@ public class GroupDao {
         return childExist;
     }
 
-//    public boolean addGroupChild(String groupName) {
-//        return groupRef.
-//    }
+    public void addGroupChild(String groupName, Coordinate coordinate, Map<String, String> userData) {
+         groupRef.child(groupName).child("users").child(userData.get("username")).setValue(userData);
+         groupRef.child(groupName).child("users").child(userData.get("username")).child("coordinate").setValue(coordinate);
+    }
 }
