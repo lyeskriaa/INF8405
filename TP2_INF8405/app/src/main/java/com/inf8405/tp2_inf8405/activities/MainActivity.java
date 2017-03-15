@@ -185,16 +185,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         if (nomUtilisateur != null && nomGroupe != null && imageURI != null) {
             // save data
             // TODO: 17-03-13 get position of user long lat
-            group = new Group();
-            group.setNomGroupe(nomGroupe.getText().toString());
+            group = new Group(nomGroupe.getText().toString());
             user = new User(nomUtilisateur.getText().toString(), imageURI, false, lastLocation.getLongitude(), lastLocation.getLatitude(), group, true);
             GroupDao groupDao = new GroupDao();
             if(!groupDao.childExist(group.getNomGroupe())) {
-                user.setOrganisateur(true);
+                user.setAsOrganisteur();
                 Map<String, String> userData = new HashMap<String, String>();
                 userData.put("username", user.getUsername());
                 userData.put("pictureURI", user.getPictureURI());
-                userData.put("organisateur", String.valueOf(user.getOrganisateur()));
+                userData.put("organisateur", String.valueOf(user.isOrganisateur()));
 
                 groupDao.addGroupChild(group.getNomGroupe(), user.getCoordinate(), userData );
 
@@ -203,8 +202,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
 
             // continue to next activity with relevant data.
-//            Intent myIntent = new Intent(MainActivity.this, MapActivity.class);
-//            startActivity(myIntent);
         }
         else
         {

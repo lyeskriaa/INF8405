@@ -28,7 +28,7 @@ public class User {
 
     public String getUsername(){ return  username; }
     public String getPictureURI(){ return  pictureURI; }
-    public boolean getOrganisateur(){ return  organisateur; }
+    public boolean isOrganisateur(){ return  organisateur; }
     public Coordinate getCoordinate(){ return  coordinate; }
     public Group getGroup(){ return  group; }
     public boolean getWritePermission(){ return  writePermission; }
@@ -45,7 +45,7 @@ public class User {
         if(writePermission) coordinate = new Coordinate(longitute, latitude);
     }
 
-    public void setOrganisateur(boolean organisateur) {
-        this.organisateur = organisateur;
+    public void setAsOrganisteur(){
+        if(writePermission) organisateur = true;
     }
 }
