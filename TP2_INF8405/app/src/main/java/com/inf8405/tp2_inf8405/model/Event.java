@@ -1,5 +1,9 @@
 package com.inf8405.tp2_inf8405.model;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +49,17 @@ public class Event {
 
     public void setPicture(String picture) { this.picture = picture; }
     public String getPicture() { return picture; }
+
+    public Bitmap pictureAsBitmap(){
+        try {
+            byte [] encodeByte= Base64.decode(picture,Base64.DEFAULT);
+            Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch(Exception e) {
+            e.getMessage();
+            return null;
+        }
+    }
 
 
 }
