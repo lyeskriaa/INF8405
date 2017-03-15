@@ -12,13 +12,19 @@ public class Group {
     static private List<User> listeUtilisateurs = new ArrayList<User>();;
     private static final Object usersLock = new Object();
     private User organisateur;
+    List<Event> eventsList;
 
-    public Group(String nomGroupe, List<User> utilisateurs){
+    public Group(String nomGroupe, List<User> utilisateurs, List<Event> eventsList){
         this.nomGroupe = nomGroupe;
+        this.eventsList = eventsList;
         synchronized (usersLock){
             listeUtilisateurs = new ArrayList<User>();
         }
         addUsers(utilisateurs);
+    }
+
+    public Group(String nomGroupe, List<User> utilisateurs){
+        this(nomGroupe, utilisateurs, new ArrayList<Event>());
     }
 
     public Group(String nomGroupe){
@@ -62,4 +68,9 @@ public class Group {
         }
         return null;
     }
+
+    public List<Event> getEventsList() {return eventsList; }
+    public void setEventsList(List<Event> eventsList) { this.eventsList = eventsList; }
+    public void addEvent(Event event) { eventsList.add(event); }
+
 }
