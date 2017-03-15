@@ -1,16 +1,26 @@
 package com.inf8405.tp2_inf8405.activities;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,32 +28,51 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.inf8405.tp2_inf8405.R;
 import com.inf8405.tp2_inf8405.dao.GroupDao;
 import com.inf8405.tp2_inf8405.dao.ProfileDao;
 import com.inf8405.tp2_inf8405.model.Group;
 import com.inf8405.tp2_inf8405.model.User;
+import com.inf8405.tp2_inf8405.services.LocationService;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private boolean quitterApp = false;
     private User user;
     private Group group;
     private static final int REQUEST_IMAGE_CAPTURE = 111;
+    private static final int PERMISSION_LOCATION = 101;
     private Bitmap capturedImage;
+    private GoogleApiClient googleApiClient;
+    private LocationManager mLocationManager = null;
+    boolean gps_enabled , network_enabled = false;
+    private Location lastLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-        final ProfileDao profileDao = new ProfileDao(this);
         Firebase.setAndroidContext(this);
+        googleApiClient = new GoogleApiClient.Builder(this, this, this).addApi(LocationServices.API).build();
+        // appel au service de localisation si on a la permission
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            // You don't have the permission you need to request it
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_LOCATION);
+        }else{
+            // You have the permission.
+//            buildGoogleApiClient();
+            getApplicationContext().startService(new Intent(getApplicationContext(), LocationService.class));
+        }
+
+        // TODO: 17-03-14 check if the profile dao is empty
+        final ProfileDao profileDao = new ProfileDao(this);
 
         if (profileDao.isEmpty()) {
             Toast.makeText(this, "Veuillez créer votre profile", Toast.LENGTH_SHORT).show();
@@ -72,10 +101,19 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+//    private synchronized void buildGoogleApiClient(){
+//        googleApiClient = new GoogleApiClient.Builder(this, this, this)
+//                .addConnectionCallbacks(this)
+//                .addOnConnectionFailedListener(this)
+//                .addApi(LocationServices.API)
+//                .build();
+//        googleApiClient.connect();
+//    }
+
     //verifier les permissions de l application
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void onLaunchCamera() {
-        if (checkSelfPermission(Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED) {
+        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_IMAGE_CAPTURE);
         } else {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -88,19 +126,28 @@ public class MainActivity extends AppCompatActivity {
     // lancer la camera si la permission est donne
     public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Now user should be able to use camera
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (takePictureIntent.resolveActivity(this.getPackageManager()) != null) {
                     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 }
-            }
-            else {
+            } else {
                 // Your app will not have this permission. Turn off all functions
                 // that require this permission or it will force close like your
                 // original question
             }
         }
+        if (requestCode == PERMISSION_LOCATION) {
+            if(grantResults.length > 0 &&  grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startService(new Intent(this, LocationService.class));
+            }
+        }
+        else {
+            //on a pas acces a la localisation (probleme)
+            Toast.makeText(this, "Nous avons besoin de votre localisation!", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     // mettre la photo dans le cadre specifie et l encoder pour la sauvegarder sur firebase
@@ -115,20 +162,15 @@ public class MainActivity extends AppCompatActivity {
 
     // copresser l'image en PNG et l'encoder en string
     private String encodeBitmapAndSaveToFirebase(Bitmap imageBitmap) {
-        if(imageBitmap != null) {
+        if (imageBitmap != null) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
             return Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
         } else {
             return null;
         }
-
-//        DatabaseReference ref = FirebaseDatabase.getInstance()
-//                .getReference("groups")
-//                .child("group2").child("users").child("user1")
-//                .child("pictureURI");
-//        ref.setValue(imageEncoded);
     }
+
 
     private void creerProfile() {
 
@@ -145,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
             // TODO: 17-03-13 get position of user long lat
             group = new Group();
             group.setNomGroupe(nomGroupe.getText().toString());
-            user = new User(nomUtilisateur.getText().toString(), imageURI, false, 1, 1, group, true);
+            user = new User(nomUtilisateur.getText().toString(), imageURI, false, lastLocation.getLongitude(), lastLocation.getLatitude(), group, true);
             GroupDao groupDao = new GroupDao();
             if(!groupDao.childExist(group.getNomGroupe())) {
                 user.setOrganisateur(true);
@@ -184,5 +226,79 @@ public class MainActivity extends AppCompatActivity {
         else{
             finish();
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (googleApiClient != null) {
+            googleApiClient.connect();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        googleApiClient.disconnect();
+        super.onStop();
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Log.e(MainActivity.class.getSimpleName(), "Connected to Google Play Services!");
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (mLocationManager == null) {
+                mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+            }
+            try {
+                gps_enabled = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            } catch(Exception ex) {
+                Log.e("MAIN ACTIVITY", "fail to request location via GPS", ex);
+            }
+
+            try {
+                network_enabled = mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            } catch(Exception ex) {
+                Log.e("MAIN ACTIVITY", "fail to request location via NETWORK", ex);
+            }
+
+            if(!gps_enabled && !network_enabled) {
+                // notify user
+                AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+                dialog.setMessage(MainActivity.this.getResources().getString(R.string.gps_network_not_enabled));
+                dialog.setPositiveButton(MainActivity.this.getResources().getString(R.string.open_location_settings), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                        // TODO Auto-generated method stub
+                        Intent myIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        MainActivity.this.startActivity(myIntent);
+                        //get gps
+                    }
+                });
+                dialog.setNegativeButton(getApplicationContext().getString(R.string.Cancel), new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                        // TODO Auto-generated method stub
+                    }
+                });
+                dialog.show();
+            } else {
+                lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+                double lat = lastLocation.getLatitude(), lon = lastLocation.getLongitude();
+                Log.e(MainActivity.class.getSimpleName(), "lat : "+lat+"lon : "+lon);
+            }
+
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.e(MainActivity.class.getSimpleName(), "Can't connect to Google Play Services!");
     }
 }

@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">TP2_INF8405</string>
     <string name="title_activity_maps">Map</string>
+    <string name="gps_network_not_enabled">Service de localisation désactivé !</string>
+    <string name="open_location_settings">Ouvrir les préférences de localisation.</string>
+    <string name="Cancel">Annuler.</string>
 </resources>
