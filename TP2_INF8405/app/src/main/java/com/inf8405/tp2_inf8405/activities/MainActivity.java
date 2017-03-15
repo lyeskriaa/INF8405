@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 user.setAsOrganisteur();
                 Map<String, String> userData = new HashMap<String, String>();
                 userData.put("username", user.getUsername());
-                userData.put("pictureURI", user.getPictureURI());
+                userData.put("pictureURI", user.getPicture());
                 userData.put("organisateur", String.valueOf(user.isOrganisateur()));
 
                 groupDao.addGroupChild(group.getNomGroupe(), user.getCoordinate(), userData );
@@ -202,6 +202,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
 
             // continue to next activity with relevant data.
+            Intent myIntent = new Intent(MainActivity.this, MapsActivity.class);
+            MainActivity.this.startActivity(myIntent);
         }
         else
         {

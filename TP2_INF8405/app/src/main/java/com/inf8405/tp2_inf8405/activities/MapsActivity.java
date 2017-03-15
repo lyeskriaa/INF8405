@@ -15,6 +15,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.inf8405.tp2_inf8405.R;
@@ -62,6 +63,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void refresh(){
         //TODO refresh group
+        List<User> list = new ArrayList<User>();
         setUsersMarkers(Group.getListeUtilisateurs());
 
         //TODO add events markers
@@ -76,7 +78,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             marker.title(user.getUsername());
 
             try {
-                URL myurl = new URL(user.getPictureURI());
+                URL myurl = new URL(user.getPicture());
                 Bitmap bmp = BitmapFactory.decodeStream(myurl.openConnection().getInputStream());
                 marker.icon(BitmapDescriptorFactory.fromBitmap(bmp));
             } catch (Exception e){
