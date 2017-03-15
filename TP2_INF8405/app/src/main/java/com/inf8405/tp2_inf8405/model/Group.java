@@ -1,6 +1,7 @@
 package com.inf8405.tp2_inf8405.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Louise on 2017-03-07.
@@ -8,37 +9,57 @@ import java.util.ArrayList;
 
 public class Group {
     private String nomGroupe;
-    private ArrayList<User> listeUtilisateurs;
+    static private List<User> listeUtilisateurs = new ArrayList<User>();;
+    private static final Object usersLock = new Object();
+    private User organisateur;
 
-    public Group(String nomGroupe,User utilisateur){
-        listeUtilisateurs = new ArrayList<User>();
+    public Group(String nomGroupe, List<User> utilisateurs){
         this.nomGroupe = nomGroupe;
-        listeUtilisateurs.add(utilisateur);
+        synchronized (usersLock){
+            listeUtilisateurs = new ArrayList<User>();
+        }
+        addUsers(utilisateurs);
     }
 
-    public Group(){
-        listeUtilisateurs = new ArrayList<User>();
+    public Group(String nomGroupe){
+        this.nomGroupe = nomGroupe;
+        synchronized (usersLock){
+            listeUtilisateurs = new ArrayList<User>();
+        }
     }
 
-    public User getOrganisateur(){
-        return listeUtilisateurs.get(0);
+    public User getOrganisateur(){ return organisateur; }
+    public String getNomGroupe() { return nomGroupe; }
+
+    static public List<User> getListeUtilisateurs() {
+        synchronized (usersLock) {
+            return listeUtilisateurs;
+        }
     }
 
-
-    public String getNomGroupe() {
-        return nomGroupe;
+    public void addUser(User newUser) {
+        if (newUser != null && findUser(newUser.getUsername()) == null) {
+            synchronized (usersLock) {
+                listeUtilisateurs.add(newUser);
+            }
+            if (newUser.isOrganisateur()) organisateur = newUser;
+        }
     }
 
-    public ArrayList<User> getListeUtilisateurs() {
-        return listeUtilisateurs;
+    public void addUsers(List<User> utilisateurs) {
+        if (utilisateurs != null){
+            for (User user : utilisateurs){
+                addUser(user);
+            }
+        }
     }
 
-    public void setListeUtilisateurs(ArrayList<User> users) {
-        this.listeUtilisateurs = users;
+    public User findUser(String username){
+        synchronized (usersLock) {
+            for (User user : listeUtilisateurs) {
+                if (user.getUsername().equals(username)) return user;
+            }
+        }
+        return null;
     }
-
-    public void setNomGroupe(String groupname) {
-        this.nomGroupe = groupname;
-    }
-
 }

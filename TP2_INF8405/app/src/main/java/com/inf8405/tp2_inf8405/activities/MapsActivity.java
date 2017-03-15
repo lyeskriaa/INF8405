@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -16,6 +18,7 @@ import java.net.URL;
 import java.util.List;
 
 import com.inf8405.tp2_inf8405.R;
+import com.inf8405.tp2_inf8405.model.Group;
 import com.inf8405.tp2_inf8405.model.User;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -44,12 +47,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        Button clickButton = (Button) findViewById(R.id.refresh);
+        clickButton.setOnClickListener( new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                MapsActivity.this.refresh();
+            }
+        });
         mMap = googleMap;
-        // TODO add real marker
+        refresh();
+
+    }
+
+    public void refresh(){
+        //TODO refresh group
+        setUsersMarkers(Group.getListeUtilisateurs());
+
+        //TODO add events markers
     }
 
 
-    public void setUsersMarker(GoogleMap googleMap, List<User> users){
+    public void setUsersMarkers(List<User> users){
         for (User user : users){
             LatLng userPosition = new LatLng(user.getCoordinate().latitude, user.getCoordinate().longitude);
             MarkerOptions marker = new MarkerOptions();

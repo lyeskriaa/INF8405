@@ -143,16 +143,15 @@ public class MainActivity extends AppCompatActivity {
         if (nomUtilisateur != null && nomGroupe != null && imageURI != null) {
             // save data
             // TODO: 17-03-13 get position of user long lat
-            group = new Group();
-            group.setNomGroupe(nomGroupe.getText().toString());
+            group = new Group(nomGroupe.getText().toString());
             user = new User(nomUtilisateur.getText().toString(), imageURI, false, 1, 1, group, true);
             GroupDao groupDao = new GroupDao();
             if(!groupDao.childExist(group.getNomGroupe())) {
-                user.setOrganisateur(true);
+                user.setAsOrganisteur();
                 Map<String, String> userData = new HashMap<String, String>();
                 userData.put("username", user.getUsername());
                 userData.put("pictureURI", user.getPictureURI());
-                userData.put("organisateur", String.valueOf(user.getOrganisateur()));
+                userData.put("organisateur", String.valueOf(user.isOrganisateur()));
 
                 groupDao.addGroupChild(group.getNomGroupe(), user.getCoordinate(), userData );
 
@@ -161,8 +160,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // continue to next activity with relevant data.
-//            Intent myIntent = new Intent(MainActivity.this, MapActivity.class);
-//            startActivity(myIntent);
         }
         else
         {
