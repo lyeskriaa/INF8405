@@ -4,4 +4,7 @@
     <string name="gps_network_not_enabled">Service de localisation désactivé !</string>
     <string name="open_location_settings">Ouvrir les préférences de localisation.</string>
     <string name="Cancel">Annuler.</string>
+    <string name="network_unactive">Pas de connexion internet! Veuillez vous connecter à internet.</string>
+
 </resources>
+

@@ -80,6 +80,7 @@ public class LocationService extends Service {
     public void onCreate()
     {
         Log.e(TAG, "onCreate");
+        NetworkStatusService.LOCATION_SERVICE_STARTED = true;
         initializeLocationManager();
         try {
             mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE, mLocationListeners[1]);
@@ -101,6 +102,7 @@ public class LocationService extends Service {
     public void onDestroy()
     {
         Log.e(TAG, "onDestroy");
+        NetworkStatusService.LOCATION_SERVICE_STARTED = false;
         super.onDestroy();
         if (mLocationManager != null) {
             for (int i = 0; i < mLocationListeners.length; i++) {

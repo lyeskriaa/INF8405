@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Group {
     private String nomGroupe;
-    static private List<User> listeUtilisateurs = new ArrayList<User>();;
+    static private List<User> listeUtilisateurs = new ArrayList<User>();
     private static final Object usersLock = new Object();
     private User organisateur;
     List<Event> eventsList;

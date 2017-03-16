@@ -64,7 +64,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Firebase.setAndroidContext(this);
+
         googleApiClient = new GoogleApiClient.Builder(this, this, this).addApi(LocationServices.API).build();
         // appel au service de localisation si on a la permission
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
@@ -72,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_LOCATION);
         }else{
             // You have the permission.
-//            buildGoogleApiClient();
             getApplicationContext().startService(new Intent(getApplicationContext(), LocationService.class));
         }
 
@@ -105,15 +106,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         });
 
     }
-
-//    private synchronized void buildGoogleApiClient(){
-//        googleApiClient = new GoogleApiClient.Builder(this, this, this)
-//                .addConnectionCallbacks(this)
-//                .addOnConnectionFailedListener(this)
-//                .addApi(LocationServices.API)
-//                .build();
-//        googleApiClient.connect();
-//    }
 
     //verifier les permissions de l application
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -296,8 +288,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 dialog.show();
             } else {
                 lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-                //double lat = lastLocation.getLatitude(), lon = lastLocation.getLongitude();
-                //Log.e(MainActivity.class.getSimpleName(), "lat : "+lat+"lon : "+lon);
             }
 
         }
