@@ -28,7 +28,7 @@ public class GroupDao {
     public void addGroupChild(String groupName, Coordinate coordinate, User user) {
         Map<String, String> userData = new HashMap<String, String>();
         userData.put("username", user.getUsername());
-        userData.put("pictureURI", user.getPictureURI());
+        userData.put("pictureURI", user.getPicture());
         userData.put("organisateur", String.valueOf(user.isOrganisateur()));
 
         groupRef.child(groupName).child("users").child(userData.get("username")).setValue(userData);
