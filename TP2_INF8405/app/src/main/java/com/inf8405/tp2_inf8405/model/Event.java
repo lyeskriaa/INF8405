@@ -1,5 +1,9 @@
 package com.inf8405.tp2_inf8405.model;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,16 +15,16 @@ public class Event {
     private List<Lieu> listPossible;
     private Lieu lieuChoisi;
     private String eventName;
-    private String pictureURI;
+    private String picture;
 
-    public Event(List<Lieu> listLieu, Lieu lieuChoisi, String eventName, String pictureURI){
+    public Event(List<Lieu> listLieu, Lieu lieuChoisi, String eventName, String picture){
         listPossible = listLieu;
         this.lieuChoisi = lieuChoisi;
-        this.pictureURI = pictureURI;
+        this.picture = picture;
         this.eventName = eventName;
     }
-    public Event(List<Lieu> listLieu, String eventName, String pictureURI){
-        this(listLieu, null, eventName, pictureURI);
+    public Event(List<Lieu> listLieu, String eventName, String picture){
+        this(listLieu, null, eventName, picture);
     }
     public Event(){
         this(new ArrayList<Lieu>(), null, null, null);
@@ -43,8 +47,19 @@ public class Event {
     public void setEventName(String eventName) { this.eventName = eventName; }
     public String getEventName() { return eventName; }
 
-    public void setPictureURI(String pictureURI) { this.pictureURI = pictureURI; }
-    public String getPictureURI() { return pictureURI; }
+    public void setPicture(String picture) { this.picture = picture; }
+    public String getPicture() { return picture; }
+
+    public Bitmap pictureAsBitmap(){
+        try {
+            byte [] encodeByte= Base64.decode(picture,Base64.DEFAULT);
+            Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch(Exception e) {
+            e.getMessage();
+            return null;
+        }
+    }
 
 
 }

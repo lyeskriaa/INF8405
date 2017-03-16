@@ -2,19 +2,26 @@ package com.inf8405.tp2_inf8405.activities;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.media.ThumbnailUtils;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.inf8405.tp2_inf8405.R;
@@ -76,10 +83,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             marker.title(user.getUsername());
 
             try {
-                URL myurl = new URL(user.getPictureURI());
-                Bitmap bmp = BitmapFactory.decodeStream(myurl.openConnection().getInputStream());
+                Bitmap bmp = user.pictureAsBitmap();
                 marker.icon(BitmapDescriptorFactory.fromBitmap(bmp));
             } catch (Exception e){
+                Log.e("MapsActivity", "exeption in icon making");
                 // show default icon. nothing to do
             }
             mMap.addMarker(marker);
