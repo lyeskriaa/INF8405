@@ -1,12 +1,11 @@
 package com.inf8405.tp2_inf8405.dao;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.inf8405.tp2_inf8405.model.Coordinate;
+import com.inf8405.tp2_inf8405.model.User;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -16,38 +15,24 @@ import java.util.Map;
 public class GroupDao {
 
     private DatabaseReference groupRef;
-    private boolean childExist = false;
+    private final String GROUPS = "groups";
 
     public GroupDao() {
-        groupRef = FirebaseDatabase.getInstance().getReference("groups");
+        groupRef = FirebaseDatabase.getInstance().getReference(GROUPS);
     }
 
     public DatabaseReference getGroupRef() {
         return groupRef;
     }
 
-    public boolean childExist(final String childName) {
-        groupRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                if (snapshot.hasChild(childName)) {
-                    childExist = true;
-                }
-                else {
-                    childExist = false;
-                }
-            }
+    public void addGroupChild(String groupName, Coordinate coordinate, User user) {
+        Map<String, String> userData = new HashMap<String, String>();
+        userData.put("username", user.getUsername());
+        userData.put("pictureURI", user.getPictureURI());
+        userData.put("organisateur", String.valueOf(user.isOrganisateur()));
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // nothing here
-            }
-        });
-        return childExist;
-    }
+        groupRef.child(groupName).child("users").child(userData.get("username")).setValue(userData);
+        groupRef.child(groupName).child("users").child(userData.get("username")).child("coordinate").setValue(coordinate);
 
-    public void addGroupChild(String groupName, Coordinate coordinate, Map<String, String> userData) {
-         groupRef.child(groupName).child("users").child(userData.get("username")).setValue(userData);
-         groupRef.child(groupName).child("users").child(userData.get("username")).child("coordinate").setValue(coordinate);
     }
 }

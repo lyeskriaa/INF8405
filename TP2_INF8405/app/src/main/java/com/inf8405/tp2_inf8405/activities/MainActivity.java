@@ -31,6 +31,12 @@ import com.firebase.client.Firebase;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.inf8405.tp2_inf8405.R;
 import com.inf8405.tp2_inf8405.dao.GroupDao;
 import com.inf8405.tp2_inf8405.dao.ProfileDao;
@@ -39,8 +45,6 @@ import com.inf8405.tp2_inf8405.model.User;
 import com.inf8405.tp2_inf8405.services.LocationService;
 
 import java.io.ByteArrayOutputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
@@ -54,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private LocationManager mLocationManager = null;
     boolean gps_enabled , network_enabled = false;
     private Location lastLocation;
+    private final String GROUPS_NAMES = "groupsNames";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,24 +189,28 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         if (nomUtilisateur != null && nomGroupe != null && imageURI != null) {
             // save data
-            // TODO: 17-03-13 get position of user long lat
             group = new Group(nomGroupe.getText().toString());
             user = new User(nomUtilisateur.getText().toString(), imageURI, false, lastLocation.getLongitude(), lastLocation.getLatitude(), group, true);
-            GroupDao groupDao = new GroupDao();
-            if(!groupDao.childExist(group.getNomGroupe())) {
-                user.setAsOrganisteur();
-                Map<String, String> userData = new HashMap<String, String>();
-                userData.put("username", user.getUsername());
-                userData.put("pictureURI", user.getPictureURI());
-                userData.put("organisateur", String.valueOf(user.isOrganisateur()));
+            // aller verifier dans groupsNames si le nom du groupe existe deja
+            final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(GROUPS_NAMES);
+            Query query = reference.orderByValue().equalTo(group.getNomGroupe());
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    // check if groupName already exist
+                    if (!snapshot.hasChildren()) {
+                        user.setAsOrganisteur();
+                        reference.push().setValue(group.getNomGroupe());
+                    }
+                    GroupDao groupDao = new GroupDao();
+                    groupDao.addGroupChild(group.getNomGroupe(), user.getCoordinate(), user );
+                }
 
-                groupDao.addGroupChild(group.getNomGroupe(), user.getCoordinate(), userData );
-
-            } else {
-
-            }
-
-            // continue to next activity with relevant data.
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // nothing here
+                }
+            });
         }
         else
         {
@@ -218,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         if(!quitterApp){
             Toast.makeText(this, "Appuiez une deuxième fois si vous êtes sûr de vouloir quitter.", Toast.LENGTH_SHORT).show();
             quitterApp = true;
-//            mettre un timer pour remettre quitterApp a false // TODO: 17-03-12
+             // TODO: 17-03-12 mettre un timer pour remettre quitterApp a false
         }
         else{
             finish();
@@ -282,8 +291,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 dialog.show();
             } else {
                 lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-                double lat = lastLocation.getLatitude(), lon = lastLocation.getLongitude();
-                Log.e(MainActivity.class.getSimpleName(), "lat : "+lat+"lon : "+lon);
+                //double lat = lastLocation.getLatitude(), lon = lastLocation.getLongitude();
+                //Log.e(MainActivity.class.getSimpleName(), "lat : "+lat+"lon : "+lon);
             }
 
         }
