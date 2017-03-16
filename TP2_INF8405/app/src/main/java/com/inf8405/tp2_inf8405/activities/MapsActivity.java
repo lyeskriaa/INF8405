@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.inf8405.tp2_inf8405.R;
+import com.inf8405.tp2_inf8405.infoWindows.InfoWindow;
 import com.inf8405.tp2_inf8405.model.Group;
 import com.inf8405.tp2_inf8405.model.User;
 
@@ -63,6 +64,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
         mMap = googleMap;
+        mMap.setInfoWindowAdapter(new InfoWindow(this));
         refresh();
 
     }
@@ -70,8 +72,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void refresh(){
         //TODO refresh group
         setUsersMarkers(Group.getListeUtilisateurs());
-
-        //TODO add events markers
+        setLocationMarkers();
+        setEventMarkers();
     }
 
 
@@ -81,15 +83,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             MarkerOptions marker = new MarkerOptions();
             marker.position(userPosition);
             marker.title(user.getUsername());
-
-            try {
-                Bitmap bmp = user.pictureAsBitmap();
-                marker.icon(BitmapDescriptorFactory.fromBitmap(bmp));
-            } catch (Exception e){
-                Log.e("MapsActivity", "exeption in icon making");
-                // show default icon. nothing to do
-            }
+            marker.snippet("user:image"+user.getPicture());
             mMap.addMarker(marker);
         }
+    }
+
+    public void setLocationMarkers() {
+        //TODO location markers
+    }
+
+    public void setEventMarkers() {
+        //TODO events markers
     }
 }
