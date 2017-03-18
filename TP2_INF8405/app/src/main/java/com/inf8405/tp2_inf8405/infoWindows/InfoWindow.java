@@ -48,14 +48,14 @@ public class InfoWindow implements GoogleMap.InfoWindowAdapter {
      */
     @Override
     public View getInfoContents(Marker marker) {
-        String[] strings = marker.getSnippet().split("image:");
-
-        String type = strings[0];
+        String[] strings = marker.getSnippet().split(":image:");
+        String[] params = strings[0].split("::");
+        String type = params[0];
         String image = strings[1];
 
         if (type == "user")     { return createUserInfoWindow(marker, image); }
-        if (type == "location") { return createEventInfoWindow(marker, image); }
-        if (type == "event")    { return createEventInfoWindow(marker, image); }
+        if (type == "location") { return createLocationInfoWindow(marker, image); }
+        if (type == "event")    { return createEventInfoWindow(marker, image, params[1]); }
 
         return null;
     }
@@ -88,7 +88,7 @@ public class InfoWindow implements GoogleMap.InfoWindowAdapter {
         return null;
     }
 
-    private View createEventInfoWindow(Marker marker, String image){
+    private View createEventInfoWindow(Marker marker, String image, String date){
         LayoutInflater inflater = (LayoutInflater)context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         View myContentsView = inflater.inflate(R.layout.event_info_contents, null);
         return null;

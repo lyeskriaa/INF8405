@@ -54,15 +54,4 @@ public class User {
     public void setAsOrganisteur(){
         if(writePermission) organisateur = true;
     }
-
-    public Bitmap pictureAsBitmap(){
-        try {
-            byte[] decodedByteArray = android.util.Base64.decode(picture, Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedByteArray, 0, decodedByteArray.length);
-            return bitmap;
-        } catch(Exception e) {
-            e.getMessage();
-            return null;
-        }
-    }
 }

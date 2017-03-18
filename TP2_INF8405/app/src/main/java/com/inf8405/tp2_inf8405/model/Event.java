@@ -12,37 +12,20 @@ import java.util.List;
  */
 
 public class Event {
-    private List<Lieu> listPossible;
-    private Lieu lieuChoisi;
+    private Coordinate lieuChoisi;
+    private String date;
     private String eventName;
     private String picture;
 
-    public Event(List<Lieu> listLieu, Lieu lieuChoisi, String eventName, String picture){
-        listPossible = listLieu;
+    public Event(Coordinate lieuChoisi, String eventName, String picture, String date){
         this.lieuChoisi = lieuChoisi;
         this.picture = picture;
         this.eventName = eventName;
-    }
-    public Event(List<Lieu> listLieu, String eventName, String picture){
-        this(listLieu, null, eventName, picture);
-    }
-    public Event(){
-        this(new ArrayList<Lieu>(), null, null, null);
+        this.date = date;
     }
 
-    public boolean addPossible(Lieu lieu){
-        if (listPossible.size() < 3){
-            listPossible.add(lieu);
-            return true;
-        }
-        return false;
-    }
-
-    public void setPossible(List<Lieu> listLieu){ this.listPossible = listLieu; }
-    public List<Lieu> getListPossible() { return listPossible; }
-
-    public void chose(Lieu lieu) { lieuChoisi = lieu; }
-    public Lieu getChoisit(){ return lieuChoisi; }
+    public void setLieuChoisi(Coordinate coor) {lieuChoisi = coor;}
+    public Coordinate getLieuChoisit(){ return lieuChoisi; }
 
     public void setEventName(String eventName) { this.eventName = eventName; }
     public String getEventName() { return eventName; }
@@ -50,16 +33,6 @@ public class Event {
     public void setPicture(String picture) { this.picture = picture; }
     public String getPicture() { return picture; }
 
-    public Bitmap pictureAsBitmap(){
-        try {
-            byte [] encodeByte= Base64.decode(picture,Base64.DEFAULT);
-            Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-            return bitmap;
-        } catch(Exception e) {
-            e.getMessage();
-            return null;
-        }
-    }
-
-
+    public void setDate(String date) {this.date = date;}
+    public String getDate() { return this.date;}
 }
