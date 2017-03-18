@@ -2,6 +2,7 @@ package com.inf8405.tp2_inf8405.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -12,7 +13,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.inf8405.tp2_inf8405.R;
 import com.inf8405.tp2_inf8405.infoWindows.InfoWindow;
+import com.inf8405.tp2_inf8405.model.Event;
 import com.inf8405.tp2_inf8405.model.Group;
+import com.inf8405.tp2_inf8405.model.Lieu;
 import com.inf8405.tp2_inf8405.model.User;
 
 import java.util.List;
@@ -59,28 +62,44 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void refresh(){
         //TODO refresh group
+        if (Group.getListeUtilisateurs()==null || Group.getListeUtilisateurs().isEmpty()) Log.e("MapActivity","------------------->No group!!!");
         setUsersMarkers(Group.getListeUtilisateurs());
-        setLocationMarkers();
-        setEventMarkers();
+        setLocationMarkers(Group.getLocList());
+        setEventMarker(Group.getEvent());
     }
 
 
-    public void setUsersMarkers(List<User> users){
+    private void setUsersMarkers(List<User> users){
+        if (users == null) return;
         for (User user : users){
             LatLng userPosition = new LatLng(user.getCoordinate().latitude, user.getCoordinate().longitude);
             MarkerOptions marker = new MarkerOptions();
             marker.position(userPosition);
             marker.title(user.getUsername());
-            marker.snippet("user:image"+user.getPicture());
+            marker.snippet("user:image:"+user.getPicture());
             mMap.addMarker(marker);
         }
     }
 
-    public void setLocationMarkers() {
-        //TODO location markers
+    private void setLocationMarkers(List<Lieu> locations) {
+        if (locations == null) return;
+        for (Lieu location : locations){
+            LatLng userPosition = new LatLng(location.getCoordinate().latitude, location.getCoordinate().longitude);
+            MarkerOptions marker = new MarkerOptions();
+            marker.position(userPosition);
+            marker.title(location.getName());
+            marker.snippet("location:image:"+location.getPicture());
+            mMap.addMarker(marker);
+        }
     }
 
-    public void setEventMarkers() {
-        //TODO events markers
+    private void setEventMarker(Event event) {
+        if (event == null) return;
+        LatLng userPosition = new LatLng(event.getLieuChoisit().latitude, event.getLieuChoisit().longitude);
+        MarkerOptions marker = new MarkerOptions();
+        marker.position(userPosition);
+        marker.title(event.getEventName());
+        marker.snippet("location:"+event.getDate()+":image:"+event.getPicture());
+        mMap.addMarker(marker);
     }
 }

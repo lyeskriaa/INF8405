@@ -12,47 +12,44 @@ import java.util.List;
 public class Group {
     private String nomGroupe;
     static private List<User> listeUtilisateurs = new ArrayList<User>();
-    private static final Object usersLock = new Object();
     private User organisateur;
-    List<Event> eventsList;
+    static List<Lieu> locList;
+    static Event event;
 
-    public Group(String nomGroupe, List<User> utilisateurs, List<Event> eventsList){
+    public Group(String nomGroupe, List<User> utilisateurs, List<Lieu> locationList, Event event){
         this.nomGroupe = nomGroupe;
-        this.eventsList = eventsList;
-        synchronized (usersLock){
-            listeUtilisateurs = new ArrayList<User>();
-        }
+        listeUtilisateurs = new ArrayList<User>();
         addUsers(utilisateurs);
+        locList = new ArrayList<Lieu>();
+        addLocs(locationList);
+        this.event = event;
     }
 
     public Group(String nomGroupe, List<User> utilisateurs){
-        this(nomGroupe, utilisateurs, new ArrayList<Event>());
+        this(nomGroupe, utilisateurs, new ArrayList<Lieu>(), null);
     }
 
     public Group(String nomGroupe){
         this.nomGroupe = nomGroupe;
-        synchronized (usersLock){
-            listeUtilisateurs = new ArrayList<User>();
-        }
-    }
+        listeUtilisateurs = new ArrayList<User>();
+        locList = new ArrayList<Lieu>();
+        event = null;
+}
 
     public User getOrganisateur(){ return organisateur; }
     public String getNomGroupe() { return nomGroupe; }
 
     public List<User> getListeUtilisateurs() {
-        synchronized (usersLock) {
-            if(listeUtilisateurs.isEmpty()) {
-                listeUtilisateurs = GroupDao.getInstance().getGroupUsers(this);
-            }
-            return listeUtilisateurs;
+        if (listeUtilisateurs.isEmpty()) {
+            listeUtilisateurs = GroupDao.getInstance().getGroupUsers(this);
         }
+        return listeUtilisateurs;
+
     }
 
     public void addUser(User newUser) {
         if (newUser != null && findUser(newUser.getUsername()) == null) {
-            synchronized (usersLock) {
-                listeUtilisateurs.add(newUser);
-            }
+            listeUtilisateurs.add(newUser);
             if (newUser.isOrganisateur()) organisateur = newUser;
         }
     }
@@ -65,18 +62,31 @@ public class Group {
         }
     }
 
-    public User findUser(String username){
-        synchronized (usersLock) {
-            for (User user : listeUtilisateurs) {
-                if (user.getUsername().equals(username)) return user;
+    public void addLoc(Lieu loc) {
+       locList.add(loc);
+    }
+
+    public void addLocs(List<Lieu> locs) {
+        if (locs != null){
+            for (Lieu loc : locs){
+                addLoc(loc);
             }
+        }
+    }
+
+    public User findUser(String username){
+        for (User user : listeUtilisateurs) {
+                if (user.getUsername().equals(username)) return user;
         }
         return null;
     }
 
-    public List<Event> getEventsList() {return eventsList; }
-    public void setEventsList(List<Event> eventsList) { this.eventsList = eventsList; }
-    public void addEvent(Event event) { eventsList.add(event); }
+    static public List<Lieu> getLocList() {return locList; }
+    static public void setLocList(List<Lieu> locList) { Group.locList = locList; }
+    static public void addEvent(Lieu lieu) { locList.add(lieu); }
+
+    static public Event getEvent() {return event; }
+    public void setEvent(Event event) { this.event = event; }
 
 
 }
