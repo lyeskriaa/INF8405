@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             // save data
             group = new Group(nomGroupe.getText().toString());
             user = new User(nomUtilisateur.getText().toString(), imageURI, false, lastLocation.getLongitude(), lastLocation.getLatitude(), group, true);
-
+            group.getListeUtilisateurs();
             // aller verifier dans groupsNames si le nom du groupe existe deja
             final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(GROUPS_NAMES);
             Query query = reference.orderByValue().equalTo(group.getNomGroupe());
@@ -195,8 +195,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                         user.setAsOrganisteur();
                         reference.push().setValue(group.getNomGroupe());
                     }
-                    GroupDao groupDao = new GroupDao();
-                    groupDao.addGroupChild(group.getNomGroupe(), user.getCoordinate(), user );
+                    GroupDao.getInstance().addGroupChild(group.getNomGroupe(), user.getCoordinate(), user );
                 }
 
                 @Override

@@ -1,5 +1,7 @@
 package com.inf8405.tp2_inf8405.model;
 
+import com.inf8405.tp2_inf8405.dao.GroupDao;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,8 +39,11 @@ public class Group {
     public User getOrganisateur(){ return organisateur; }
     public String getNomGroupe() { return nomGroupe; }
 
-    static public List<User> getListeUtilisateurs() {
+    public List<User> getListeUtilisateurs() {
         synchronized (usersLock) {
+            if(listeUtilisateurs.isEmpty()) {
+                listeUtilisateurs = GroupDao.getInstance().getGroupUsers(this);
+            }
             return listeUtilisateurs;
         }
     }
@@ -72,5 +77,6 @@ public class Group {
     public List<Event> getEventsList() {return eventsList; }
     public void setEventsList(List<Event> eventsList) { this.eventsList = eventsList; }
     public void addEvent(Event event) { eventsList.add(event); }
+
 
 }
