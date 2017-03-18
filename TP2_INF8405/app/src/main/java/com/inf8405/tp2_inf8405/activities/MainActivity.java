@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             // save data
             group = new Group(nomGroupe.getText().toString());
             user = new User(nomUtilisateur.getText().toString(), imageURI, false, lastLocation.getLongitude(), lastLocation.getLatitude(), group, true);
-            group.getListeUtilisateurs();
+
             // aller verifier dans groupsNames si le nom du groupe existe deja
             final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(GROUPS_NAMES);
             Query query = reference.orderByValue().equalTo(group.getNomGroupe());

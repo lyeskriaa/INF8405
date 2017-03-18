@@ -15,6 +15,7 @@ public class Group {
     private User organisateur;
     static List<Lieu> locList;
     static Event event;
+    private static Group INSTANCE = null;
 
     public Group(String nomGroupe, List<User> utilisateurs, List<Lieu> locationList, Event event){
         this.nomGroupe = nomGroupe;
@@ -29,12 +30,13 @@ public class Group {
         this(nomGroupe, utilisateurs, new ArrayList<Lieu>(), null);
     }
 
+
     public Group(String nomGroupe){
         this.nomGroupe = nomGroupe;
         listeUtilisateurs = new ArrayList<User>();
         locList = new ArrayList<Lieu>();
         event = null;
-}
+    }
 
     public User getOrganisateur(){ return organisateur; }
     public String getNomGroupe() { return nomGroupe; }
@@ -52,6 +54,10 @@ public class Group {
             listeUtilisateurs.add(newUser);
             if (newUser.isOrganisateur()) organisateur = newUser;
         }
+    }
+
+    public void removeUser(User user) {
+        listeUtilisateurs.remove(user);
     }
 
     public void addUsers(List<User> utilisateurs) {

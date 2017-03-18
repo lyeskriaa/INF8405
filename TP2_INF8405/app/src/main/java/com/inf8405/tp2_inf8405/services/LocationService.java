@@ -36,6 +36,7 @@ public class LocationService extends Service {
         {
             Log.e(TAG, "onLocationChanged: " + location);
             mLastLocation.set(location);
+
         }
 
         @Override

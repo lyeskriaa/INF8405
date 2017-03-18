@@ -2,7 +2,6 @@ package com.inf8405.tp2_inf8405.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -62,10 +61,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void refresh(){
         //TODO refresh group
-        if (Group.getListeUtilisateurs()==null || Group.getListeUtilisateurs().isEmpty()) Log.e("MapActivity","------------------->No group!!!");
-        setUsersMarkers(Group.getListeUtilisateurs());
-        setLocationMarkers(Group.getLocList());
-        setEventMarker(Group.getEvent());
+//        if (Group.getListeUtilisateurs()==null || Group.getListeUtilisateurs().isEmpty()) Log.e("MapActivity","------------------->No group!!!");
+//        setUsersMarkers(Group.getListeUtilisateurs());
+            setLocationMarkers(Group.getLocList());
+            setEventMarker(Group.getEvent());
     }
 
 

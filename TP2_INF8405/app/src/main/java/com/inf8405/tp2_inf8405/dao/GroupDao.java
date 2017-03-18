@@ -11,6 +11,7 @@ import com.inf8405.tp2_inf8405.model.Coordinate;
 import com.inf8405.tp2_inf8405.model.Group;
 import com.inf8405.tp2_inf8405.model.User;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,18 +56,20 @@ public class GroupDao {
 
     public List<User> getGroupUsers(final Group group)
     {
+        final List<User> listeUsers = new ArrayList<User>();
         groupRef.child(group.getNomGroupe()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
                 for(DataSnapshot snapUser : dataSnapshot.getChildren()){
-                    String username      = snapUser.child("username").getValue().toString();
-                    String picture       = snapUser.child("pictureURI").getValue().toString();
-                    boolean organisateur = Boolean.valueOf(snapUser.child("organisateur").getValue().toString());
-                    double lon = Double.valueOf(snapUser.child("coordinate").child("longitude").getValue().toString());
-                    double lat = Double.valueOf(snapUser.child("coordinate").child("latitude").getValue().toString());
+                    String username      = snapUser.child("username") != null ? snapUser.child("username").getValue().toString() : null;
+                    String picture       = snapUser.child("pictureURI") != null ? snapUser.child("pictureURI").getValue().toString() : null;
+                    boolean organisateur = snapUser.child("organisateur") != null ? Boolean.valueOf(snapUser.child("organisateur").getValue().toString()) : null;
+                    double lon           = snapUser.child("coordinate")!= null? Double.valueOf(snapUser.child("coordinate").child("longitude").getValue().toString()) : null;
+                    double lat           = snapUser.child("coordinate")!= null? Double.valueOf(snapUser.child("coordinate").child("latitude").getValue().toString()) : null;
                     User user = new User(username, picture, organisateur, lon,lat, group, false);
                     group.addUser(user);
+                    listeUsers.add(user);
                 }
 
             }
@@ -79,7 +82,16 @@ public class GroupDao {
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
-                String commentKey = dataSnapshot.getKey();
+                for(DataSnapshot snapUser : dataSnapshot.getChildren()){
+                    String username      = snapUser.child("username") != null ? snapUser.child("username").getValue().toString() : null;
+                    String picture       = snapUser.child("pictureURI") != null ? snapUser.child("pictureURI").getValue().toString() : null;
+                    boolean organisateur = snapUser.child("organisateur") != null ? Boolean.valueOf(snapUser.child("organisateur").getValue().toString()) : null;
+                    double lon           = snapUser.child("coordinate")!= null? Double.valueOf(snapUser.child("coordinate").child("longitude").getValue().toString()) : null;
+                    double lat           = snapUser.child("coordinate")!= null? Double.valueOf(snapUser.child("coordinate").child("latitude").getValue().toString()) : null;
+                    User user = new User(username, picture, organisateur, lon,lat, group, false);
+                    group.removeUser(user);
+                    listeUsers.remove(user);
+                }
             }
 
             @Override
@@ -93,6 +105,6 @@ public class GroupDao {
             }
         });
 
-        return null;
+        return listeUsers;
     }
 }
