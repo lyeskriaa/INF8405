@@ -10,13 +10,14 @@ import java.util.List;
  */
 
 public class Group {
+    static Group group;
     private String nomGroupe;
-    static private List<User> listeUtilisateurs = new ArrayList<User>();
+    private List<User> listeUtilisateurs = new ArrayList<User>();
     private User organisateur;
-    static List<Lieu> locList;
-    static Event event;
+    private List<Lieu> locList;
+    private Event event;
 
-    public Group(String nomGroupe, List<User> utilisateurs, List<Lieu> locationList, Event event){
+    private Group(String nomGroupe, List<User> utilisateurs, List<Lieu> locationList, Event event){
         this.nomGroupe = nomGroupe;
         listeUtilisateurs = new ArrayList<User>();
         addUsers(utilisateurs);
@@ -24,12 +25,25 @@ public class Group {
         addLocs(locationList);
         this.event = event;
     }
+    static public Group getGroup() {return group;}
+    static public Group createGroup(String nomGroupe, List<User> utilisateurs, List<Lieu> locationList, Event event){
+        group = new Group(nomGroupe, utilisateurs, locationList, event);
+        return group;
+    }
+    static public Group createGroup(String nomGroupe, List<User> utilisateurs){
+        group = new Group(nomGroupe, utilisateurs);
+        return group;
+    }
+    static public Group createGroup(String nomGroupe){
+        group = new Group(nomGroupe);
+        return group;
+    }
 
-    public Group(String nomGroupe, List<User> utilisateurs){
+    private Group(String nomGroupe, List<User> utilisateurs){
         this(nomGroupe, utilisateurs, new ArrayList<Lieu>(), null);
     }
 
-    public Group(String nomGroupe){
+    private Group(String nomGroupe){
         this.nomGroupe = nomGroupe;
         listeUtilisateurs = new ArrayList<User>();
         locList = new ArrayList<Lieu>();
@@ -47,7 +61,13 @@ public class Group {
 
     }
 
+    public void update(){
+        listeUtilisateurs = GroupDao.getInstance().getGroupUsers(this);
+        //TODO add location end events
+    }
+
     public void addUser(User newUser) {
+        if (listeUtilisateurs == null)listeUtilisateurs = new ArrayList<User>();
         if (newUser != null && findUser(newUser.getUsername()) == null) {
             listeUtilisateurs.add(newUser);
             if (newUser.isOrganisateur()) organisateur = newUser;
@@ -81,11 +101,11 @@ public class Group {
         return null;
     }
 
-    static public List<Lieu> getLocList() {return locList; }
-    static public void setLocList(List<Lieu> locList) { Group.locList = locList; }
-    static public void addEvent(Lieu lieu) { locList.add(lieu); }
+    public List<Lieu> getLocList() {return locList; }
+    public void setLocList(List<Lieu> locList) { this.locList = locList; }
+    public void addEvent(Lieu lieu) { locList.add(lieu); }
 
-    static public Event getEvent() {return event; }
+    public Event getEvent() {return event; }
     public void setEvent(Event event) { this.event = event; }
 
 

@@ -23,6 +23,7 @@ import java.util.List;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private Group group;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        group = Group.getGroup();
+
     }
 
 
@@ -56,16 +59,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
         mMap = googleMap;
         mMap.setInfoWindowAdapter(new InfoWindow(this));
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                mMap.addMarker(new MarkerOptions().position(latLng).title("marker here"));
+                //TODO add input name and photo
+            }
+        });
         refresh();
 
     }
 
     public void refresh(){
         //TODO refresh group
-        if (Group.getListeUtilisateurs()==null || Group.getListeUtilisateurs().isEmpty()) Log.e("MapActivity","------------------->No group!!!");
-        setUsersMarkers(Group.getListeUtilisateurs());
-        setLocationMarkers(Group.getLocList());
-        setEventMarker(Group.getEvent());
+        if (group.getListeUtilisateurs()==null || group.getListeUtilisateurs().isEmpty()) Log.e("MapActivity","------------------->No group!!!");
+        setUsersMarkers(group.getListeUtilisateurs());
+        setLocationMarkers(group.getLocList());
+        setEventMarker(group.getEvent());
     }
 
 
@@ -99,7 +109,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         MarkerOptions marker = new MarkerOptions();
         marker.position(userPosition);
         marker.title(event.getEventName());
-        marker.snippet("location:"+event.getDate()+":image:"+event.getPicture());
+        //marker.snippet("location:"+event.getDate()+":image:"+event.getPicture());
         mMap.addMarker(marker);
     }
 }

@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         if (nomUtilisateur != null && nomGroupe != null && imageURI != null) {
             // save data
-            group = new Group(nomGroupe.getText().toString());
+            group = Group.createGroup(nomGroupe.getText().toString());
             user = new User(nomUtilisateur.getText().toString(), imageURI, false, lastLocation.getLongitude(), lastLocation.getLatitude(), group, true);
             group.getListeUtilisateurs();
             // aller verifier dans groupsNames si le nom du groupe existe deja
