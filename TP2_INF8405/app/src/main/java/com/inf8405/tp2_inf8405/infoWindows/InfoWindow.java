@@ -60,7 +60,7 @@ public class InfoWindow implements GoogleMap.InfoWindowAdapter {
 
         if (type.equals("user"))     { return createUserInfoWindow(marker, image); }
         if (type.equals("location")) { return createLocationInfoWindow(marker, image); }
-        if (type.equals("event"))    { return createEventInfoWindow(marker, image, params[1]); }
+        if (type.equals("event"))    { return createEventInfoWindow(marker, image, params[1], params[2]); }
 
         return null;
     }
@@ -106,7 +106,7 @@ public class InfoWindow implements GoogleMap.InfoWindowAdapter {
         return myContentsView;
     }
 
-    private View createEventInfoWindow(Marker marker, String image, String date){
+    private View createEventInfoWindow(Marker marker, String image, String dateStart, String dateEnd){
         LayoutInflater inflater = (LayoutInflater)context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         View myContentsView = inflater.inflate(R.layout.event_info_contents, null);
 
@@ -123,10 +123,10 @@ public class InfoWindow implements GoogleMap.InfoWindowAdapter {
         //txt2.setText(date);
 
         Button button = (Button) myContentsView.findViewById(R.id.event_go_button);
-        button.setOnClickListener(new VoteOnclickListener());
+        button.setOnClickListener(new GoOnclickListener());
 
-        Button button2 = (Button) myContentsView.findViewById(R.id.event_go_button);
-        button2.setOnClickListener(new VoteOnclickListener());
+        Button button2 = (Button) myContentsView.findViewById(R.id.event_no_go_button);
+        button2.setOnClickListener(new NoGoOnclickListener());
 
         return myContentsView;
     }
