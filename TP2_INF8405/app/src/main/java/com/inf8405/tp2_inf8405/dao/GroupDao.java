@@ -8,6 +8,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.inf8405.tp2_inf8405.model.Coordinate;
+import com.inf8405.tp2_inf8405.model.Enum;
 import com.inf8405.tp2_inf8405.model.Group;
 import com.inf8405.tp2_inf8405.model.User;
 
@@ -22,10 +23,8 @@ import java.util.Map;
 
 public class GroupDao {
 
-    private final String GROUPS = "groups";
-    private final String USERS = "users";
     private final String TAG = "GROUP_DAO";
-    private DatabaseReference groupRef = FirebaseDatabase.getInstance().getReference(GROUPS);
+    private DatabaseReference groupRef = FirebaseDatabase.getInstance().getReference(Enum.GROUPS.toString());
 
     private GroupDao() {}
 
@@ -49,8 +48,8 @@ public class GroupDao {
         userData.put("pictureURI", user.getPicture());
         userData.put("organisateur", String.valueOf(user.isOrganisateur()));
 
-        groupRef.child(groupName).child(USERS).child(userData.get("username")).setValue(userData);
-        groupRef.child(groupName).child(USERS).child(userData.get("username")).child("coordinate").setValue(coordinate);
+        groupRef.child(groupName).child(Enum.USERS.toString()).child(userData.get("username")).setValue(userData);
+        groupRef.child(groupName).child(Enum.USERS.toString()).child(userData.get("username")).child(Enum.COORDINATE.toString()).setValue(coordinate);
 
     }
 

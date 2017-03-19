@@ -78,17 +78,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
 
         // TODO: 17-03-14 check if the profile dao is empty
-        final ProfileDao profileDao = new ProfileDao(this);
-
-        if (profileDao.isEmpty()) {
-            Toast.makeText(this, "Veuillez créer votre profile", Toast.LENGTH_SHORT).show();
-
-        } else {
-            Toast.makeText(this, "Veuillez choisir une action", Toast.LENGTH_SHORT).show();
-//            Intent intent = new Intent(this, MenuActivity.class);
-//            startActivity(intent);
-        }
-
 
         final Button okButton = (Button) findViewById(R.id.okButton);
         okButton.setOnClickListener(new View.OnClickListener() {
@@ -181,9 +170,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         if (nomUtilisateur != null && nomGroupe != null && imageURI != null) {
             // save data
-            group = new Group(nomGroupe.getText().toString());
+            group = Group.createGroup(nomGroupe.getText().toString());
+            ProfileDao.getInstance().setUserProfileRef(nomUtilisateur.getText().toString(), nomGroupe.getText().toString());
             user = new User(nomUtilisateur.getText().toString(), imageURI, false, lastLocation.getLongitude(), lastLocation.getLatitude(), group, true);
-
             // aller verifier dans groupsNames si le nom du groupe existe deja
             final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(GROUPS_NAMES);
             Query query = reference.orderByValue().equalTo(group.getNomGroupe());

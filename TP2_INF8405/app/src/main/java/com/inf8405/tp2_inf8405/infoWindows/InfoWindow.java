@@ -10,10 +10,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.inf8405.tp2_inf8405.R;
+import com.inf8405.tp2_inf8405.model.Group;
+import com.inf8405.tp2_inf8405.model.Lieu;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -23,12 +26,14 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * Created by Louise on 2017-03-16.
@@ -53,9 +58,9 @@ public class InfoWindow implements GoogleMap.InfoWindowAdapter {
         String type = params[0];
         String image = strings[1];
 
-        if (type == "user")     { return createUserInfoWindow(marker, image); }
-        if (type == "location") { return createLocationInfoWindow(marker, image); }
-        if (type == "event")    { return createEventInfoWindow(marker, image, params[1]); }
+        if (type.equals("user"))     { return createUserInfoWindow(marker, image); }
+        if (type.equals("location")) { return createLocationInfoWindow(marker, image); }
+        if (type.equals("event"))    { return createEventInfoWindow(marker, image, params[1]); }
 
         return null;
     }
@@ -85,13 +90,45 @@ public class InfoWindow implements GoogleMap.InfoWindowAdapter {
     private View createLocationInfoWindow(Marker marker, String image){
         LayoutInflater inflater = (LayoutInflater)context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         View myContentsView = inflater.inflate(R.layout.location_info_contents, null);
-        return null;
+
+        TextView txt = ((TextView)myContentsView.findViewById(R.id.location_title));
+        txt.setText(marker.getTitle());
+
+        ImageView img = ((ImageView)myContentsView.findViewById(R.id.location_image));
+        byte[] decodedString = Base64.decode(image,Base64.NO_WRAP);
+        InputStream inputStream  = new ByteArrayInputStream(decodedString);
+        Bitmap bitmap  = BitmapFactory.decodeStream(inputStream);
+        img.setImageBitmap(bitmap);
+
+        Button button = (Button) myContentsView.findViewById(R.id.location_vote_button);
+        button.setOnClickListener(new VoteOnclickListener());
+
+        return myContentsView;
     }
 
     private View createEventInfoWindow(Marker marker, String image, String date){
         LayoutInflater inflater = (LayoutInflater)context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         View myContentsView = inflater.inflate(R.layout.event_info_contents, null);
-        return null;
+
+        TextView txt = ((TextView)myContentsView.findViewById(R.id.event_title));
+        txt.setText(marker.getTitle());
+
+        ImageView img = ((ImageView)myContentsView.findViewById(R.id.event_image));
+        byte[] decodedString = Base64.decode(image,Base64.NO_WRAP);
+        InputStream inputStream  = new ByteArrayInputStream(decodedString);
+        Bitmap bitmap  = BitmapFactory.decodeStream(inputStream);
+        img.setImageBitmap(bitmap);
+
+        //TextView txt2 = ((TextView)myContentsView.findViewById(R.id.event_date));
+        //txt2.setText(date);
+
+        Button button = (Button) myContentsView.findViewById(R.id.event_go_button);
+        button.setOnClickListener(new VoteOnclickListener());
+
+        Button button2 = (Button) myContentsView.findViewById(R.id.event_go_button);
+        button2.setOnClickListener(new VoteOnclickListener());
+
+        return myContentsView;
     }
 
 }

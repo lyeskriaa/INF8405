@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.inf8405.tp2_inf8405.dao.ProfileDao;
+import com.inf8405.tp2_inf8405.model.Enum;
+
 /**
  * Created by LyesKriaa on 17-03-14.
  * service de update de la localisation en background (meme si lapplication est ferme)
@@ -17,8 +20,8 @@ import android.util.Log;
 public class LocationService extends Service {
     private static final String TAG = "BOOOOOOOOOOMTESTGPS";
     private LocationManager mLocationManager = null;
-    private static final int LOCATION_INTERVAL = 10;
-    private static final float LOCATION_DISTANCE = 1f;
+    private static final int LOCATION_INTERVAL = 1;
+    private static final float LOCATION_DISTANCE = .5f;
 
 
     private class LocationListener implements android.location.LocationListener
@@ -36,7 +39,10 @@ public class LocationService extends Service {
         {
             Log.e(TAG, "onLocationChanged: " + location);
             mLastLocation.set(location);
-
+            if(ProfileDao.getInstance().getUsersRef().toString() != Enum.GROUPS.toString()) {
+                ProfileDao.getInstance().updateUserLocation(location);
+            }
+            // ptt update aussi directement l objet user en local
         }
 
         @Override
