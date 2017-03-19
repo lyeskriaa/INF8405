@@ -72,6 +72,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void refresh(){
         group.update();
+        mMap.clear();
         if (group.getListeUtilisateurs()==null || group.getListeUtilisateurs().isEmpty()) Log.e("MapActivity","No users!!!");
         setUsersMarkers(group.getListeUtilisateurs());
         setLocationMarkers(group.getLocList());
