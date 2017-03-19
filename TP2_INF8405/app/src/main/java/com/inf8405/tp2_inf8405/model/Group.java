@@ -55,7 +55,7 @@ public class Group {
     public String getNomGroupe() { return nomGroupe; }
 
     public List<User> getListeUtilisateurs() {
-        if (listeUtilisateurs.isEmpty()) {
+        if (listeUtilisateurs == null || listeUtilisateurs.isEmpty()) {
             listeUtilisateurs = GroupDao.getInstance().getGroupUsers(this);
         }
         return listeUtilisateurs;

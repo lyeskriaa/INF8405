@@ -71,8 +71,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void refresh(){
-        //TODO refresh group
-        if (group.getListeUtilisateurs()==null || group.getListeUtilisateurs().isEmpty()) Log.e("MapActivity","------------------->No group!!!");
+        group.update();
+        if (group.getListeUtilisateurs()==null || group.getListeUtilisateurs().isEmpty()) Log.e("MapActivity","No users!!!");
         setUsersMarkers(group.getListeUtilisateurs());
         setLocationMarkers(group.getLocList());
         setEventMarker(group.getEvent());
@@ -109,7 +109,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         MarkerOptions marker = new MarkerOptions();
         marker.position(userPosition);
         marker.title(event.getEventName());
-        //marker.snippet("location:"+event.getDate()+":image:"+event.getPicture());
+        marker.snippet("location::"+event.getDateStart()+"::"+event.getDateEnd()+":image:"+event.getPicture());
         mMap.addMarker(marker);
     }
 }
