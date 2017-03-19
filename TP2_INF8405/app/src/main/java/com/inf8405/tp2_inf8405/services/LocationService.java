@@ -42,7 +42,8 @@ public class LocationService extends Service {
             // facon debile mais rapide dsl
             String refLastWord = ProfileDao.getInstance().getUsersRef().toString().substring(ProfileDao.getInstance().getUsersRef().toString().length() - 6);
             if(! refLastWord.equals(Enum.GROUPS.toString())) {
-                ProfileDao.getInstance().updateUserLocation(location);
+                Log.e(TAG, "NOT EQUALS: " + refLastWord);
+                ProfileDao.getInstance().updateUserLocation(location, refLastWord);
             }
             // ptt update aussi directement l objet user en local
         }

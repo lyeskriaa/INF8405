@@ -24,6 +24,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private Group group;
+    private static MapsActivity mapsActivity = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +35,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         group = Group.getGroup();
-
+        mapsActivity = this;
     }
 
+    public static MapsActivity getMapsActivity() {return mapsActivity;}
 
     /**
      * Manipulates the map once available.
@@ -71,7 +73,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void refresh(){
-        group.update();
+        //group.update();
         if (group.getListeUtilisateurs()==null || group.getListeUtilisateurs().isEmpty()) Log.e("MapActivity","No users!!!");
         setUsersMarkers(group.getListeUtilisateurs());
         setLocationMarkers(group.getLocList());
@@ -111,5 +113,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         marker.title(event.getEventName());
         marker.snippet("location::"+event.getDateStart()+"::"+event.getDateEnd()+":image:"+event.getPicture());
         mMap.addMarker(marker);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refresh();
     }
 }

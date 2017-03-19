@@ -1,7 +1,5 @@
 package com.inf8405.tp2_inf8405.model;
 
-import com.inf8405.tp2_inf8405.dao.GroupDao;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,15 +53,15 @@ public class Group {
     public String getNomGroupe() { return nomGroupe; }
 
     public List<User> getListeUtilisateurs() {
-        if (listeUtilisateurs == null || listeUtilisateurs.isEmpty()) {
-            listeUtilisateurs = GroupDao.getInstance().getGroupUsers(this);
-        }
+//        if (listeUtilisateurs == null || listeUtilisateurs.isEmpty()) {
+//            listeUtilisateurs = GroupDao.getInstance().getGroupUsers();
+//        }
         return listeUtilisateurs;
 
     }
 
     public void update(){
-        listeUtilisateurs = GroupDao.getInstance().getGroupUsers(this);
+//        listeUtilisateurs = GroupDao.getInstance().getGroupUsers();
         //TODO add location end events
     }
 

@@ -1,6 +1,7 @@
 package com.inf8405.tp2_inf8405.dao;
 
 import android.location.Location;
+import android.util.Log;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -33,11 +34,12 @@ public class ProfileDao {
         return usersRef;
     }
 
-    public void setUserProfileRef(String s, String g) {
-        usersRef = FirebaseDatabase.getInstance().getReference(Enum.GROUPS.toString()).child(Enum.USERS.toString()).child(g).child(s).getRef();
+    public void setUserProfileRef(String user, String group) {
+        usersRef = FirebaseDatabase.getInstance().getReference(Enum.GROUPS.toString()).child(group).child(Enum.USERS.toString()).child(user).getRef();
+        Log.e("ProfileDAO", "refUser set to : " + usersRef.getRef());
     }
 
-    public void updateUserLocation(Location location) {
+    public void updateUserLocation(Location location, String userName) {
         usersRef.child("coordinate").child("latitude").setValue(location.getLatitude());
         usersRef.child("coordinate").child("longitude").setValue(location.getLongitude());
     }

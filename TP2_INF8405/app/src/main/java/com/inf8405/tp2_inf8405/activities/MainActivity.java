@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         EditText nomGroupe = (EditText) findViewById(R.id.groupEditText);
 
         ImageView photoImageView = (ImageView) findViewById(R.id.photoIamgeView);
-        String imageURI = encodeBitmapAndSaveToFirebase(capturedImage);
+        String imageURI = "1234567";//encodeBitmapAndSaveToFirebase(capturedImage);
 
         if (nomUtilisateur != null && nomGroupe != null && imageURI != null) {
             // save data
