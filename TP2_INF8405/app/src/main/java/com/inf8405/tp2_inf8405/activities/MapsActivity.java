@@ -9,6 +9,7 @@ import android.widget.Button;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.inf8405.tp2_inf8405.R;
@@ -53,7 +54,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         Button clickButton = (Button) findViewById(R.id.refresh);
         clickButton.setOnClickListener( new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 MapsActivity.this.refresh();
@@ -73,7 +73,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void refresh(){
-        //group.update();
+        mMap.clear();
         if (group.getListeUtilisateurs()==null || group.getListeUtilisateurs().isEmpty()) Log.e("MapActivity","No users!!!");
         setUsersMarkers(group.getListeUtilisateurs());
         setLocationMarkers(group.getLocList());
@@ -101,6 +101,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             marker.position(userPosition);
             marker.title(location.getName());
             marker.snippet("location:image:"+location.getPicture());
+            marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
             mMap.addMarker(marker);
         }
     }
@@ -112,6 +113,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         marker.position(userPosition);
         marker.title(event.getEventName());
         marker.snippet("location::"+event.getDateStart()+"::"+event.getDateEnd()+":image:"+event.getPicture());
+        marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
         mMap.addMarker(marker);
     }
 
