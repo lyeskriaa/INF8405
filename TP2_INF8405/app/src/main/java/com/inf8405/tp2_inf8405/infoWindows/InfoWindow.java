@@ -123,10 +123,13 @@ public class InfoWindow implements GoogleMap.InfoWindowAdapter {
         //txt2.setText(date);
 
         Button button = (Button) myContentsView.findViewById(R.id.event_go_button);
-        button.setOnClickListener(new GoOnclickListener());
+        //button.setOnClickListener(new GoOnclickListener());
 
-        Button button2 = (Button) myContentsView.findViewById(R.id.event_no_go_button);
-        button2.setOnClickListener(new NoGoOnclickListener());
+        Button button2 = (Button) myContentsView.findViewById((R.id.event_maybe_go_button));
+        //button2.setOnClickListener(new MaybeOnClickListener());
+
+        Button button3 = (Button) myContentsView.findViewById(R.id.event_no_go_button);
+        //button3.setOnClickListener(new NoGoOnclickListener());
 
         return myContentsView;
     }

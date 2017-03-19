@@ -3,9 +3,6 @@ package com.inf8405.tp2_inf8405.infoWindows;
 import android.content.Context;
 import android.content.Intent;
 import android.provider.CalendarContract;
-import android.provider.CalendarContract.Events;
-import android.text.format.DateUtils;
-import android.text.method.DateTimeKeyListener;
 import android.view.View;
 
 import com.inf8405.tp2_inf8405.model.Event;
@@ -15,13 +12,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by Louise on 2017-03-18.
+ * Created by Louise on 2017-03-19.
  */
 
-public class GoOnclickListener implements View.OnClickListener {
+public class MaybeOnClickListener implements View.OnClickListener {
     private Context context;
 
-    public GoOnclickListener(Context context){
+    public MaybeOnClickListener(Context context){
         this.context = context;
     }
     public void onClick(View v) {
@@ -29,7 +26,7 @@ public class GoOnclickListener implements View.OnClickListener {
         String title = "", eventLocation="";
         Event event = Group.getGroup().getEvent();
         if (event == null) return;
-        // set going to database
+        // set maybe to database
         title = event.getEventName();
         try {
             startTime = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(event.getDateStart());
@@ -40,12 +37,12 @@ public class GoOnclickListener implements View.OnClickListener {
         }
 
         //add event going list update
-        Intent intent = new Intent(Intent.ACTION_INSERT);
+        Intent intent = new Intent(Intent.ACTION_INSERT_OR_EDIT);
         intent.setType("vnd.android.cursor.item/event");
         intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, String.valueOf(startTime.getTime()));
         intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, String.valueOf(endTime.getTime()));
-        intent.putExtra(Events.TITLE, title);
-        intent.putExtra(Events.EVENT_LOCATION, eventLocation);
+        intent.putExtra(CalendarContract.Events.TITLE, title);
+        intent.putExtra(CalendarContract.Events.EVENT_LOCATION, eventLocation);
         context.startActivity(intent);
 
 
