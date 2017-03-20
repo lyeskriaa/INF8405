@@ -42,7 +42,7 @@ public class LocationService extends Service {
             // facon debile mais rapide dsl
             String refLastWord = ProfileDao.getInstance().getUsersRef().toString().substring(ProfileDao.getInstance().getUsersRef().toString().length() - 6);
             if(! refLastWord.equals(Enum.GROUPS.toString())) {
-                Log.e(TAG, "NOT EQUALS: " + refLastWord);
+             //   Log.e(TAG, "NOT EQUALS: " + refLastWord);
                 ProfileDao.getInstance().updateUserLocation(location, refLastWord);
             }
             // ptt update aussi directement l objet user en local
@@ -89,7 +89,7 @@ public class LocationService extends Service {
     @Override
     public void onCreate()
     {
-        Log.e(TAG, "onCreate");
+        //Log.e(TAG, "onCreate");
         NetworkStatusService.LOCATION_SERVICE_STARTED = true;
         initializeLocationManager();
         try {
@@ -126,7 +126,7 @@ public class LocationService extends Service {
     }
 
     private void initializeLocationManager() {
-        Log.e(TAG, "initializeLocationManager");
+        //Log.e(TAG, "initializeLocationManager");
         if (mLocationManager == null) {
             mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         }

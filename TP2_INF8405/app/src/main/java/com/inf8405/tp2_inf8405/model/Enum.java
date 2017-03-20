@@ -7,7 +7,9 @@ package com.inf8405.tp2_inf8405.model;
 public enum Enum {
     USERS("users"),
     COORDINATE("coordinate"),
-    GROUPS("groups");
+    GROUPS("groups"),
+    LIEUX("lieux"),
+    GROUPS_NAMES("groupsNames");
 
     private final String text;
 

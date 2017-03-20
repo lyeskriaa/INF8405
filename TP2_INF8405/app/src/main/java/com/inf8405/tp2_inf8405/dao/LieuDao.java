@@ -6,27 +6,35 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.inf8405.tp2_inf8405.activities.MapsActivity;
-import com.inf8405.tp2_inf8405.model.Coordinate;
-import com.inf8405.tp2_inf8405.model.Enum;
 import com.inf8405.tp2_inf8405.model.Group;
 import com.inf8405.tp2_inf8405.model.User;
 
-import java.util.HashMap;
-import java.util.Map;
+import static com.inf8405.tp2_inf8405.model.Enum.LIEUX;
 
 /**
- * Created by Louise on 2017-03-07.
+ * Created by LyesKriaa on 17-03-20.
  */
 
-public class GroupDao {
+public class LieuDao {
+    private static LieuDao Instance = null;
+    private DatabaseReference lieuxRef = null;
+    private final String TAG = "LIEU DAO";
 
-    private final String TAG = "GROUP_DAO";
-    private DatabaseReference groupRef = FirebaseDatabase.getInstance().getReference(Enum.GROUPS.toString());
+    public static LieuDao getInstance() {
+        if (Instance == null) {
+            Instance = new LieuDao();
+        }
+        return Instance;
+    }
 
-    private GroupDao() {
-        groupRef.child(Group.getGroup().getNomGroupe()).addChildEventListener(new ChildEventListener() {
+    public DatabaseReference getLieuxRef() {
+        return lieuxRef;
+    }
+
+    private LieuDao() {
+        lieuxRef = GroupDao.getInstance().getGroupRef().child(LIEUX.toString());
+        lieuxRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
@@ -37,7 +45,7 @@ public class GroupDao {
                     double lon           = snapUser.child("coordinate")!= null? Double.valueOf(snapUser.child("coordinate").child("longitude").getValue().toString()) : null;
                     double lat           = snapUser.child("coordinate")!= null? Double.valueOf(snapUser.child("coordinate").child("latitude").getValue().toString()) : null;
                     User user = new User(username, picture, organisateur, lon,lat, Group.getGroup(), false);
-                    Group.getGroup().addUser(user);
+                    //Group.getGroup().addLieu(user);
                 }
                 if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();
             }
@@ -73,33 +81,6 @@ public class GroupDao {
                 Log.w(TAG, "postComments:onCancelled", databaseError.toException());
             }
         });
-    }
-
-    private static GroupDao INSTANCE = null;
-
-    public static GroupDao getInstance()
-    {
-        if (INSTANCE == null) {
-            INSTANCE = new GroupDao();
-        }
-        return INSTANCE;
-    }
-
-    public DatabaseReference getGroupRef() {
-        return groupRef;
-    }
-
-    public void addGroupChild(String groupName, Coordinate coordinate, User user) {
-        Map<String, String> userData = new HashMap<String, String>();
-        userData.put("username", user.getUsername());
-        userData.put("pictureURI", user.getPicture());
-        userData.put("organisateur", String.valueOf(user.isOrganisateur()));
-
-        groupRef.child(groupName).child(Enum.USERS.toString()).child(userData.get("username")).setValue(userData);
-        groupRef.child(groupName).child(Enum.USERS.toString()).child(userData.get("username")).child(Enum.COORDINATE.toString()).setValue(coordinate);
-        // set a reference to our current group
-        groupRef = FirebaseDatabase.getInstance().getReference(Enum.GROUPS.toString()).child(groupName);
-
     }
 
 }

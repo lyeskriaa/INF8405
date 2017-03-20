@@ -28,6 +28,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private Group group;
     private static MapsActivity mapsActivity = null;
+    private String mainUser = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         group = Group.getGroup();
+        mainUser = (String) getIntent().getSerializableExtra("mainUser");
         mapsActivity = this;
     }
 

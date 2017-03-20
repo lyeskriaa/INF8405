@@ -40,9 +40,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.inf8405.tp2_inf8405.R;
 import com.inf8405.tp2_inf8405.dao.GroupDao;
 import com.inf8405.tp2_inf8405.dao.ProfileDao;
+import com.inf8405.tp2_inf8405.model.Enum;
 import com.inf8405.tp2_inf8405.model.Group;
 import com.inf8405.tp2_inf8405.model.User;
 import com.inf8405.tp2_inf8405.services.LocationService;
+import com.inf8405.tp2_inf8405.services.NetworkStatusService;
 
 import java.io.ByteArrayOutputStream;
 
@@ -58,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private LocationManager mLocationManager = null;
     boolean gps_enabled, network_enabled = false;
     private Location lastLocation;
-    private final String GROUPS_NAMES = "groupsNames";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             ProfileDao.getInstance().setUserProfileRef(nomUtilisateur.getText().toString(), nomGroupe.getText().toString());
             user = new User(nomUtilisateur.getText().toString(), imageURI, false, lastLocation.getLongitude(), lastLocation.getLatitude(), group, true);
             // aller verifier dans groupsNames si le nom du groupe existe deja
-            final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(GROUPS_NAMES);
+            final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Enum.GROUPS_NAMES.toString());
             Query query = reference.orderByValue().equalTo(group.getNomGroupe());
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -189,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
             // continue to next activity with relevant data.
             Intent myIntent = new Intent(MainActivity.this, MapsActivity.class);
+            myIntent.putExtra("mainUser", user.getUsername());
             MainActivity.this.startActivity(myIntent);
         } else {
             AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
@@ -213,6 +215,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     protected void onStart() {
         super.onStart();
+        NetworkStatusService.checkConnectivity(getApplicationContext());
         if (googleApiClient != null) {
             googleApiClient.connect();
         }

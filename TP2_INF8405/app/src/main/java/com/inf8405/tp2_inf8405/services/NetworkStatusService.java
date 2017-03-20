@@ -19,10 +19,14 @@ public class NetworkStatusService extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        checkConnectivity(context);
+    }
+
+    public static void checkConnectivity(Context context) {
         ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-
+        //Log.e("NETWORK", "Recieve; "+isConnected);
         if (!isConnected) {
             Intent locationService = new Intent(context, LocationService.class);
             context.stopService(locationService);

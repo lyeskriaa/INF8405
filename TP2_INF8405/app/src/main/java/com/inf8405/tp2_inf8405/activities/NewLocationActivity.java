@@ -3,11 +3,11 @@ package com.inf8405.tp2_inf8405.activities;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.inf8405.tp2_inf8405.R;
+import com.inf8405.tp2_inf8405.dao.LieuDao;
 import com.inf8405.tp2_inf8405.model.Coordinate;
 import com.inf8405.tp2_inf8405.model.Group;
 import com.inf8405.tp2_inf8405.model.Lieu;
@@ -52,6 +53,7 @@ public class NewLocationActivity extends AppCompatActivity {
                             .show();
                 } else {
                     Group.getGroup().addLoc(new Lieu(new Coordinate(longitude, latitude), name, encodeBitmap(capturedImage),0));
+                    LieuDao.getInstance().getLieuxRef();
                     finish();
                 }
             }
