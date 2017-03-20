@@ -101,7 +101,7 @@ public class InfoWindow implements GoogleMap.InfoWindowAdapter {
         img.setImageBitmap(bitmap);
 
         Button button = (Button) myContentsView.findViewById(R.id.location_vote_button);
-        button.setOnClickListener(new VoteOnclickListener());
+        button.setOnClickListener(new VoteOnclickListener(this.context, marker.getTitle()));
 
         return myContentsView;
     }

@@ -9,6 +9,7 @@ public class Lieu {
     private String picture;
     private String name;
     private int votes;
+    private int myVote;
 
     public Lieu(Coordinate coordinate, String name, String picture, int votes){
         this.name = name;
@@ -19,7 +20,7 @@ public class Lieu {
 
     public void setVotes(int votes){ this.votes = votes; }
     public int getVotes() { return votes; }
-    public int incrementVote() {return ++votes; }
+    public void vote(int vote) { myVote = vote; }
 
     public String getName() {return name;}
     public String getPicture() {return picture;}

@@ -104,6 +104,13 @@ public class Group {
         return null;
     }
 
+    public Lieu findLocation(String location){
+        for (Lieu lieu : locList) {
+            if (lieu.getName().equals(location)) return lieu;
+        }
+        return null;
+    }
+
     public List<Lieu> getLocList() {return locList; }
     public void setLocList(List<Lieu> locList) { this.locList = locList; }
     public void addEvent(Lieu lieu) { locList.add(lieu); }
