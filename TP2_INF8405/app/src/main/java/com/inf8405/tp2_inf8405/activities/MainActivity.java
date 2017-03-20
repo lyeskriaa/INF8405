@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private Bitmap capturedImage;
     private GoogleApiClient googleApiClient;
     private LocationManager mLocationManager = null;
-    boolean gps_enabled , network_enabled = false;
+    boolean gps_enabled, network_enabled = false;
     private Location lastLocation;
     private final String GROUPS_NAMES = "groupsNames";
 
@@ -68,15 +68,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         Firebase.setAndroidContext(this);
 
         googleApiClient = new GoogleApiClient.Builder(this, this, this).addApi(LocationServices.API).build();
-        // appel au service de localisation si on a la permission
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-            // You don't have the permission you need to request it
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_LOCATION);
-        }else{
-            // You have the permission.
-            getApplicationContext().startService(new Intent(getApplicationContext(), LocationService.class));
-        }
-
         // TODO: 17-03-14 check if the profile dao is empty
 
         final Button okButton = (Button) findViewById(R.id.okButton);
@@ -110,7 +101,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
     // lancer la camera si la permission est donne
-    public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) {
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Now user should be able to use camera
@@ -120,21 +113,22 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 }
             } else {
                 // Your app will not have this permission. Turn off all functions
-                // that require this permission or it will force close like your
-                // original question
+                // that require this permission or it will force close and crash
             }
         }
         if (requestCode == PERMISSION_LOCATION) {
-            if(grantResults.length > 0 &&  grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                initialiserLocationManager();
                 startService(new Intent(this, LocationService.class));
             }
-        }
-        else {
+        } else {
             //on a pas acces a la localisation (probleme)
             Toast.makeText(this, "Nous avons besoin de votre localisation!", Toast.LENGTH_SHORT).show();
         }
-
     }
+
 
     // mettre la photo dans le cadre specifie et l encoder pour la sauvegarder sur firebase
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -184,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                         user.setAsOrganisteur();
                         reference.push().setValue(group.getNomGroupe());
                     }
-                    GroupDao.getInstance().addGroupChild(group.getNomGroupe(), user.getCoordinate(), user );
+                    GroupDao.getInstance().addGroupChild(group.getNomGroupe(), user.getCoordinate(), user);
                 }
 
                 @Override
@@ -196,9 +190,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             // continue to next activity with relevant data.
             Intent myIntent = new Intent(MainActivity.this, MapsActivity.class);
             MainActivity.this.startActivity(myIntent);
-        }
-        else
-        {
+        } else {
             AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
                     .setTitle("Erreur")
                     .setMessage("Il faut un nom d'utilisateur et une photo ainsi qu'un groupe !")
@@ -209,12 +201,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onBackPressed() {
-        if(!quitterApp){
+        if (!quitterApp) {
             Toast.makeText(this, "Appuiez une deuxième fois si vous êtes sûr de vouloir quitter.", Toast.LENGTH_SHORT).show();
             quitterApp = true;
-             // TODO: 17-03-12 mettre un timer pour remettre quitterApp a false
-        }
-        else{
+            // TODO: 17-03-12 mettre un timer pour remettre quitterApp a false
+        } else {
             finish();
         }
     }
@@ -222,6 +213,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     protected void onStart() {
         super.onStart();
+        if (googleApiClient != null) {
+            googleApiClient.connect();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         if (googleApiClient != null) {
             googleApiClient.connect();
         }
@@ -236,49 +235,63 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Log.e(MainActivity.class.getSimpleName(), "Connected to Google Play Services!");
+        initialiserLocationManager();
+    }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+    private void initialiserLocationManager() {
+        // appel au service de localisation si on a la permission
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // You don't have the permission you need to request it
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_LOCATION);
+        } else {
+            // You have the permission.
             if (mLocationManager == null) {
                 mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
             }
             try {
                 gps_enabled = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 Log.e("MAIN ACTIVITY", "fail to request location via GPS", ex);
             }
 
             try {
                 network_enabled = mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 Log.e("MAIN ACTIVITY", "fail to request location via NETWORK", ex);
             }
 
-            if(!gps_enabled && !network_enabled) {
-                // notify user
-                AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
-                dialog.setMessage(MainActivity.this.getResources().getString(R.string.gps_network_not_enabled));
-                dialog.setPositiveButton(MainActivity.this.getResources().getString(R.string.open_location_settings), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                        // TODO Auto-generated method stub
-                        Intent myIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        MainActivity.this.startActivity(myIntent);
-                        //get gps
-                    }
-                });
-                dialog.setNegativeButton(getApplicationContext().getString(R.string.Cancel), new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                        // TODO Auto-generated method stub
-                    }
-                });
-                dialog.show();
-            } else {
-                lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+            if (!gps_enabled && !network_enabled) {
+                checkUserLocationEnabled();
             }
 
+            lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+            Log.e(MainActivity.class.getSimpleName(), "Connected to Google Play Services!"+lastLocation);
         }
+    }
+
+    private void checkUserLocationEnabled() {
+            // notify user
+            AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+            dialog.setMessage(MainActivity.this.getResources().getString(R.string.gps_network_not_enabled));
+            dialog.setPositiveButton(MainActivity.this.getResources().getString(R.string.open_location_settings), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    // TODO Auto-generated method stub
+                    Intent myIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    MainActivity.this.startActivity(myIntent);
+                    //get gps
+                }
+            });
+            dialog.setNegativeButton(getApplicationContext().getString(R.string.Cancel), new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    // TODO Auto-generated method stub
+                    checkUserLocationEnabled();
+                }
+            });
+            dialog.setCancelable(false);
+            dialog.show();
     }
 
     @Override
