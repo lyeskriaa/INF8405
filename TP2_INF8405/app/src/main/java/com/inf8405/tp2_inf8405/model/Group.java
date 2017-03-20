@@ -111,6 +111,13 @@ public class Group {
         return null;
     }
 
+    public User findCurrentUser(){
+        for (User user : listeUtilisateurs) {
+            if (user.getWritePermission()) return user;
+        }
+        return null;
+    }
+
     public List<Lieu> getLocList() {return locList; }
     public void setLocList(List<Lieu> locList) { this.locList = locList; }
     public void addEvent(Lieu lieu) { locList.add(lieu); }

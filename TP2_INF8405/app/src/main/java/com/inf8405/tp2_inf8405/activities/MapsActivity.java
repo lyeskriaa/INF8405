@@ -1,11 +1,15 @@
 package com.inf8405.tp2_inf8405.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -16,11 +20,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.inf8405.tp2_inf8405.R;
 import com.inf8405.tp2_inf8405.infoWindows.InfoWindow;
+import com.inf8405.tp2_inf8405.model.Coordinate;
 import com.inf8405.tp2_inf8405.model.Event;
 import com.inf8405.tp2_inf8405.model.Group;
 import com.inf8405.tp2_inf8405.model.Lieu;
 import com.inf8405.tp2_inf8405.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -59,12 +65,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
-                Intent intent = new Intent(MapsActivity.this, NewLocationActivity.class);
-                Bundle b = new Bundle();
-                b.putDouble("longitude", latLng.longitude);
-                b.putDouble("latitude", latLng.latitude);
-                intent.putExtras(b);
-                startActivity(intent);
+                User currentUser = group.findCurrentUser();
+                if (currentUser == null) {
+                    Log.e("MapsActivity", "Didn't find current user!!!!");
+                    return;
+                }
+                if (currentUser.isOrganisateur()) {
+                    Intent intent = new Intent(MapsActivity.this, NewLocationActivity.class);
+                    Bundle b = new Bundle();
+                    b.putDouble("longitude", latLng.longitude);
+                    b.putDouble("latitude", latLng.latitude);
+                    intent.putExtras(b);
+                    startActivity(intent);
+                }
             }
         });
         refresh();
@@ -94,6 +107,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void setLocationMarkers(List<Lieu> locations) {
+        //TODO test code to remove
+        locations = new ArrayList<Lieu>();
+        locations.add(new Lieu(new Coordinate(45.5, -73.6), "test", "", 0));
+
         if (locations == null) return;
         for (Lieu location : locations){
             LatLng userPosition = new LatLng(location.getCoordinate().latitude, location.getCoordinate().longitude);
@@ -120,6 +137,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    private Boolean exit = false;
+    @Override
+    public void onBackPressed() {
+        if (exit) {
+            finish(); // finish activity
+        } else {
+            Toast.makeText(this, "Appuiez une deuxième fois si vous êtes sûr de vouloir quitter.",
+                    Toast.LENGTH_SHORT).show();
+            exit = true;
+        }
+
     }
 
 }
