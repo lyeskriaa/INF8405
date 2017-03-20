@@ -23,7 +23,7 @@ public class VoteOnclickListener implements View.OnClickListener {
 
     public VoteOnclickListener(Context context, String locationName) {
         this.context = context;
-        lieu = Group.getGroup().findLocation(locationName);
+        location = Group.getGroup().findLocation(locationName);
     }
 
     public void onClick(View v) {
@@ -53,7 +53,7 @@ public class VoteOnclickListener implements View.OnClickListener {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                lieu.vote(voteValue);
+                location.vote(voteValue);
             }
         });
 
