@@ -114,4 +114,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
         mMap.addMarker(marker);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
 }
