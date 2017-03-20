@@ -36,9 +36,9 @@ public class NewLocationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_location);
         Bundle b = getIntent().getExtras();
         longitude = -1; // or other values
-        if(b != null) longitude = b.getInt("longitude");
+        if(b != null) longitude = b.getDouble("longitude");
         latitude = -1; // or other values
-        if(b != null) latitude = b.getInt("latitude");
+        if(b != null) latitude = b.getDouble("latitude");
 
         final Button okButton = (Button) findViewById(R.id.newloc_okButton);
         okButton.setOnClickListener(new View.OnClickListener() {
@@ -52,8 +52,9 @@ public class NewLocationActivity extends AppCompatActivity {
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
                 } else {
-                    Group.getGroup().addLoc(new Lieu(new Coordinate(longitude, latitude), name, encodeBitmap(capturedImage),0));
-                    LieuDao.getInstance().getLieuxRef();
+                    Lieu lieu = new Lieu(new Coordinate(longitude, latitude), name, encodeBitmap(capturedImage),0);
+                    Group.getGroup().addLoc(lieu);
+                    LieuDao.getInstance().addLieuChild(lieu);
                     finish();
                 }
             }

@@ -167,7 +167,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             // save data
             group = Group.createGroup(nomGroupe.getText().toString());
             ProfileDao.getInstance().setUserProfileRef(nomUtilisateur.getText().toString(), nomGroupe.getText().toString());
-            user = new User(nomUtilisateur.getText().toString(), imageURI, false, lastLocation.getLongitude(), lastLocation.getLatitude(), group, true);
+            // TODO: 17-03-20 remettre organisateur a false
+            user = new User(nomUtilisateur.getText().toString(), imageURI, true, lastLocation.getLongitude(), lastLocation.getLatitude(), group, true);
             // aller verifier dans groupsNames si le nom du groupe existe deja
             final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Enum.GROUPS_NAMES.toString());
             Query query = reference.orderByValue().equalTo(group.getNomGroupe());

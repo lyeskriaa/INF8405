@@ -1,10 +1,7 @@
 package com.inf8405.tp2_inf8405.activities;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
@@ -65,7 +62,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
-                User currentUser = group.findCurrentUser();
+                User currentUser = group.findUser(mainUser);
                 if (currentUser == null) {
                     Log.e("MapsActivity", "Didn't find current user!!!!");
                     return;

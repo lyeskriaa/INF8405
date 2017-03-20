@@ -39,6 +39,7 @@ public class GroupDao {
                     User user = new User(username, picture, organisateur, lon,lat, Group.getGroup(), false);
                     Group.getGroup().addUser(user);
                 }
+
                 if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();
             }
 
@@ -95,10 +96,11 @@ public class GroupDao {
         userData.put("pictureURI", user.getPicture());
         userData.put("organisateur", String.valueOf(user.isOrganisateur()));
 
+        if(user.isOrganisateur()) groupRef.child(groupName).child(Enum.LIEUX.toString()).setValue("no elements");
         groupRef.child(groupName).child(Enum.USERS.toString()).child(userData.get("username")).setValue(userData);
         groupRef.child(groupName).child(Enum.USERS.toString()).child(userData.get("username")).child(Enum.COORDINATE.toString()).setValue(coordinate);
         // set a reference to our current group
-        groupRef = FirebaseDatabase.getInstance().getReference(Enum.GROUPS.toString()).child(groupName);
+        //groupRef = FirebaseDatabase.getInstance().getReference(Enum.GROUPS.toString()).child(groupName);
 
     }
 
