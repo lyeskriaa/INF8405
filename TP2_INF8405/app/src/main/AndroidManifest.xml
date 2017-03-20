@@ -66,8 +66,12 @@
 
         <activity
             android:name=".activities.MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
-        <activity android:name=".activities.NewLocationActivity"></activity>
+            android:label="@string/title_activity_maps" />
+        <activity android:name=".activities.NewLocationActivity" />
+        <activity
+            android:name=".activities.SetToCalendarActivity"
+            android:label="@string/title_activity_set_to_calendar"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

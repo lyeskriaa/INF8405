@@ -82,7 +82,8 @@ public class Group {
     }
 
     public void addLoc(Lieu loc) {
-       locList.add(loc);
+        if (locList == null) locList = new ArrayList<Lieu>();
+        locList.add(loc);
     }
 
     public void addLocs(List<Lieu> locs) {

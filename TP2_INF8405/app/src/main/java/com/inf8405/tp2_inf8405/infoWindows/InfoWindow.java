@@ -1,39 +1,21 @@
 package com.inf8405.tp2_inf8405.infoWindows;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
-import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.inf8405.tp2_inf8405.R;
-import com.inf8405.tp2_inf8405.model.Group;
-import com.inf8405.tp2_inf8405.model.Lieu;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Location;
-import android.os.Bundle;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.FragmentManager;
 import android.util.Base64;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.List;
 
 /**
  * Created by Louise on 2017-03-16.
@@ -100,9 +82,6 @@ public class InfoWindow implements GoogleMap.InfoWindowAdapter {
         Bitmap bitmap  = BitmapFactory.decodeStream(inputStream);
         img.setImageBitmap(bitmap);
 
-        Button button = (Button) myContentsView.findViewById(R.id.location_vote_button);
-        button.setOnClickListener(new VoteOnclickListener(this.context, marker.getTitle()));
-
         return myContentsView;
     }
 
@@ -121,15 +100,6 @@ public class InfoWindow implements GoogleMap.InfoWindowAdapter {
 
         //TextView txt2 = ((TextView)myContentsView.findViewById(R.id.event_date));
         //txt2.setText(date);
-
-        Button button = (Button) myContentsView.findViewById(R.id.event_go_button);
-        //button.setOnClickListener(new GoOnclickListener());
-
-        Button button2 = (Button) myContentsView.findViewById((R.id.event_maybe_go_button));
-        //button2.setOnClickListener(new MaybeOnClickListener());
-
-        Button button3 = (Button) myContentsView.findViewById(R.id.event_no_go_button);
-        //button3.setOnClickListener(new NoGoOnclickListener());
 
         return myContentsView;
     }

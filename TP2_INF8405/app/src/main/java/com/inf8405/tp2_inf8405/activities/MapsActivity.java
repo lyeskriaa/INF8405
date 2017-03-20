@@ -15,8 +15,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.inf8405.tp2_inf8405.R;
 import com.inf8405.tp2_inf8405.infoWindows.InfoWindow;
+import com.inf8405.tp2_inf8405.infoWindows.InfoWindowClickListener;
 import com.inf8405.tp2_inf8405.model.Coordinate;
 import com.inf8405.tp2_inf8405.model.Event;
 import com.inf8405.tp2_inf8405.model.Group;
@@ -68,15 +70,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     return;
                 }
                 if (currentUser.isOrganisateur()) {
-                    Intent intent = new Intent(MapsActivity.this, NewLocationActivity.class);
-                    Bundle b = new Bundle();
-                    b.putDouble("longitude", latLng.longitude);
-                    b.putDouble("latitude", latLng.latitude);
-                    intent.putExtras(b);
-                    startActivity(intent);
+                    if (group.getLocList().size() >= 3) {
+                        Intent intent = new Intent(MapsActivity.this, NewLocationActivity.class);
+                        Bundle b = new Bundle();
+                        b.putDouble("longitude", latLng.longitude);
+                        b.putDouble("latitude", latLng.latitude);
+                        intent.putExtras(b);
+                        startActivity(intent);
+                    }
                 }
             }
         });
+
+        mMap.setOnInfoWindowClickListener(new InfoWindowClickListener(this));
         refresh();
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(45.5, -73.6), 12.0f));
 
@@ -104,13 +110,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void setLocationMarkers(List<Lieu> locations) {
-        //TODO test code to remove
-        locations = new ArrayList<Lieu>();
-        locations.add(new Lieu(new Coordinate(45.5, -73.6), "test", "", 0));
-
         if (locations == null) return;
         for (Lieu location : locations){
-            LatLng userPosition = new LatLng(location.getCoordinate().latitude, location.getCoordinate().longitude);
+            LatLng userPosition = new LatLng(location.getCoordinate().longitude, location.getCoordinate().latitude);
             MarkerOptions marker = new MarkerOptions();
             marker.position(userPosition);
             marker.title(location.getName());
@@ -140,7 +142,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onBackPressed() {
         if (exit) {
-            finish(); // finish activity
+            Intent a = new Intent(Intent.ACTION_MAIN);
+            a.addCategory(Intent.CATEGORY_HOME);
+            a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(a);
         } else {
             Toast.makeText(this, "Appuiez une deuxième fois si vous êtes sûr de vouloir quitter.",
                     Toast.LENGTH_SHORT).show();
