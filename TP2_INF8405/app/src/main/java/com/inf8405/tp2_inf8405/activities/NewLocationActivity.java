@@ -35,9 +35,9 @@ public class NewLocationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_location);
         Bundle b = getIntent().getExtras();
         longitude = -1; // or other values
-        if(b != null) longitude = b.getInt("longitude");
+        if(b != null) longitude = b.getDouble("longitude");
         latitude = -1; // or other values
-        if(b != null) latitude = b.getInt("latitude");
+        if(b != null) latitude = b.getDouble("latitude");
 
         final Button okButton = (Button) findViewById(R.id.newloc_okButton);
         okButton.setOnClickListener(new View.OnClickListener() {

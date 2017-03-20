@@ -5,6 +5,7 @@
     <string name="open_location_settings">Ouvrir les préférences de localisation.</string>
     <string name="Cancel">Annuler.</string>
     <string name="network_unactive">Pas de connexion internet! Veuillez vous connecter à internet.</string>
+    <string name="title_activity_set_to_calendar">SetToCalendarActivity</string>
 
 </resources>
 
