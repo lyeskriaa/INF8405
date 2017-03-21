@@ -15,17 +15,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Marker;
 import com.inf8405.tp2_inf8405.R;
 import com.inf8405.tp2_inf8405.infoWindows.InfoWindow;
 import com.inf8405.tp2_inf8405.infoWindows.InfoWindowClickListener;
-import com.inf8405.tp2_inf8405.model.Coordinate;
 import com.inf8405.tp2_inf8405.model.Event;
 import com.inf8405.tp2_inf8405.model.Group;
 import com.inf8405.tp2_inf8405.model.Lieu;
 import com.inf8405.tp2_inf8405.model.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -70,7 +67,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     return;
                 }
                 if (currentUser.isOrganisateur()) {
-                    if (group.getLocList().size() >= 3) {
+                    if (group.getLocList().size() < 3) {
                         Intent intent = new Intent(MapsActivity.this, NewLocationActivity.class);
                         Bundle b = new Bundle();
                         b.putDouble("longitude", latLng.longitude);
