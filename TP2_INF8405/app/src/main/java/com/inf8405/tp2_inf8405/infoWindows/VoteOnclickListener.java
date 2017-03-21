@@ -5,12 +5,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.View;
 
-import com.inf8405.tp2_inf8405.R;
+import com.inf8405.tp2_inf8405.dao.LieuDao;
 import com.inf8405.tp2_inf8405.model.Group;
 import com.inf8405.tp2_inf8405.model.Lieu;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by Louise on 2017-03-18.
@@ -28,6 +27,14 @@ public class VoteOnclickListener implements View.OnClickListener {
 
     public void onClick(View v) {
         if (location == null) return; // nothing we can do
+        else if(location.getMyVote() != 0) {
+            AlertDialog dialog = new AlertDialog.Builder(context)
+                    .setTitle("Erreur")
+                    .setMessage("Vous avez déjà voté pour ce lieu!")
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+            return;
+        }
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
         // Set the alert dialog title
@@ -54,6 +61,7 @@ public class VoteOnclickListener implements View.OnClickListener {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 location.vote(voteValue);
+                LieuDao.getInstance().saveVote(voteValue, location);
             }
         });
 

@@ -110,7 +110,7 @@ public class Group {
 
     public User findCurrentUser(){
         for (User user : listeUtilisateurs) {
-            if (user.getWritePermission()) return user;
+            return user;
         }
         return null;
     }

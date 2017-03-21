@@ -9,7 +9,8 @@ public enum Enum {
     COORDINATE("coordinate"),
     GROUPS("groups"),
     LIEUX("lieux"),
-    GROUPS_NAMES("groupsNames");
+    GROUPS_NAMES("groupsNames"),
+    EVENTS("events");
 
     private final String text;
 
