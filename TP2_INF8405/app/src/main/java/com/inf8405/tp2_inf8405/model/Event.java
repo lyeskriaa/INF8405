@@ -1,5 +1,8 @@
 package com.inf8405.tp2_inf8405.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Louise on 2017-03-15.
  */
@@ -10,6 +13,10 @@ public class Event {
     private String dateEnd;
     private String eventName;
     private String picture;
+    private List<String> going = new ArrayList<String>();
+    private List<String> maybe = new ArrayList<String>();
+    private List<String> notGoing = new ArrayList<String>();
+
 
     public Event(Coordinate lieuChoisi, String eventName, String picture, String dateStart, String dateEnd){
         this.lieuChoisi = lieuChoisi;
@@ -32,4 +39,13 @@ public class Event {
     public void setDateEnd(String date) {this.dateEnd = date;}
     public String getDateStart() { return this.dateStart;}
     public String getDateEnd() { return this.dateEnd;}
+
+    public void addGoing(String username){going.add(username);}
+    public void addMaybe(String username){maybe.add(username);}
+    public void addNotGoing(String username){notGoing.add(username);}
+
+    public List<String> getGoing() {return going;}
+    public List<String> getMaybe() {return maybe;}
+    public List<String> getNotGoing() {return notGoing;}
+
 }

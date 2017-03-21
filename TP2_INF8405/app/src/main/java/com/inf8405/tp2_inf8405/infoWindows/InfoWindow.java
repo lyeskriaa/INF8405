@@ -3,6 +3,8 @@ package com.inf8405.tp2_inf8405.infoWindows;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 import com.inf8405.tp2_inf8405.R;
+import com.inf8405.tp2_inf8405.model.Event;
+import com.inf8405.tp2_inf8405.model.Group;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -42,7 +44,7 @@ public class InfoWindow implements GoogleMap.InfoWindowAdapter {
 
         if (type.equals("user"))     { return createUserInfoWindow(marker, image); }
         if (type.equals("location")) { return createLocationInfoWindow(marker, image); }
-        if (type.equals("event"))    { return createEventInfoWindow(marker, image, params[1], params[2]); }
+        if (type.equals("event"))    { return createEventInfoWindow(marker, image); }
 
         return null;
     }
@@ -85,12 +87,23 @@ public class InfoWindow implements GoogleMap.InfoWindowAdapter {
         return myContentsView;
     }
 
-    private View createEventInfoWindow(Marker marker, String image, String dateStart, String dateEnd){
+    private View createEventInfoWindow(Marker marker, String image){
         LayoutInflater inflater = (LayoutInflater)context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         View myContentsView = inflater.inflate(R.layout.event_info_contents, null);
 
         TextView txt = ((TextView)myContentsView.findViewById(R.id.event_title));
         txt.setText(marker.getTitle());
+
+        Event ev = Group.getGroup().getEvent();
+
+        TextView txt2 = ((TextView)myContentsView.findViewById(R.id.event_participartion));
+        String participation = "Participe: ";
+        for (String str : ev.getGoing()) participation = participation + str + ", ";
+        participation = participation + "\n Participe peut-être: ";
+        for (String str : ev.getMaybe()) participation = participation + str + ", ";
+        participation = participation + "\n Participe pas: ";
+        for (String str : ev.getNotGoing()) participation = participation + str + ", ";
+        txt2.setText(participation);
 
         ImageView img = ((ImageView)myContentsView.findViewById(R.id.event_image));
         byte[] decodedString = Base64.decode(image,Base64.NO_WRAP);
@@ -98,8 +111,10 @@ public class InfoWindow implements GoogleMap.InfoWindowAdapter {
         Bitmap bitmap  = BitmapFactory.decodeStream(inputStream);
         img.setImageBitmap(bitmap);
 
-        //TextView txt2 = ((TextView)myContentsView.findViewById(R.id.event_date));
-        //txt2.setText(date);
+        TextView txt3 = ((TextView)myContentsView.findViewById(R.id.event_date_start));
+        txt3.setText(ev.getDateStart());
+        TextView txt4 = ((TextView)myContentsView.findViewById(R.id.event_date_end));
+        txt4.setText(ev.getDateEnd());
 
         return myContentsView;
     }

@@ -6,9 +6,11 @@ import com.google.android.gms.maps.model.Marker;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 
 import java.util.Arrays;
 
+import com.inf8405.tp2_inf8405.activities.SetToCalendarActivity;
 import com.inf8405.tp2_inf8405.model.Lieu;
 import com.inf8405.tp2_inf8405.model.Group;
 
@@ -76,6 +78,7 @@ public class InfoWindowClickListener implements GoogleMap.OnInfoWindowClickListe
     }
 
     private void eventInfoWindow(Marker marker){
-
+        Intent myIntent = new Intent(context, SetToCalendarActivity.class);
+        context.startActivity(myIntent);
     }
 }
