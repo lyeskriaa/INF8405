@@ -15,6 +15,9 @@ import com.inf8405.tp2_inf8405.model.Lieu;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.util.Log.d;
+import static com.inf8405.tp2_inf8405.model.Group.getGroup;
+
 
 /**
  * Created by LyesKriaa on 17-03-20.
@@ -37,7 +40,7 @@ public class LieuDao {
     }
 
     private LieuDao() {
-        lieuxRef = GroupDao.getInstance().getGroupRef().child(Group.getGroup().getNomGroupe()).child(Enum.LIEUX.toString());
+        lieuxRef = GroupDao.getInstance().getGroupRef().child(getGroup().getNomGroupe()).child(Enum.LIEUX.toString());
 
     }
 
@@ -57,36 +60,41 @@ public class LieuDao {
         lieuxRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d(TAG, "onChildAdded:" + dataSnapshot);
+                d(TAG, "onChildAdded:" + dataSnapshot);
                 if(dataSnapshot.hasChildren()) {
 
                     String lieuName      = dataSnapshot.child("name") != null ? dataSnapshot.child("name").getValue().toString() : null;
                     String picture       = dataSnapshot.child("picture") != null ? dataSnapshot.child("picture").getValue().toString() : null;
-                    int votes            = dataSnapshot.child("votes") != null ? Integer.valueOf(dataSnapshot.child("votes").getValue().toString()) : null;
-                    double lon           = dataSnapshot.child("coordinate")!= null? Double.valueOf(dataSnapshot.child("coordinate").child("longitude").getValue().toString()) : null;
-                    double lat           = dataSnapshot.child("coordinate")!= null? Double.valueOf(dataSnapshot.child("coordinate").child("latitude").getValue().toString()) : null;
+                    float votes            = dataSnapshot.child("votes") != null ? Float.valueOf(dataSnapshot.child("votes").getValue().toString()) : 0;
+                    double lon           = dataSnapshot.child("coordinate")!= null? Double.valueOf(dataSnapshot.child("coordinate").child("longitude").getValue().toString()) : 0;
+                    double lat           = dataSnapshot.child("coordinate")!= null? Double.valueOf(dataSnapshot.child("coordinate").child("latitude").getValue().toString()) : 0;
                     Coordinate coordinate = new Coordinate(lon,lat);
                     Lieu lieu = new Lieu(coordinate,lieuName, picture, votes);
-                    Group.getGroup().addLoc(lieu);
-                    Log.d(TAG, "FIN ChildAdded:" + Group.getGroup().getLocList().size());
+                    getGroup().addLoc(lieu);
+//                    Log.d(TAG, "FIN ChildAdded:" + Group.getGroup().getLocList().size());
                 }
                 if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
+                d(TAG, "onChildChanged:" + dataSnapshot.getKey());
+                String lieuName = dataSnapshot.child("name") != null ? dataSnapshot.child("name").getValue().toString() : null;
+                float votes     = dataSnapshot.child("votes") != null ? Float.valueOf(dataSnapshot.child("votes").getValue().toString()) : 0;
+                if(lieuName != null) {
+                    Group.getGroup().findLocation(lieuName).setVotes(votes);
+                }
                 if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
+                d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
+                d(TAG, "onChildMoved:" + dataSnapshot.getKey());
             }
 
             @Override
@@ -94,6 +102,13 @@ public class LieuDao {
                 Log.w(TAG, "postComments:onCancelled", databaseError.toException());
             }
         });
+    }
 
+    public void setVote(int vote, Lieu lieu) {
+        float oldVote = lieu.getVotes();
+        int nbrVotes = lieu.getNbrVotes();
+        nbrVotes++;
+        float newVote = (float)Math.round(oldVote + vote)/ nbrVotes ;
+        lieuxRef.child(lieu.getName()).child("note").setValue(String.format(java.util.Locale.US,"%.2f", newVote));
     }
 }

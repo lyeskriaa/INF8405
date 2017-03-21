@@ -3,6 +3,7 @@ package com.inf8405.tp2_inf8405.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -74,6 +75,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         b.putDouble("latitude", latLng.latitude);
                         intent.putExtras(b);
                         startActivity(intent);
+                    }
+                    else {
+                        AlertDialog dialog = new AlertDialog.Builder(MapsActivity.this)
+                                .setTitle("Alerte")
+                                .setMessage("Vous avez déjà choisis trois lieux !")
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
                     }
                 }
             }

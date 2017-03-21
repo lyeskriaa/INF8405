@@ -8,18 +8,28 @@ public class Lieu {
     private Coordinate coordinate;
     private String picture;
     private String name;
-    private int votes;
+    private float votes;
+    private int nbrVotes;
     private int myVote;
 
-    public Lieu(Coordinate coordinate, String name, String picture, int votes){
+    public Lieu(Coordinate coordinate, String name, String picture, float votes){
         this.name = name;
         this.picture = picture;
         this.coordinate = coordinate;
         this.votes = votes;
+        this.nbrVotes = 0;
     }
 
-    public void setVotes(int votes){ this.votes = votes; }
-    public int getVotes() { return votes; }
+    public void setVotes(float votes){ this.votes = votes; }
+    public float getVotes() { return votes; }
+
+    public int getNbrVotes() {
+        return nbrVotes;
+    }
+    public void setNbrVotes(int nbrVotes) {
+        this.nbrVotes = nbrVotes;
+    }
+
     public void vote(int vote) { myVote = vote; }
 
     public String getName() {return name;}
