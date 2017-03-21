@@ -17,7 +17,6 @@ public class Lieu {
         this.picture = picture;
         this.coordinate = coordinate;
         this.votes = votes;
-        this.nbrVotes = 0;
     }
 
     public void setVotes(float votes){ this.votes = votes; }
@@ -31,6 +30,7 @@ public class Lieu {
     }
 
     public void vote(int vote) { myVote = vote; }
+    public int getMyVote() {return myVote;}
 
     public String getName() {return name;}
     public String getPicture() {return picture;}

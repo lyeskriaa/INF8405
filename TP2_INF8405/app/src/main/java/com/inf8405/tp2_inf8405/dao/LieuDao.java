@@ -81,8 +81,11 @@ public class LieuDao {
                 d(TAG, "onChildChanged:" + dataSnapshot.getKey());
                 String lieuName = dataSnapshot.child("name") != null ? dataSnapshot.child("name").getValue().toString() : null;
                 float votes     = dataSnapshot.child("votes") != null ? Float.valueOf(dataSnapshot.child("votes").getValue().toString()) : 0;
+                int nbrVotes    = dataSnapshot.child("nbrVotes") != null ? Integer.valueOf(dataSnapshot.child("nbrVotes").getValue().toString()) : 0;
                 if(lieuName != null) {
-                    Group.getGroup().findLocation(lieuName).setVotes(votes);
+                    Lieu lieuToUpdate = Group.getGroup().findLocation(lieuName);
+                    lieuToUpdate.setVotes(votes);
+                    lieuToUpdate.setNbrVotes(nbrVotes);
                 }
                 if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();
             }
@@ -104,11 +107,13 @@ public class LieuDao {
         });
     }
 
-    public void setVote(int vote, Lieu lieu) {
+    public void saveVote(int vote, Lieu lieu) {
         float oldVote = lieu.getVotes();
         int nbrVotes = lieu.getNbrVotes();
         nbrVotes++;
         float newVote = (float)Math.round(oldVote + vote)/ nbrVotes ;
-        lieuxRef.child(lieu.getName()).child("note").setValue(String.format(java.util.Locale.US,"%.2f", newVote));
+        lieu.vote(vote);
+        lieuxRef.child(lieu.getName()).child("votes").setValue(String.format(java.util.Locale.US,"%.2f", newVote));
+        lieuxRef.child(lieu.getName()).child("nbrVotes").setValue(nbrVotes);
     }
 }
