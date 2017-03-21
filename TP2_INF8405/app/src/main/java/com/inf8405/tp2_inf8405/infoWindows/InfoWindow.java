@@ -3,6 +3,7 @@ package com.inf8405.tp2_inf8405.infoWindows;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 import com.inf8405.tp2_inf8405.R;
+import com.inf8405.tp2_inf8405.model.Lieu;
 import com.inf8405.tp2_inf8405.model.Event;
 import com.inf8405.tp2_inf8405.model.Group;
 
@@ -77,6 +78,12 @@ public class InfoWindow implements GoogleMap.InfoWindowAdapter {
 
         TextView txt = ((TextView)myContentsView.findViewById(R.id.location_title));
         txt.setText(marker.getTitle());
+
+        Lieu l = Group.getGroup().findLocation(marker.getTitle());
+        if (l.getMyVote() != 0) {
+            TextView txt2 = ((TextView) myContentsView.findViewById(R.id.location_average));
+            txt2.setText("vote moyen : " +  String.valueOf(l.getVotes()));
+        }
 
         ImageView img = ((ImageView)myContentsView.findViewById(R.id.location_image));
         byte[] decodedString = Base64.decode(image,Base64.NO_WRAP);
