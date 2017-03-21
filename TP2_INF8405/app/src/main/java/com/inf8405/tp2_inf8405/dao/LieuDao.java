@@ -68,7 +68,7 @@ public class LieuDao {
                     Lieu lieuToUpdate = Group.getGroup().findLocation(lieuName);
                     lieuToUpdate.setVotes(votes);
                     lieuToUpdate.setNbrVotes(nbrVotes);
-                    // TODO: 17-03-21 la notification 
+                    // TODO: 17-03-21 la notification
                     for (Lieu votedPlace : Group.getGroup().getLocList()) {
 
                     }
@@ -111,7 +111,9 @@ public class LieuDao {
         int nbrVotes = lieu.getNbrVotes();
         nbrVotes++;
         float newVote = (float)Math.round(oldVote + vote)/ nbrVotes ;
-        lieuxRef.child(lieu.getName()).child("votes").setValue(String.format(java.util.Locale.US,"%.2f", newVote));
-        lieuxRef.child(lieu.getName()).child("nbrVotes").setValue(nbrVotes);
+        Map<String, String> voteToSave = new HashMap<String, String>();
+        voteToSave.put("votes",String.format(java.util.Locale.US,"%.2f", newVote));
+        voteToSave.put("nbrVotes", String.valueOf(nbrVotes));
+        lieuxRef.child(lieu.getName()).setValue(voteToSave);
     }
 }
