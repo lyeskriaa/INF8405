@@ -42,12 +42,16 @@ public class GoOnclickListener implements View.OnClickListener {
         EventDao.getInstance().updateGoing(event.getEventName(), ProfileDao.getInstance().getCurrentUser().getUsername());
         Intent intent = new Intent(Intent.ACTION_INSERT);
         intent.setType("vnd.android.cursor.item/event");
-        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, String.valueOf(startTime.getTime()));
-        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, String.valueOf(endTime.getTime()));
+        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startTime.getTime());
+        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.getTime());
         intent.putExtra(Events.TITLE, title);
         intent.putExtra(Events.EVENT_LOCATION, eventLocation);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_SINGLE_TOP
+                | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                | Intent.FLAG_ACTIVITY_NO_HISTORY
+                | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         context.startActivity(intent);
-
 
     }
 }

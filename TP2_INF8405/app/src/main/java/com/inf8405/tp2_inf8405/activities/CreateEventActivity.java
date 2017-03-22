@@ -79,6 +79,7 @@ public class CreateEventActivity extends AppCompatActivity {
             Event event = new Event(location.getCoordinate(), name, location.getPicture(), dateStart, dateEnd);
             EventDao.getInstance().addEventChild(event);
             LieuDao.getInstance().removeAllLieux();
+            finish();
             //Group.getGroup().setEvent(new Event(location.getCoordinate(), name, location.getPicture(), dateStart, dateEnd));
         }
     }
