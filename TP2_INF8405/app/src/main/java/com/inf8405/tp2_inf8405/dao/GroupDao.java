@@ -26,49 +26,71 @@ public class GroupDao {
     private DatabaseReference groupRef = FirebaseDatabase.getInstance().getReference(Enum.GROUPS.toString());
 
     private GroupDao() {
-        groupRef.child(Group.getGroup().getNomGroupe()).child(Enum.USERS.toString()).addChildEventListener(new ChildEventListener() {
+        groupRef.child(Group.getGroup().getNomGroupe()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
-                String username      = dataSnapshot.child("username") != null ? dataSnapshot.child("username").getValue().toString() : null;
-                String picture       = dataSnapshot.child("pictureURI") != null ? dataSnapshot.child("pictureURI").getValue().toString() : null;
-                boolean organisateur = dataSnapshot.child("organisateur") != null ? Boolean.valueOf(dataSnapshot.child("organisateur").getValue().toString()) : null;
-                double lon           = dataSnapshot.child("coordinate")!= null? Double.valueOf(dataSnapshot.child("coordinate").child("longitude").getValue().toString()) : 0;
-                double lat           = dataSnapshot.child("coordinate")!= null? Double.valueOf(dataSnapshot.child("coordinate").child("latitude").getValue().toString()) : 0;
-                User user = new User(username, picture, organisateur, lon,lat, Group.getGroup(), false);
-                if(Group.getGroup().findUser(username)==null)
-                    Group.getGroup().addUser(user);
+                if(dataSnapshot.getKey().equals(Enum.USERS.toString())) {
+                    Log.d(TAG, "onChildAdded:" + "========== USERS ========");
+                    for (DataSnapshot user : dataSnapshot.getChildren()) {
+                        readData(user);
+                    }
+                }
+                if(dataSnapshot.getKey().equals(Enum.LIEUX.toString())) {
+                    Log.d(TAG, "onChildAdded:" + "========== LIEUX ========");
+                    if(dataSnapshot.hasChildren()) {
+                        for (DataSnapshot lieu : dataSnapshot.getChildren()) {
+                            LieuDao.getInstance().readData(lieu);
+                        }
+                    }
+                }
+                if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();
+                // TODO: 17-03-22  
+                // on enleve ce listener qui genere beaucoup trop de données et on mets des listener sur des child précis
+                //groupRef.child(Group.getGroup().getNomGroupe()).removeEventListener(this);
+            }
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
+            }
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "postComments:onCancelled", databaseError.toException());
+            }
+        });
 
+        //keepUpdates();
+    }
+
+    private void keepUpdates() {
+        groupRef.child(Group.getGroup().getNomGroupe()).child(Enum.USERS.toString()).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.d(TAG, "onChildAdded: 2 ;" + dataSnapshot.getKey());
+                readData(dataSnapshot);
                 if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();
             }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
-                String username      = dataSnapshot.child("username") != null ? dataSnapshot.child("username").getValue().toString() : null;
-                double lon           = dataSnapshot.child("coordinate")!= null? Double.valueOf(dataSnapshot.child("coordinate").child("longitude").getValue().toString()) : 0;
-                double lat           = dataSnapshot.child("coordinate")!= null? Double.valueOf(dataSnapshot.child("coordinate").child("latitude").getValue().toString()) : 0;
-                Group.getGroup().findUser(username).setCoordinate(lon, lat);
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.d(TAG, "onChildChanged: 2 ;" + dataSnapshot.getKey());
+                updateData(dataSnapshot);
                 if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
-                String username      = dataSnapshot.child("username") != null ? dataSnapshot.child("username").getValue().toString() : null;
-                String picture       = dataSnapshot.child("pictureURI") != null ? dataSnapshot.child("pictureURI").getValue().toString() : null;
-                boolean organisateur = dataSnapshot.child("organisateur") != null ? Boolean.valueOf(dataSnapshot.child("organisateur").getValue().toString()) : null;
-                double lon           = dataSnapshot.child("coordinate")!= null? Double.valueOf(dataSnapshot.child("coordinate").child("longitude").getValue().toString()) : 0;
-                double lat           = dataSnapshot.child("coordinate")!= null? Double.valueOf(dataSnapshot.child("coordinate").child("latitude").getValue().toString()) : 0;
-                User user = new User(username, picture, organisateur, lon,lat, Group.getGroup(), false);
-                Group.getGroup().removeUser(user);
 
-                if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();
             }
 
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
             }
 
             @Override
@@ -76,6 +98,30 @@ public class GroupDao {
                 Log.w(TAG, "postComments:onCancelled", databaseError.toException());
             }
         });
+    }
+
+    private void updateData(DataSnapshot dataSnapshot) {
+        String username      = dataSnapshot.child("username").getValue() != null ? dataSnapshot.child("username").getValue().toString() : null;
+        double lon           = dataSnapshot.child("coordinate").getValue() != null ? Double.valueOf(dataSnapshot.child("coordinate").child("longitude").getValue().toString()) : 0;
+        double lat           = dataSnapshot.child("coordinate").getValue() != null ? Double.valueOf(dataSnapshot.child("coordinate").child("latitude").getValue().toString()) : 0;
+        User user = Group.getGroup().findUser(username);
+        if(user != null) {
+            user.setCoordinate(lon, lat);
+        }
+    }
+
+    private void readData(DataSnapshot dataSnapshot) {
+        if(dataSnapshot.hasChildren()) {
+            String username      = dataSnapshot.child("username").getValue() != null ? dataSnapshot.child("username").getValue().toString() : null;
+            String picture       = dataSnapshot.child("pictureURI").getValue() != null ? dataSnapshot.child("pictureURI").getValue().toString() : null;
+            boolean organisateur = dataSnapshot.child("organisateur").getValue() != null ? Boolean.valueOf(dataSnapshot.child("organisateur").getValue().toString()) : null;
+            double lon           = dataSnapshot.child("coordinate").getValue() != null ? Double.valueOf(dataSnapshot.child("coordinate").child("longitude").getValue().toString()) : 0;
+            double lat           = dataSnapshot.child("coordinate").getValue() != null ? Double.valueOf(dataSnapshot.child("coordinate").child("latitude").getValue().toString()) : 0;
+            if(Group.getGroup().findUser(username)==null) {
+                User user = new User(username, picture, organisateur, lon,lat, Group.getGroup(), false);
+                Group.getGroup().addUser(user);
+            }
+        }
     }
 
     private static GroupDao INSTANCE = null;
