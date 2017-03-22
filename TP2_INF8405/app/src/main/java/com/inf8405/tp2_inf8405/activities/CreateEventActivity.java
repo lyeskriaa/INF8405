@@ -1,6 +1,7 @@
 package com.inf8405.tp2_inf8405.activities;
 
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -63,7 +64,11 @@ public class CreateEventActivity extends AppCompatActivity {
             if (name == null || name.equals("") ||
                     dateStart == null || dateStart.equals("") ||
                     dateEnd == null || dateEnd.equals("")) {
-                //todo error message
+                AlertDialog dialog = new AlertDialog.Builder(CreateEventActivity.this)
+                        .setTitle("Erreur")
+                        .setMessage("information manquante! !")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
                 return;
             }
 
@@ -72,7 +77,11 @@ public class CreateEventActivity extends AppCompatActivity {
                 Date result = df.parse(dateStart);
                 result = df.parse(dateEnd);
             } catch (Exception e){
-                // TODO error message
+                AlertDialog dialog = new AlertDialog.Builder(CreateEventActivity.this)
+                        .setTitle("Erreur")
+                        .setMessage("Format de date illégal !")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
                 return;
             }
             // todo EVENT DAO + delete lieu (APRES la création de l'event
