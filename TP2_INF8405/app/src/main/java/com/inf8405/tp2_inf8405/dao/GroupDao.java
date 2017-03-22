@@ -27,7 +27,7 @@ public class GroupDao {
     private ChildEventListener childEventListener = null;
 
     private GroupDao() {
-        childEventListener = groupRef.child(Group.getGroup().getNomGroupe()).addChildEventListener(new ChildEventListener() {
+        groupRef.child(Group.getGroup().getNomGroupe()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
@@ -58,12 +58,12 @@ public class GroupDao {
                     // TODO: 17-03-22
                     // on enleve ce listener qui genere beaucoup trop de données et on mets des listener sur des child précis
                     // USERS est le dernier a etre chargé
-                    groupRef.removeEventListener(childEventListener);
+                    groupRef.child(Group.getGroup().getNomGroupe()).removeEventListener(this);
                 }
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d(TAG, "onChildChanged:" + "========== GROUP DAO ======== "+dataSnapshot.getKey());
+                Log.d(TAG, "onChildChanged:" + "========== FIRST LISTENER GROUP DAO ======== "+dataSnapshot.getKey());
             }
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
