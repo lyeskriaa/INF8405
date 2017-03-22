@@ -61,6 +61,10 @@ public class LieuDao {
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
                 // TODO: 17-03-22 remove locations
+                Group.getGroup().setLocList(null);
+                if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();
+                Instance = null;
+                lieuxRef.removeEventListener(childEventListener);
             }
 
             @Override
@@ -126,12 +130,10 @@ public class LieuDao {
                 lieuToUpdate.setVotes(votes);
                 lieuToUpdate.setNbrVotes(nbrVotes);
                 // TODO: 17-03-21 la notification
+                MapsActivity.getMapsActivity().setVotesCompleted(true);
                 for (Lieu place : Group.getGroup().getLocList()) {
                     if(place.getNbrVotes() < Group.getGroup().getListeUtilisateurs().size()) {
                         MapsActivity.getMapsActivity().setVotesCompleted(false);
-                    }
-                    else {
-                        MapsActivity.getMapsActivity().setVotesCompleted(true);
                     }
                 }
                 if (MapsActivity.getMapsActivity().isVotesCompleted()) {
@@ -142,10 +144,6 @@ public class LieuDao {
     }
 
     public void removeAllLieux() {
-        lieuxRef.removeEventListener(childEventListener);
         lieuxRef.setValue("no elements");
-        Group.getGroup().setLocList(null);
-        Instance = null;
-        if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();
     }
 }

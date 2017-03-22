@@ -33,6 +33,7 @@ public class GroupDao {
                 Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
                 if(dataSnapshot.getKey().equals(Enum.EVENTS.toString())) {
                     Log.d(TAG, "onChildAdded:" + "========== EVENT ========");
+                    EventDao.getInstance();
                     if(dataSnapshot.hasChildren()) {
                         for (DataSnapshot event : dataSnapshot.getChildren()) {
                             EventDao.getInstance().readData(event);
@@ -42,6 +43,7 @@ public class GroupDao {
 
                 if(dataSnapshot.getKey().equals(Enum.LIEUX.toString())) {
                     Log.d(TAG, "onChildAdded:" + "========== LIEUX ========");
+                    LieuDao.getInstance();
                     if(dataSnapshot.hasChildren()) {
                         for (DataSnapshot lieu : dataSnapshot.getChildren()) {
                             LieuDao.getInstance().readData(lieu);
