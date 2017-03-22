@@ -26,6 +26,7 @@ public class LieuDao {
     private static LieuDao Instance = null;
     private DatabaseReference lieuxRef = null;
     private final String TAG = "LIEU DAO";
+    private ChildEventListener childEventListener = null;
 
     public static LieuDao getInstance() {
         if (Instance == null) {
@@ -39,8 +40,8 @@ public class LieuDao {
     }
 
     private LieuDao() {
-        lieuxRef = GroupDao.getInstance().getGroupRef().child(Group.getGroup().getNomGroupe()).child(Enum.LIEUX.toString());
-        lieuxRef.addChildEventListener(new ChildEventListener() {
+        lieuxRef = GroupDao.getInstance().getGroupRef().child(Group.getGroup().getNomGroupe()).child(Enum.LIEUX.toString()).getRef();
+        childEventListener = lieuxRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 d(TAG, "onChildAdded:" + dataSnapshot.getKey());
@@ -90,10 +91,11 @@ public class LieuDao {
         int nbrVotes = lieu.getNbrVotes();
         nbrVotes++;
         float newVote = (float)Math.round(oldVote + vote)/ nbrVotes ;
-        Map<String, String> voteToSave = new HashMap<String, String>();
+        Map<String, Object> voteToSave = new HashMap<String, Object>();
         voteToSave.put("votes",String.format(java.util.Locale.US,"%.2f", newVote));
         voteToSave.put("nbrVotes", String.valueOf(nbrVotes));
-        lieuxRef.child(lieu.getName()).setValue(voteToSave);
+        lieuxRef.child(lieu.getName()).updateChildren(voteToSave);
+                //setValue(voteToSave);
     }
 
     public void readData(DataSnapshot dataSnapshot) {
@@ -107,7 +109,7 @@ public class LieuDao {
             Coordinate coordinate = new Coordinate(lon,lat);
 
             if(Group.getGroup().findLocation(lieuName) == null) {
-                Lieu lieu = new Lieu(coordinate,lieuName, picture, votes);
+                Lieu lieu = new Lieu(coordinate,lieuName, picture, votes, nbrVotes);
                 Group.getGroup().addLoc(lieu);
             }
 
@@ -137,5 +139,13 @@ public class LieuDao {
                 }
             }
         }
+    }
+
+    public void removeAllLieux() {
+        lieuxRef.removeEventListener(childEventListener);
+        lieuxRef.setValue("no elements");
+        Group.getGroup().setLocList(null);
+        Instance = null;
+        if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();
     }
 }

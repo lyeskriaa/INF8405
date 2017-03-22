@@ -7,6 +7,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.inf8405.tp2_inf8405.activities.MapsActivity;
+import com.inf8405.tp2_inf8405.model.Coordinate;
 import com.inf8405.tp2_inf8405.model.Enum;
 import com.inf8405.tp2_inf8405.model.Event;
 import com.inf8405.tp2_inf8405.model.Group;
@@ -72,13 +73,51 @@ public class EventDao {
 
     private void updateData(DataSnapshot dataSnapshot) {
         Log.d(TAG,"UPDATE EVENT");
+        if (dataSnapshot.hasChildren()) {
+            String eventName      = dataSnapshot.child("eventName").getValue() != null ? dataSnapshot.child("eventName").getValue().toString() : null;
+            Event event = Group.getGroup().getEvent();
+            if(event.getEventName().equals(eventName)) {
+                for (DataSnapshot goinUser : dataSnapshot.child("going").getChildren()) {
+                    event.addGoing(goinUser.getValue().toString());
+                }
+
+                for (DataSnapshot maybeUser : dataSnapshot.child("maybe").getChildren()) {
+                    event.addMaybe(maybeUser.getValue().toString());
+                }
+
+                for (DataSnapshot notGoinUser : dataSnapshot.child("notGoing").getChildren()) {
+                    event.addNotGoing(notGoinUser.getValue().toString());
+                }
+            }
+        }
     }
 
     private void readData(DataSnapshot dataSnapshot) {
         Log.d(TAG,"READ EVENT");
         if (dataSnapshot.hasChildren()) {
-            String lieuName      = dataSnapshot.child("eventName").getValue() != null ? dataSnapshot.child("eventName").getValue().toString() : null;
+            String eventName      = dataSnapshot.child("eventName").getValue() != null ? dataSnapshot.child("eventName").getValue().toString() : null;
+            String dateStart      = dataSnapshot.child("dateStart").getValue() != null ? dataSnapshot.child("dateStart").getValue().toString() : null;
+            String dateEnd      = dataSnapshot.child("dateEnd").getValue() != null ? dataSnapshot.child("dateEnd").getValue().toString() : null;
+            String picture      = dataSnapshot.child("picture").getValue() != null ? dataSnapshot.child("picture").getValue().toString() : null;
+            double lon           = dataSnapshot.child("coordinate").getValue() != null? Double.valueOf(dataSnapshot.child("coordinate").child("longitude").getValue().toString()) : 0;
+            double lat           = dataSnapshot.child("coordinate").getValue() != null? Double.valueOf(dataSnapshot.child("coordinate").child("latitude").getValue().toString()) : 0;
+            Coordinate coordinate = new Coordinate(lon,lat);
 
+            Event event = new Event(coordinate, eventName, picture, dateStart, dateEnd);
+
+            for (DataSnapshot goinUser : dataSnapshot.child("going").getChildren()) {
+                event.addGoing(goinUser.getValue().toString());
+            }
+
+            for (DataSnapshot maybeUser : dataSnapshot.child("maybe").getChildren()) {
+                event.addMaybe(maybeUser.getValue().toString());
+            }
+
+            for (DataSnapshot notGoinUser : dataSnapshot.child("notGoing").getChildren()) {
+                event.addNotGoing(notGoinUser.getValue().toString());
+            }
+
+            Group.getGroup().setEvent(event);
         }
     }
 
@@ -89,10 +128,22 @@ public class EventDao {
         eventToAdd.put("dateEnd",event.getDateEnd());
         eventToAdd.put("eventName",event.getEventName());
         eventToAdd.put("picture",event.getPicture());
-        eventToAdd.put("going",event.getGoing());
-        eventToAdd.put("maybe",event.getMaybe());
-        eventToAdd.put("notGoing",event.getNotGoing());
+        eventToAdd.put("going",null);
+        eventToAdd.put("maybe",null);
+        eventToAdd.put("notGoing",null);
         eventRef.child(event.getEventName()).setValue(eventToAdd);
+    }
+
+    public void updateGoing(String eventName, String userName) {
+        eventRef.child(eventName).child("going").push().setValue(userName);
+    }
+
+    public void updateMaybe(String eventName, String userName) {
+        eventRef.child(eventName).child("maybe").push().setValue(userName);
+    }
+
+    public void updateNotGoing(String eventName, String userName) {
+        eventRef.child(eventName).child("notGoing").push().setValue(userName);
     }
 
 }

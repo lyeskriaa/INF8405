@@ -40,9 +40,21 @@ public class Event {
     public String getDateStart() { return this.dateStart;}
     public String getDateEnd() { return this.dateEnd;}
 
-    public void addGoing(String username){going.add(username);}
-    public void addMaybe(String username){maybe.add(username);}
-    public void addNotGoing(String username){notGoing.add(username);}
+    public void addGoing(String username) {
+        if(!going.contains(username)) {
+            going.add(username);
+        }
+    }
+    public void addMaybe(String username) {
+        if(!maybe.contains(username)) {
+            maybe.add(username);
+        }
+    }
+    public void addNotGoing(String username) {
+        if(!notGoing.contains(username)) {
+            notGoing.add(username);
+        }
+    }
 
     public List<String> getGoing() {return going;}
     public List<String> getMaybe() {return maybe;}

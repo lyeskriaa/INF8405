@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.provider.CalendarContract;
 import android.view.View;
 
+import com.inf8405.tp2_inf8405.dao.EventDao;
+import com.inf8405.tp2_inf8405.dao.ProfileDao;
 import com.inf8405.tp2_inf8405.model.Event;
 import com.inf8405.tp2_inf8405.model.Group;
 
@@ -36,7 +38,7 @@ public class MaybeOnClickListener implements View.OnClickListener {
             return;
         }
 
-        //add event going list update
+        EventDao.getInstance().updateMaybe(event.getEventName(), ProfileDao.getInstance().getCurrentUser().getUsername());
         Intent intent = new Intent(Intent.ACTION_INSERT_OR_EDIT);
         intent.setType("vnd.android.cursor.item/event");
         intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, String.valueOf(startTime.getTime()));

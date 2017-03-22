@@ -51,6 +51,7 @@ public class GroupDao {
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
+                Log.d(TAG, "onChildChanged:" + "========== GROUP DAO ======== "+dataSnapshot.getKey());
             }
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {

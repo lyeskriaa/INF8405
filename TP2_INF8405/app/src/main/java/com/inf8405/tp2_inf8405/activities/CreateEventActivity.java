@@ -1,23 +1,22 @@
 package com.inf8405.tp2_inf8405.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.content.Context;
 import android.widget.EditText;
 
-import java.util.List;
-import java.util.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
-
+import com.inf8405.tp2_inf8405.R;
+import com.inf8405.tp2_inf8405.dao.EventDao;
+import com.inf8405.tp2_inf8405.dao.LieuDao;
+import com.inf8405.tp2_inf8405.model.Event;
 import com.inf8405.tp2_inf8405.model.Group;
 import com.inf8405.tp2_inf8405.model.Lieu;
-import com.inf8405.tp2_inf8405.model.Event;
 
-import com.inf8405.tp2_inf8405.R;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 public class CreateEventActivity extends AppCompatActivity {
 
@@ -77,7 +76,10 @@ public class CreateEventActivity extends AppCompatActivity {
                 return;
             }
             // todo EVENT DAO + delete lieu (APRES la création de l'event
-            Group.getGroup().setEvent(new Event(location.getCoordinate(), name, location.getPicture(), dateStart, dateEnd));
+            Event event = new Event(location.getCoordinate(), name, location.getPicture(), dateStart, dateEnd);
+            EventDao.getInstance().addEventChild(event);
+            LieuDao.getInstance().removeAllLieux();
+            //Group.getGroup().setEvent(new Event(location.getCoordinate(), name, location.getPicture(), dateStart, dateEnd));
         }
     }
 

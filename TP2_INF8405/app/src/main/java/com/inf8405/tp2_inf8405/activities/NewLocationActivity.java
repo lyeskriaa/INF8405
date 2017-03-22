@@ -51,7 +51,7 @@ public class NewLocationActivity extends AppCompatActivity {
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
                 } else {
-                    Lieu lieu = new Lieu(new Coordinate(longitude, latitude), name, encodeBitmap(capturedImage),0);
+                    Lieu lieu = new Lieu(new Coordinate(longitude, latitude), name, encodeBitmap(capturedImage), 0, 0);
                     //Group.getGroup().addLoc(lieu);
                     LieuDao.getInstance().addLieuChild(lieu);
                     finish();

@@ -4,10 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Events;
-import android.text.format.DateUtils;
-import android.text.method.DateTimeKeyListener;
 import android.view.View;
 
+import com.inf8405.tp2_inf8405.dao.EventDao;
+import com.inf8405.tp2_inf8405.dao.ProfileDao;
 import com.inf8405.tp2_inf8405.model.Event;
 import com.inf8405.tp2_inf8405.model.Group;
 
@@ -25,7 +25,7 @@ public class GoOnclickListener implements View.OnClickListener {
         this.context = context;
     }
     public void onClick(View v) {
-        Date startTime=new Date(), endTime=new Date();
+        Date startTime, endTime;
         String title = "", eventLocation="";
         Event event = Group.getGroup().getEvent();
         if (event == null) return;
@@ -39,7 +39,7 @@ public class GoOnclickListener implements View.OnClickListener {
             return;
         }
 
-        //add event going list update
+        EventDao.getInstance().updateGoing(event.getEventName(), ProfileDao.getInstance().getCurrentUser().getUsername());
         Intent intent = new Intent(Intent.ACTION_INSERT);
         intent.setType("vnd.android.cursor.item/event");
         intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, String.valueOf(startTime.getTime()));

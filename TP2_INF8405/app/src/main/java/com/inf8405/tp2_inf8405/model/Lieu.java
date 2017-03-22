@@ -12,11 +12,12 @@ public class Lieu {
     private int nbrVotes;
     private int myVote;
 
-    public Lieu(Coordinate coordinate, String name, String picture, float votes){
+    public Lieu(Coordinate coordinate, String name, String picture, float votes, int nbrVotes){
         this.name = name;
         this.picture = picture;
         this.coordinate = coordinate;
         this.votes = votes;
+        this.nbrVotes = nbrVotes;
     }
 
     public void setVotes(float votes){ this.votes = votes; }

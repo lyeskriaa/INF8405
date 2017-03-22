@@ -3,6 +3,7 @@ package com.inf8405.tp2_inf8405.infoWindows;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.View;
 
 import com.inf8405.tp2_inf8405.dao.LieuDao;
@@ -60,6 +61,7 @@ public class VoteOnclickListener implements View.OnClickListener {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                Log.d("ON CLICK OK", "========== Vote OK ======== ");
                 location.vote(voteValue);
                 LieuDao.getInstance().saveVote(voteValue, location);
             }
