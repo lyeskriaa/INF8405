@@ -119,7 +119,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.clear();
         if (group.getListeUtilisateurs()==null || group.getListeUtilisateurs().isEmpty()) Log.e("MapActivity","No users!!!");
         setUsersMarkers(group.getListeUtilisateurs());
+        if (group.getLocList()==null || group.getLocList().isEmpty()) Log.e("MapActivity","No locations!!!");
         setLocationMarkers(group.getLocList());
+        if (group.getEvent() == null) Log.e("MapActivity","No event!!!");
         setEventMarker(group.getEvent());
     }
 
@@ -154,7 +156,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void setLocationMarkers(List<Lieu> locations) {
         if (locations == null) return;
         for (Lieu location : locations){
-            LatLng userPosition = new LatLng(location.getCoordinate().longitude, location.getCoordinate().latitude);
+            LatLng userPosition = new LatLng(location.getCoordinate().latitude, location.getCoordinate().longitude);
             MarkerOptions marker = new MarkerOptions();
             marker.position(userPosition);
             marker.title(location.getName());
