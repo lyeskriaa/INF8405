@@ -24,18 +24,22 @@ public class GroupDao {
 
     private final String TAG = "GROUP_DAO";
     private DatabaseReference groupRef = FirebaseDatabase.getInstance().getReference(Enum.GROUPS.toString());
+    private ChildEventListener childEventListener = null;
 
     private GroupDao() {
-        groupRef.child(Group.getGroup().getNomGroupe()).addChildEventListener(new ChildEventListener() {
+        childEventListener = groupRef.child(Group.getGroup().getNomGroupe()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
-                if(dataSnapshot.getKey().equals(Enum.USERS.toString())) {
-                    Log.d(TAG, "onChildAdded:" + "========== USERS ========");
-                    for (DataSnapshot user : dataSnapshot.getChildren()) {
-                        readData(user);
+                if(dataSnapshot.getKey().equals(Enum.EVENTS.toString())) {
+                    Log.d(TAG, "onChildAdded:" + "========== EVENT ========");
+                    if(dataSnapshot.hasChildren()) {
+                        for (DataSnapshot event : dataSnapshot.getChildren()) {
+                            EventDao.getInstance().readData(event);
+                        }
                     }
                 }
+
                 if(dataSnapshot.getKey().equals(Enum.LIEUX.toString())) {
                     Log.d(TAG, "onChildAdded:" + "========== LIEUX ========");
                     if(dataSnapshot.hasChildren()) {
@@ -44,10 +48,18 @@ public class GroupDao {
                         }
                     }
                 }
-                if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();
-                // TODO: 17-03-22  
-                // on enleve ce listener qui genere beaucoup trop de données et on mets des listener sur des child précis
-                //groupRef.child(Group.getGroup().getNomGroupe()).removeEventListener(this);
+
+                if(dataSnapshot.getKey().equals(Enum.USERS.toString())) {
+                    Log.d(TAG, "onChildAdded:" + "========== USERS ========");
+                    for (DataSnapshot user : dataSnapshot.getChildren()) {
+                        readData(user);
+                    }
+                    if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();
+                    // TODO: 17-03-22
+                    // on enleve ce listener qui genere beaucoup trop de données et on mets des listener sur des child précis
+                    // USERS est le dernier a etre chargé
+                    groupRef.removeEventListener(childEventListener);
+                }
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
@@ -65,7 +77,7 @@ public class GroupDao {
             }
         });
 
-        //keepUpdates();
+        keepUpdates();
     }
 
     private void keepUpdates() {

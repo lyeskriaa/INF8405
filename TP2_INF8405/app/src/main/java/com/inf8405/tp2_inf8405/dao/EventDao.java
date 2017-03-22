@@ -71,7 +71,7 @@ public class EventDao {
         });
     }
 
-    private void updateData(DataSnapshot dataSnapshot) {
+    public void updateData(DataSnapshot dataSnapshot) {
         Log.d(TAG,"UPDATE EVENT");
         if (dataSnapshot.hasChildren()) {
             String eventName      = dataSnapshot.child("eventName").getValue() != null ? dataSnapshot.child("eventName").getValue().toString() : null;
@@ -92,7 +92,7 @@ public class EventDao {
         }
     }
 
-    private void readData(DataSnapshot dataSnapshot) {
+    public void readData(DataSnapshot dataSnapshot) {
         Log.d(TAG,"READ EVENT");
         if (dataSnapshot.hasChildren()) {
             String eventName      = dataSnapshot.child("eventName").getValue() != null ? dataSnapshot.child("eventName").getValue().toString() : null;

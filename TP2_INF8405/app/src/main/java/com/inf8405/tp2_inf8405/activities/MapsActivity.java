@@ -110,7 +110,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
         mMap.setOnInfoWindowClickListener(new InfoWindowClickListener(this));
-        refresh();
+        //todo            je ne pense pas que refresh(); est utile ici car les data sont pas encore chargées
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(45.5, -73.6), 12.0f));
 
     }
