@@ -30,12 +30,13 @@ public class GroupDao {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
-                    String username      = dataSnapshot.child("username") != null ? dataSnapshot.child("username").getValue().toString() : null;
-                    String picture       = dataSnapshot.child("pictureURI") != null ? dataSnapshot.child("pictureURI").getValue().toString() : null;
-                    boolean organisateur = dataSnapshot.child("organisateur") != null ? Boolean.valueOf(dataSnapshot.child("organisateur").getValue().toString()) : null;
-                    double lon           = dataSnapshot.child("coordinate")!= null? Double.valueOf(dataSnapshot.child("coordinate").child("longitude").getValue().toString()) : 0;
-                    double lat           = dataSnapshot.child("coordinate")!= null? Double.valueOf(dataSnapshot.child("coordinate").child("latitude").getValue().toString()) : 0;
-                    User user = new User(username, picture, organisateur, lon,lat, Group.getGroup(), false);
+                String username      = dataSnapshot.child("username") != null ? dataSnapshot.child("username").getValue().toString() : null;
+                String picture       = dataSnapshot.child("pictureURI") != null ? dataSnapshot.child("pictureURI").getValue().toString() : null;
+                boolean organisateur = dataSnapshot.child("organisateur") != null ? Boolean.valueOf(dataSnapshot.child("organisateur").getValue().toString()) : null;
+                double lon           = dataSnapshot.child("coordinate")!= null? Double.valueOf(dataSnapshot.child("coordinate").child("longitude").getValue().toString()) : 0;
+                double lat           = dataSnapshot.child("coordinate")!= null? Double.valueOf(dataSnapshot.child("coordinate").child("latitude").getValue().toString()) : 0;
+                User user = new User(username, picture, organisateur, lon,lat, Group.getGroup(), false);
+                if(Group.getGroup().findUser(username)==null)
                     Group.getGroup().addUser(user);
 
                 if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();

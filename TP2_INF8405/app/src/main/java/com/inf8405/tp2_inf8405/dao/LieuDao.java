@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static android.util.Log.d;
-import static com.inf8405.tp2_inf8405.model.Group.getGroup;
 
 
 /**
@@ -40,22 +39,25 @@ public class LieuDao {
     }
 
     private LieuDao() {
-        lieuxRef = GroupDao.getInstance().getGroupRef().child(getGroup().getNomGroupe()).child(Enum.LIEUX.toString());
+        lieuxRef = GroupDao.getInstance().getGroupRef().child(Group.getGroup().getNomGroupe()).child(Enum.LIEUX.toString());
         lieuxRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                d(TAG, "onChildAdded:" + dataSnapshot);
+                d(TAG, "onChildAdded:" + dataSnapshot.getKey());
                 if(dataSnapshot.hasChildren()) {
                     String lieuName      = dataSnapshot.child("name") != null ? dataSnapshot.child("name").getValue().toString() : null;
                     String picture       = dataSnapshot.child("picture") != null ? dataSnapshot.child("picture").getValue().toString() : null;
-                    float votes            = dataSnapshot.child("votes") != null ? Float.valueOf(dataSnapshot.child("votes").getValue().toString()) : 0;
+                    float votes          = dataSnapshot.child("votes") != null ? Float.valueOf(dataSnapshot.child("votes").getValue().toString()) : 0;
+                    int nbrVotes         = dataSnapshot.child("nbrVotes") != null ? Integer.valueOf(dataSnapshot.child("nbrVotes").getValue().toString()) : 0;
                     double lon           = dataSnapshot.child("coordinate")!= null? Double.valueOf(dataSnapshot.child("coordinate").child("longitude").getValue().toString()) : 0;
                     double lat           = dataSnapshot.child("coordinate")!= null? Double.valueOf(dataSnapshot.child("coordinate").child("latitude").getValue().toString()) : 0;
                     Coordinate coordinate = new Coordinate(lon,lat);
                     Lieu lieu = new Lieu(coordinate,lieuName, picture, votes);
-                    getGroup().addLoc(lieu);
+                    if(Group.getGroup().findLocation(lieuName) == null)
+                        Group.getGroup().addLoc(lieu);
                 }
-                if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();
+                if(MapsActivity.getMapsActivity() != null )
+                    MapsActivity.getMapsActivity().refresh();
             }
 
             @Override
@@ -69,11 +71,16 @@ public class LieuDao {
                     lieuToUpdate.setVotes(votes);
                     lieuToUpdate.setNbrVotes(nbrVotes);
                     // TODO: 17-03-21 la notification
-                    for (Lieu votedPlace : Group.getGroup().getLocList()) {
-
+                    for (Lieu place : Group.getGroup().getLocList()) {
+                        if(place.getNbrVotes() < Group.getGroup().getListeUtilisateurs().size()) {
+                            MapsActivity.getMapsActivity().setVotesCompleted(false);
+                        }
+                        else {
+                            MapsActivity.getMapsActivity().setVotesCompleted(true);
+                        }
                     }
-                    if(nbrVotes == Group.getGroup().getListeUtilisateurs().size()) {
-
+                    if (MapsActivity.getMapsActivity().isVotesCompleted()) {
+                        MapsActivity.getMapsActivity().gotoEventActivity();
                     }
                 }
                 if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();
@@ -103,6 +110,7 @@ public class LieuDao {
         lieuToAdd.put("name", lieu.getName());
         lieuToAdd.put("picture", lieu.getPicture());
         lieuToAdd.put("votes", String.valueOf(lieu.getVotes()));
+        lieuToAdd.put("nbrVotes", String.valueOf(lieu.getNbrVotes()));
         lieuxRef.child(lieu.getName()).setValue(lieuToAdd);
     }
 

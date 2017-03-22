@@ -7,6 +7,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.inf8405.tp2_inf8405.model.Enum;
+import com.inf8405.tp2_inf8405.model.User;
 
 /**
  * Created by LyesKriaa on 17-03-07.
@@ -17,6 +18,7 @@ public class ProfileDao {
 
     private final String TAG = "PROFILE_DAO";
     private DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference(Enum.GROUPS.toString());
+    private User currentUser;
 
     private ProfileDao() {}
 
@@ -28,6 +30,14 @@ public class ProfileDao {
             INSTANCE = new ProfileDao();
         }
         return INSTANCE;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
     }
 
     public DatabaseReference getUsersRef() {

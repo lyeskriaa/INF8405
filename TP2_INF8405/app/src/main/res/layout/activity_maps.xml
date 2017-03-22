@@ -15,4 +15,15 @@
         android:padding="10dp"
         android:layout_marginTop="20dp"
         android:paddingRight="10dp"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/addEventBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        android:clickable="true"
+        android:src="@android:drawable/ic_menu_my_calendar"
+        map:backgroundTint="@color/colorPrimaryDark" />
 </fragment>

@@ -14,7 +14,6 @@ public class Group {
     private User organisateur;
     private List<Lieu> locList;
     private Event event;
-    public User currentUser;
 
 
     private Group(String nomGroupe, List<User> utilisateurs, List<Lieu> locationList, Event event){

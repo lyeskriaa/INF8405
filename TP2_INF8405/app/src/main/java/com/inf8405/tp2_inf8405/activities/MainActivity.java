@@ -166,8 +166,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         if (nomUtilisateur != null && nomGroupe != null && imageURI != null) {
             // save data
             group = Group.createGroup(nomGroupe.getText().toString());
-            ProfileDao.getInstance().setUserProfileRef(nomUtilisateur.getText().toString(), nomGroupe.getText().toString());
+            // TODO: 17-03-21  remettre false
             user = new User(nomUtilisateur.getText().toString(), imageURI, false, lastLocation.getLongitude(), lastLocation.getLatitude(), group, true);
+            ProfileDao.getInstance().setUserProfileRef(nomUtilisateur.getText().toString(), nomGroupe.getText().toString());
+            ProfileDao.getInstance().setCurrentUser(user);
             // aller verifier dans groupsNames si le nom du groupe existe deja
             final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Enum.GROUPS_NAMES.toString());
             Query query = reference.orderByValue().equalTo(group.getNomGroupe());
@@ -190,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
             // continue to next activity with relevant data.
             Intent myIntent = new Intent(MainActivity.this, MapsActivity.class);
-            myIntent.putExtra("mainUser", user.getUsername());
+            //myIntent.putExtra("mainUser", user.getUsername());
             MainActivity.this.startActivity(myIntent);
         } else {
             AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)

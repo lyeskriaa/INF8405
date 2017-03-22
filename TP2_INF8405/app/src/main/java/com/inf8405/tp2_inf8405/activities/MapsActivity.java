@@ -2,6 +2,7 @@ package com.inf8405.tp2_inf8405.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -17,6 +18,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.inf8405.tp2_inf8405.R;
+import com.inf8405.tp2_inf8405.dao.ProfileDao;
 import com.inf8405.tp2_inf8405.infoWindows.InfoWindow;
 import com.inf8405.tp2_inf8405.infoWindows.InfoWindowClickListener;
 import com.inf8405.tp2_inf8405.model.Event;
@@ -31,7 +33,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private Group group;
     private static MapsActivity mapsActivity = null;
-    private String mainUser = null;
+    private User currentUser;
+    private boolean votesCompleted = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +46,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         group = Group.getGroup();
-        mainUser = (String) getIntent().getSerializableExtra("mainUser");
+        currentUser = ProfileDao.getInstance().getCurrentUser();
         mapsActivity = this;
     }
 
@@ -57,12 +61,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 MapsActivity.this.refresh();
             }
         });
+        FloatingActionButton eventButton = (FloatingActionButton) findViewById(R.id.addEventBtn);
+        if(!currentUser.isOrganisateur()) eventButton.setVisibility(View.GONE);
+        eventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(votesCompleted) {
+                    MapsActivity.this.gotoEventActivity();
+                }
+                else {
+                    AlertDialog dialog = new AlertDialog.Builder(MapsActivity.this)
+                            .setTitle("Alerte")
+                            .setMessage("Les votes ne sont pas encore finalisés !")
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                }
+            }
+        });
+
         mMap = googleMap;
         mMap.setInfoWindowAdapter(new InfoWindow(this));
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
-                User currentUser = group.findUser(mainUser);
+
                 if (currentUser == null) {
                     Log.e("MapsActivity", "Didn't find current user!!!!");
                     return;
@@ -99,6 +121,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setUsersMarkers(group.getListeUtilisateurs());
         setLocationMarkers(group.getLocList());
         setEventMarker(group.getEvent());
+    }
+
+    public boolean isVotesCompleted() {
+        return votesCompleted;
+    }
+
+    public void setVotesCompleted(boolean votesCompleted) {
+        this.votesCompleted = votesCompleted;
+    }
+
+    public void gotoEventActivity() {
+        if (currentUser.isOrganisateur()) {
+            Intent intent = new Intent(MapsActivity.this, CreateEventActivity.class);
+            startActivity(intent);
+        }
     }
 
 

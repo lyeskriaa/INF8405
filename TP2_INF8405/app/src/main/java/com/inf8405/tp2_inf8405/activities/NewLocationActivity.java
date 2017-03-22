@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import com.inf8405.tp2_inf8405.R;
 import com.inf8405.tp2_inf8405.dao.LieuDao;
 import com.inf8405.tp2_inf8405.model.Coordinate;
-import com.inf8405.tp2_inf8405.model.Group;
 import com.inf8405.tp2_inf8405.model.Lieu;
 
 import java.io.ByteArrayOutputStream;
@@ -53,7 +52,7 @@ public class NewLocationActivity extends AppCompatActivity {
                             .show();
                 } else {
                     Lieu lieu = new Lieu(new Coordinate(longitude, latitude), name, encodeBitmap(capturedImage),0);
-                    Group.getGroup().addLoc(lieu);
+                    //Group.getGroup().addLoc(lieu);
                     LieuDao.getInstance().addLieuChild(lieu);
                     finish();
                 }
