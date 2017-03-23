@@ -47,6 +47,12 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".services.BatteryStatusService">
+            <intent-filter>
+                <action android:name="android.intent.action.BATTERY_LOW"/>
+            </intent-filter>
+        </receiver>
+
         <service
             android:name=".services.LocationService"
             android:enabled="true"
