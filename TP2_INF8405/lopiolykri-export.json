@@ -1,0 +1,45 @@
+{
+  "groups" : {
+    "Groupe" : {
+      "events" : {
+        "description" : {
+          "coordinate" : {
+            "latitude" : 0,
+            "longitude" : 0
+          },
+          "dateEnd" : "string",
+          "dateStart" : "string",
+          "eventName" : "string",
+          "going" : {"id" : "string",...},
+		  "maybe" : {"id" : "string",...},
+		  "notgoing" : {"id" : "string",...},
+          "picture" : "string"
+        }
+      },
+      "lieux" : {
+	    "string":{
+		  "coordinate" : {
+            "latitude" : 0,
+            "longitude" : 0
+			}
+		  "pictureURI" : "string",
+          "name" : "string"
+		}
+	  },
+      "users" : {
+        "string" : {
+          "coordinate" : {
+            "latitude" : 0,
+            "longitude" : 0
+          },
+          "organisateur" : "false",
+          "pictureURI" : "string",
+          "username" : "string"
+        }
+      }
+    }
+  },
+  "groupsNames" : {
+    "id" : "string"
+  }
+}
