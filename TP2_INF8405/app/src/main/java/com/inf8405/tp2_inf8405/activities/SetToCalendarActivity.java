@@ -29,4 +29,9 @@ public class SetToCalendarActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        finish();
+    }
 }

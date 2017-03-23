@@ -23,10 +23,11 @@ import java.util.Map;
 public class GroupDao {
 
     private final String TAG = "GROUP_DAO";
-    private DatabaseReference groupRef = FirebaseDatabase.getInstance().getReference(Enum.GROUPS.toString());
+    private DatabaseReference groupRef = null;
     private ChildEventListener childEventListener = null;
 
     private GroupDao() {
+        groupRef = FirebaseDatabase.getInstance().getReference(Enum.GROUPS.toString());
         groupRef.child(Group.getGroup().getNomGroupe()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
@@ -100,7 +101,7 @@ public class GroupDao {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();
             }
 
             @Override
@@ -167,4 +168,16 @@ public class GroupDao {
         groupRef.child(groupName).child(Enum.USERS.toString()).child(user.getUsername()).setValue(userToAdd);
     }
 
+    public void removeGroupChild() {
+        // juste valide pour un membre qui veut quitter le groupe et qui n<est pas organisateur
+        Group.getGroup().removeUser(ProfileDao.getInstance().getCurrentUser());
+        groupRef.child(Group.getGroup().getNomGroupe()).child(Enum.USERS.toString())
+                .child(ProfileDao.getInstance().getCurrentUser().getUsername()).removeValue();
+        ProfileDao.getInstance().destroy();
+    }
+
+    public void destroy() {
+        groupRef = null;
+        INSTANCE = null;
+    }
 }

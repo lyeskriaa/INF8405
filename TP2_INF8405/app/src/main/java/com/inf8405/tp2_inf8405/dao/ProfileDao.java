@@ -17,7 +17,7 @@ import com.inf8405.tp2_inf8405.model.User;
 public class ProfileDao {
 
     private final String TAG = "PROFILE_DAO";
-    private DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference(Enum.GROUPS.toString());
+    private DatabaseReference usersRef = null;
     private User currentUser;
 
     private ProfileDao() {}
@@ -55,4 +55,12 @@ public class ProfileDao {
     }
 
 
+    public void destroy() {
+
+        usersRef = null;
+        INSTANCE = null;
+        EventDao.getInstance().destroy();
+        LieuDao.getInstance().destroy();
+        GroupDao.getInstance().destroy();
+    }
 }

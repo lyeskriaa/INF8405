@@ -7,6 +7,6 @@
     <string name="network_unactive">Pas de connexion internet! Veuillez vous connecter à internet.</string>
     <string name="title_activity_set_to_calendar">SetToCalendarActivity</string>
     <string name="title_activity_main2_activityd">Main2Activityd</string>
-
+    <string name="title_activity_preferences">Preferences</string>
 </resources>
 

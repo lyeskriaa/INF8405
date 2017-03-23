@@ -146,4 +146,8 @@ public class EventDao {
         eventRef.child(eventName).child("notGoing").push().setValue(userName);
     }
 
+    public void destroy() {
+        eventRef = null;
+        Instance = null;
+    }
 }

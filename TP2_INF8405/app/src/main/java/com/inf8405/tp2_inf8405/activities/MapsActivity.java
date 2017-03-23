@@ -1,5 +1,6 @@
 package com.inf8405.tp2_inf8405.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -78,6 +79,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         });
+
+        FloatingActionButton preferencesButton = (FloatingActionButton) findViewById(R.id.preferencesBtn);
+        preferencesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MapsActivity.this, PreferencesActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         mMap = googleMap;
         mMap.setInfoWindowAdapter(new InfoWindow(this));
@@ -179,7 +190,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     protected void onResume() {
-        refresh();
         super.onResume();
     }
 

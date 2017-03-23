@@ -20,10 +20,22 @@
         android:id="@+id/addEventBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_marginBottom="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_gravity="start|bottom"
+        android:layout_marginBottom="80dp"
+        android:layout_marginStart="20dp"
         android:clickable="true"
         android:src="@android:drawable/ic_menu_my_calendar"
         map:backgroundTint="@color/colorPrimaryDark" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/preferencesBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|bottom"
+        android:layout_marginBottom="20dp"
+        android:layout_marginStart="20dp"
+        android:clickable="true"
+        android:src="@android:drawable/ic_menu_preferences"
+        map:backgroundTint="@color/colorPrimaryDark" />
+
 </fragment>

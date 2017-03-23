@@ -20,8 +20,8 @@ import com.inf8405.tp2_inf8405.model.Enum;
 public class LocationService extends Service {
     private static final String TAG = "BOOOOOOOOOOMTESTGPS";
     private LocationManager mLocationManager = null;
-    private static final int LOCATION_INTERVAL = 1;
-    private static final float LOCATION_DISTANCE = .5f;
+    private static int LOCATION_INTERVAL = 120000;
+    private static float LOCATION_DISTANCE = 1.0f;
 
 
     private class LocationListener implements android.location.LocationListener
@@ -71,6 +71,22 @@ public class LocationService extends Service {
             new LocationListener(LocationManager.GPS_PROVIDER),
             new LocationListener(LocationManager.NETWORK_PROVIDER)
     };
+
+    public static int getLocationInterval() {
+        return LOCATION_INTERVAL;
+    }
+
+    public static void setLocationInterval(int locationInterval) {
+        LOCATION_INTERVAL = (locationInterval > 0) ? locationInterval : 1000 ;
+    }
+
+    public static float getLocationDistance() {
+        return LOCATION_DISTANCE;
+    }
+
+    public static void setLocationDistance(float locationDistance) {
+        LOCATION_DISTANCE = locationDistance;
+    }
 
     @Override
     public IBinder onBind(Intent arg0)

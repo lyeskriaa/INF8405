@@ -73,6 +73,9 @@
             android:label="@string/title_activity_set_to_calendar"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.CreateEventActivity" />
+        <activity
+            android:name=".activities.PreferencesActivity"
+            android:label="@string/title_activity_preferences" />
     </application>
 
 </manifest>

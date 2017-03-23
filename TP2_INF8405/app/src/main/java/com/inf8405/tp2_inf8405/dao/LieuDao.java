@@ -146,4 +146,13 @@ public class LieuDao {
     public void removeAllLieux() {
         lieuxRef.setValue("no elements");
     }
+
+    public void destroy() {
+        if (childEventListener != null) {
+            lieuxRef.removeEventListener(childEventListener);
+        }
+        childEventListener = null;
+        lieuxRef = null;
+        Instance = null;
+    }
 }
