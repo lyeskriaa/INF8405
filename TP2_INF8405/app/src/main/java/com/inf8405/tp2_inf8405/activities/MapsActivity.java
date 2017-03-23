@@ -1,6 +1,5 @@
 package com.inf8405.tp2_inf8405.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -121,7 +120,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
         mMap.setOnInfoWindowClickListener(new InfoWindowClickListener(this));
-        //todo            je ne pense pas que refresh(); est utile ici car les data sont pas encore chargées
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(45.5, -73.6), 12.0f));
 
     }

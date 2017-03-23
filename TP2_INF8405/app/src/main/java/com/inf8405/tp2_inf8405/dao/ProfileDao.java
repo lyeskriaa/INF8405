@@ -56,7 +56,7 @@ public class ProfileDao {
 
 
     public void destroy() {
-
+        currentUser = null;
         usersRef = null;
         INSTANCE = null;
         EventDao.getInstance().destroy();

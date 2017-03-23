@@ -33,7 +33,7 @@ public class NetworkStatusService extends BroadcastReceiver {
             Toast.makeText(context, R.string.network_unactive,Toast.LENGTH_LONG).show();
         }
         else {
-            if(!LOCATION_SERVICE_STARTED) {
+            if(!LOCATION_SERVICE_STARTED ) {
                 Intent locationService = new Intent(context, LocationService.class);
                 context.startService(locationService);
             }

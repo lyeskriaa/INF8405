@@ -25,13 +25,13 @@ public class SetToCalendarActivity extends AppCompatActivity {
         Button maybe = (Button) findViewById(R.id.cal_maybe_button);
         maybe.setOnClickListener(new MaybeOnClickListener(this));
         Button no = (Button) findViewById(R.id.cal_no_button);
-        maybe.setOnClickListener(new NoGoOnclickListener());
+        no.setOnClickListener(new NoGoOnclickListener());
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        finish();
+        //finish();
     }
 }

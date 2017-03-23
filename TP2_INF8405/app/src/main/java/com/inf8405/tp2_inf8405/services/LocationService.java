@@ -19,12 +19,12 @@ import com.inf8405.tp2_inf8405.model.Enum;
 
 public class LocationService extends Service {
     private static final String TAG = "BOOOOOOOOOOMTESTGPS";
-    private LocationManager mLocationManager = null;
-    private static int LOCATION_INTERVAL = 120000;
-    private static float LOCATION_DISTANCE = 1.0f;
+    private static LocationManager mLocationManager = null;
+    private static int LOCATION_INTERVAL = 6000;
+    private static float LOCATION_DISTANCE = 0.5f;
 
 
-    private class LocationListener implements android.location.LocationListener
+    private static class LocationListener implements android.location.LocationListener
     {
         Location mLastLocation;
 
@@ -40,10 +40,12 @@ public class LocationService extends Service {
             Log.e(TAG, "onLocationChanged: " + location);
             mLastLocation.set(location);
             // facon debile mais rapide dsl
-            String refLastWord = ProfileDao.getInstance().getUsersRef().toString().substring(ProfileDao.getInstance().getUsersRef().toString().length() - 6);
-            if(! refLastWord.equals(Enum.GROUPS.toString())) {
-             //   Log.e(TAG, "NOT EQUALS: " + refLastWord);
-                ProfileDao.getInstance().updateUserLocation(location, refLastWord);
+            if(ProfileDao.getInstance().getUsersRef() != null) {
+                String refLastWord = ProfileDao.getInstance().getUsersRef().toString().substring(ProfileDao.getInstance().getUsersRef().toString().length() - 6);
+                if(refLastWord!= null && !refLastWord.equals(Enum.GROUPS.toString())) {
+                 //   Log.e(TAG, "NOT EQUALS: " + refLastWord);
+                    ProfileDao.getInstance().updateUserLocation(location, refLastWord);
+                }
             }
             // ptt update aussi directement l objet user en local
         }
@@ -67,7 +69,7 @@ public class LocationService extends Service {
         }
     }
 
-    public  LocationListener[] mLocationListeners = new LocationListener[] {
+    public static final LocationListener[] mLocationListeners = new LocationListener[] {
             new LocationListener(LocationManager.GPS_PROVIDER),
             new LocationListener(LocationManager.NETWORK_PROVIDER)
     };
@@ -77,7 +79,8 @@ public class LocationService extends Service {
     }
 
     public static void setLocationInterval(int locationInterval) {
-        LOCATION_INTERVAL = (locationInterval > 0) ? locationInterval : 1000 ;
+        LOCATION_INTERVAL = (locationInterval > 0) ? locationInterval : 100 ;
+        initConditionUpdateLocation();
     }
 
     public static float getLocationDistance() {
@@ -108,6 +111,10 @@ public class LocationService extends Service {
         //Log.e(TAG, "onCreate");
         NetworkStatusService.LOCATION_SERVICE_STARTED = true;
         initializeLocationManager();
+        initConditionUpdateLocation();
+    }
+
+    private static void initConditionUpdateLocation() {
         try {
             mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE, mLocationListeners[1]);
         } catch (java.lang.SecurityException ex) {

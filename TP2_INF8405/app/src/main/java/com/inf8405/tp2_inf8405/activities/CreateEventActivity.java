@@ -42,6 +42,8 @@ public class CreateEventActivity extends AppCompatActivity {
             button3.setText(current.getName() + " " + Float.valueOf(current.getVotes()).toString() +"/5");
             button3.setOnClickListener(new CreateWithLocation(current));
         }
+        else
+            finish();
 
 
     }
