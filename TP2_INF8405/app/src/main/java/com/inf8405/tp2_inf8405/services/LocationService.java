@@ -79,7 +79,7 @@ public class LocationService extends Service {
     }
 
     public static void setLocationInterval(int locationInterval) {
-        LOCATION_INTERVAL = (locationInterval > 0) ? locationInterval : 100 ;
+        LOCATION_INTERVAL = (locationInterval > 0) ? locationInterval * 60000 : 100 ;
         initConditionUpdateLocation();
     }
 

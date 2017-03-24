@@ -1,5 +1,6 @@
 package com.inf8405.tp2_inf8405.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -25,6 +26,7 @@ import com.inf8405.tp2_inf8405.model.Event;
 import com.inf8405.tp2_inf8405.model.Group;
 import com.inf8405.tp2_inf8405.model.Lieu;
 import com.inf8405.tp2_inf8405.model.User;
+import com.inf8405.tp2_inf8405.services.LocationService;
 
 import java.util.List;
 
@@ -147,6 +149,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Intent intent = new Intent(MapsActivity.this, CreateEventActivity.class);
             startActivity(intent);
         }
+    }
+
+    public void notifySaveEnergy() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("La batterie est faible !");
+        //builder.setMessage("voulez-vous passer en mode économie de batterie ?");
+        builder.setIcon(android.R.drawable.ic_dialog_alert);
+        builder.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                LocationService.setLocationInterval(30);
+            }
+        });
+        builder.setNegativeButton("Non", null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
 

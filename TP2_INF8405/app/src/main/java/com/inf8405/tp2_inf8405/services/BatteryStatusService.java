@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
 
+import com.inf8405.tp2_inf8405.activities.MapsActivity;
+
 /**
  * Created by LyesKriaa on 17-03-23.
  */
@@ -15,6 +17,7 @@ public class BatteryStatusService extends BroadcastReceiver {
     private float lastBatteryLevel;
     private float initialBatteryLevel;
     private Intent batteryStatus;
+    private boolean notify = false;
 
     public BatteryStatusService(){
         lastBatteryLevel =0f;
@@ -26,6 +29,15 @@ public class BatteryStatusService extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         this.batteryStatus = context.registerReceiver(null, ifilter);
+        if(GetCurrentBatteryLevel() <= 16.0 && !notify) {
+            //Log.e("BAAAAATTERRYY SLOW", String.valueOf(GetCurrentBatteryLevel()));
+            notify = true;
+            MapsActivity.getMapsActivity().notifySaveEnergy(); // afin de mettre un delai de 30 minutes
+        }
+        if(GetCurrentBatteryLevel() > 15.0) {
+            //Log.e("BAAAAATTERRYY OK", String.valueOf(GetCurrentBatteryLevel()));
+            notify = false;
+        }
     }
 
     public void SetInitialBatteryLevel(float level)

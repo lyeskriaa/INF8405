@@ -82,6 +82,6 @@ public class PreferencesActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         // todo sauvegarder cette valeur en local
-        LocationService.setLocationInterval(progress * 60000);
+        LocationService.setLocationInterval(progress);
     }
 }
