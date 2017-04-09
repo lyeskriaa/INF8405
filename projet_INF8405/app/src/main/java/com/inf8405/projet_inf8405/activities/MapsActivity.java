@@ -7,6 +7,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.inf8405.projet_inf8405.R;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -38,5 +40,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         //TODO add markers
+    }
+
+    public void refresh() {
+        mMap.clear();
+        // for each user add marker
+        //for (User user : users){
+        //    LatLng userPosition = new LatLng(user.getCoordinate().latitude, user.getCoordinate().longitude);
+        //    MarkerOptions marker = new MarkerOptions();
+        //    marker.position(userPosition);
+        //    marker.title(user.getUsername());
+        //    marker.snippet("user:image:"+user.getPicture());
+        //    mMap.addMarker(marker);
+        //    TODO if current user, change color. if conversation, change to a third color.
+        //}
     }
 }
