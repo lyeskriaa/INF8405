@@ -1,15 +1,19 @@
 package com.inf8405.projet_inf8405.activities;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
+import android.util.Base64;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -18,17 +22,25 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.inf8405.projet_inf8405.R;
+import com.inf8405.projet_inf8405.fireBaseHelper.UserDBHelper;
+import com.inf8405.projet_inf8405.model.User;
+
+import java.io.ByteArrayOutputStream;
 
 public class InscriptionActivity extends AppCompatActivity implements View.OnClickListener {
 
     Spinner spinner;
     ArrayAdapter<CharSequence> adapter;
-    private Button creerProfileBtn;
+    private FloatingActionButton creerProfileBtn;
     private EditText email;
     private EditText mdpasse;
+    private EditText userName;
     private EditText description;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
+    private String itemSpinner;
+    private Bitmap capturedImage;
+    private static final int REQUEST_IMAGE_CAPTURE = 111;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +50,11 @@ public class InscriptionActivity extends AppCompatActivity implements View.OnCli
         firebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this);
 
-        creerProfileBtn = (Button) findViewById(R.id.creerProButton);
+        creerProfileBtn = (FloatingActionButton) findViewById(R.id.creerProButton);
         email = (EditText) findViewById(R.id.userEmailRegister);
         mdpasse = (EditText) findViewById(R.id.userMdpasseRegister);
         description = (EditText) findViewById(R.id.user_description);
+        userName = (EditText) findViewById(R.id.user_name);
 
         creerProfileBtn.setOnClickListener(this);
 
@@ -53,7 +66,7 @@ public class InscriptionActivity extends AppCompatActivity implements View.OnCli
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String item = parent.getItemAtPosition(position).toString();
+                itemSpinner = parent.getItemAtPosition(position).toString();
                 //Toast.makeText(getBaseContext(), item+ "selected", Toast.LENGTH_SHORT).show();
             }
 
@@ -75,30 +88,65 @@ public class InscriptionActivity extends AppCompatActivity implements View.OnCli
     private void creerProfile() {
         String userEmail = email.getText().toString().trim();
         String userMdp = mdpasse.getText().toString().trim();
+        String nom = userName.getText().toString().trim();
 
-        if(TextUtils.isEmpty(userEmail) || TextUtils.isEmpty(userMdp)) {
+        if(userEmail.isEmpty() || userMdp.isEmpty() ||  nom.isEmpty()) { //capturedImage == null ||
             // email empty or pwd empty
-
+            AlertDialog dialog = new AlertDialog.Builder(InscriptionActivity.this)
+                    .setTitle("Erreur")
+                    .setMessage("Il faut remplir les informations manquantes !")
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
+        else {
+            progressDialog.setMessage("Création du profile...");
+            progressDialog.show();
+            firebaseAuth.createUserWithEmailAndPassword(userEmail, userMdp)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if(task.isSuccessful()) {
+                                String desc = description.getText().toString().trim();
+                                String imageURI = encodeBitmap(capturedImage);
+                                // TODO: 17-04-12  location
+                                User user = new User(userName.getText().toString().trim(), desc, imageURI, 45.5045971, -73.6146566, itemSpinner);
+                                UserDBHelper.getInstance().setUserProfileRef(userName.getText().toString());
+                                UserDBHelper.getInstance().setCurrentUser(user);
+                                UserDBHelper.getInstance().addUserChild(user);
+                                // user is successfully registered and logged in
+                                // we will start the profile activity here
+                                // right now lets display a toast only
+                                progressDialog.hide();
+                                Toast.makeText(InscriptionActivity.this, "Céation du profile avec succès !", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                progressDialog.hide();
+                                Toast.makeText(InscriptionActivity.this, "Échec de la céation du profile, veuillez reéssayer !", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
         }
 
-        progressDialog.setMessage("Création du profile...");
-        progressDialog.show();
-        firebaseAuth.createUserWithEmailAndPassword(userEmail, userMdp)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()) {
-                            // user is successfully registered and logged in
-                            // we will start the profile activity here
-                            // right now lets display a toast only
-                            progressDialog.hide();
-                            Toast.makeText(InscriptionActivity.this, "Céation du profile avec succès !", Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            Toast.makeText(InscriptionActivity.this, "Échec de la céation du profile, veuillez reéssayer !", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+    }
 
+    // mettre la photo dans le cadre specifie et l encoder pour la sauvegarder sur firebase
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == this.RESULT_OK) {
+            Bundle extras = data.getExtras();
+            capturedImage = (Bitmap) extras.get("data");
+            ImageView mImageLabel = (ImageView) findViewById(R.id.photoIamgeView);
+            mImageLabel.setImageBitmap(capturedImage);
+        }
+    }
+
+    // copresser l'image en PNG et l'encoder en string
+    private String encodeBitmap(Bitmap imageBitmap) {
+        if (imageBitmap != null) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            return Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+        } else {
+            return null;
+        }
     }
 }

@@ -56,13 +56,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="text"
+        android:hint="Votre nom d'utilisateur"
+        android:ems="12"
+        android:id="@+id/user_name"
+        android:textAlignment="center"
+        android:layout_below="@+id/spinner"
+        android:layout_toStartOf="@+id/spinner"
+        android:layout_marginTop="12dp"
+        android:layout_alignEnd="@+id/user_description" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="text"
         android:hint="Votre description"
         android:ems="12"
-        android:layout_marginTop="20dp"
         android:id="@+id/user_description"
         android:textAlignment="center"
-        android:layout_below="@id/sexeText"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/user_name"
+        android:layout_alignStart="@+id/userMdpasseRegister"
+        android:layout_marginTop="12dp" />
 
 
     <ImageView
@@ -70,7 +83,6 @@
         android:layout_height="wrap_content"
         app:srcCompat="@android:drawable/ic_menu_camera"
         android:id="@+id/photoIcon"
-        android:layout_marginBottom="60dp"
         android:layout_above="@+id/pictureButton"
         android:layout_centerHorizontal="true" />
 
@@ -78,35 +90,37 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/photoIamgeView"
-        android:layout_below="@id/user_description"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="100dp"
-        android:layout_alignTop="@+id/sexeText"
-        android:layout_above="@+id/pictureButton"
-        android:layout_alignLeft="@+id/pictureButton"
-        android:layout_alignStart="@+id/pictureButton"
-        android:layout_alignEnd="@id/pictureButton"
-        android:layout_alignRight="@id/pictureButton" />
+        android:layout_alignBottom="@+id/creerProButton"
+        android:layout_alignStart="@+id/userMdpasseRegister"
+        android:layout_toStartOf="@+id/spinner"
+        android:layout_below="@+id/user_description"
+        android:layout_alignEnd="@+id/user_description" />
 
-    <Button
-        android:text="Prendre une photo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/pictureButton"
-        android:layout_marginBottom="80dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:text="Creer mon profil"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="start|bottom"
+        android:clickable="true"
+        android:src="@android:drawable/ic_menu_camera"
+        android:layout_marginBottom="16dp"
+        app:rippleColor="@color/colorPrimaryDark"
+        android:layout_above="@+id/creerProButton"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp" />
+
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/creerProButton"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|bottom"
+        android:clickable="true"
+        android:src="@android:drawable/ic_input_add"
+        android:layout_marginBottom="17dp"
+        app:rippleColor="@color/colorPrimaryDark"
         android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/pictureButton"
-        android:layout_alignEnd="@+id/pictureButton"
-        android:layout_alignLeft="@+id/pictureButton"
         android:layout_alignStart="@+id/pictureButton" />
+
 
 </RelativeLayout>

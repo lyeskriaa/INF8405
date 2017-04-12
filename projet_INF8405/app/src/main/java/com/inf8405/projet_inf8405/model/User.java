@@ -9,16 +9,18 @@ public class User {
     private String description;
     private String picture;
     private Coordinate coordinate;
+    private String sexe;
 
     public User() {
 
     }
 
-    public User(String username, String description, String picture, double longitude, double latitude) {
+    public User(String username, String description, String picture, double longitude, double latitude, String sexe) {
         this.username = username;
         this.description = description;
         this.picture = picture;
         this.coordinate = new Coordinate(longitude, latitude);
+        this.sexe = sexe;
     }
 
     public String getUsername() {
@@ -31,6 +33,16 @@ public class User {
 
     public String getDescription() {
         return description;
+    }
+
+    public Coordinate getCoordinate() { return coordinate; }
+
+    public String getSexe() {
+        return sexe;
+    }
+
+    public void setSexe(String sexe) {
+        this.sexe = sexe;
     }
 
     public void setDescription(String description) {
