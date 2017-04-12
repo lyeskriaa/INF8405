@@ -33,7 +33,7 @@ public class UserInfoWindow implements GoogleMap.InfoWindowAdapter {
     @Override
     public View getInfoContents(Marker marker) {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-        View myContentsView = inflater.inflate(R.layout.map_marker, null);
+        View myContentsView = inflater.inflate(R.layout.marker_user, null);
 
         String[] attributes = marker.getSnippet().split(":::::");
 

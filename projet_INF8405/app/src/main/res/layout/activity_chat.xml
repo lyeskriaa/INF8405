@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.inf8405.projet_inf8405.activities.ChatActivity">
+
+    <ScrollView android:id="@+id/scrollView1"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:weightSum="1">
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
+            <Button
+                android:text="Envoyer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/send_message"
+
+                android:layout_centerHorizontal="true" />
+            <EditText
+                android:inputType="textMultiLine"
+                android:lines="3"
+                android:minLines="1"
+                android:gravity="top|left"
+                android:maxLines="5"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:scrollbars="vertical"
+                android:id="@+id/message"
+                android:layout_alignTop="@+id/send_message"
+                android:layout_alignParentBottom="true" />
+        </LinearLayout>
+    </ScrollView>
+
+</android.support.constraint.ConstraintLayout>
