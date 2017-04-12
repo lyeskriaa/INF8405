@@ -11,66 +11,44 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.inf8405.projet_inf8405.activities.MainActivity">
 
-
-    <TextView
-        android:text="Nom d'utilisateur"
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/usenameTextView"
-        android:textSize="18sp"
-        android:layout_alignParentTop="true"
+        android:inputType="textPersonName"
+        android:hint="Entrez votre email"
+        android:ems="12"
+        android:id="@+id/userEmailLogin"
+        android:textAlignment="center"
         android:layout_centerHorizontal="true" />
-
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Nom"
-        android:ems="10"
-        android:id="@+id/userNameEditText"
+        android:hint="Entrez votre mot de passe"
+        android:ems="12"
+        android:id="@+id/userMdpasseLogin"
         android:textAlignment="center"
-        android:layout_below="@+id/usenameTextView"
+        android:layout_below="@+id/userEmailLogin"
         android:layout_centerHorizontal="true" />
 
-    <Button
-        android:text="Prendre une photo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/pictureButton"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="70dp" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/ic_menu_camera"
-        android:id="@+id/photoIcon"
-        android:layout_alignBottom="@+id/photoIamgeView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="59dp" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/photoIamgeView"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="70dp"
-        android:layout_alignTop="@+id/userNameEditText"
-        android:layout_above="@+id/pictureButton"
-        android:layout_alignStart="@+id/pictureButton"
-        android:layout_alignEnd="@+id/pictureButton"
-        android:layout_alignRight="@+id/pictureButton"
-        android:layout_alignLeft="@+id/pictureButton"/>
 
     <Button
-        android:text="OK"
+        android:text="Inscription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/okButton"
-        android:layout_alignTop="@+id/pictureButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="80dp" />
+        android:id="@+id/InscriptionButton"
+        android:layout_alignStart="@id/userEmailLogin"
+        android:layout_marginTop="90dp"
+        android:layout_alignLeft="@id/userEmailLogin" />
+
+    <Button
+        android:text="Connexion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ConnexionButton"
+        android:layout_alignEnd="@id/userEmailLogin"
+        android:layout_marginTop="90dp"
+        android:layout_alignRight="@id/userEmailLogin" />
 
 </RelativeLayout>

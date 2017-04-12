@@ -2,12 +2,9 @@ package com.inf8405.projet_inf8405.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Build;
-import android.provider.MediaStore;
-import android.support.annotation.RequiresApi;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -29,10 +26,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Button okButton = (Button) findViewById(R.id.okButton);
-        okButton.setOnClickListener(new View.OnClickListener() {
+        final Button inscriptionButton = (Button) findViewById(R.id.InscriptionButton);
+        inscriptionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
-                EditText username = (EditText) findViewById(R.id.userNameEditText);
+                Intent inscription = new Intent(MainActivity.this, InscriptionActivity.class);
+                startActivity(inscription);
+            }
+        });
+
+        final Button connexionButton = (Button) findViewById(R.id.ConnexionButton);
+        connexionButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                EditText username = (EditText) findViewById(R.id.userEmailLogin);
                 name = username.getText().toString();
                 if (capturedImage == null || name == null) {
                     AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
@@ -45,16 +51,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final Button photoButton = (Button) findViewById(R.id.pictureButton);
-        photoButton.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            public void onClick(View v) {
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (takePictureIntent.resolveActivity(MainActivity.this.getPackageManager()) != null) {
-                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                }
-            }
-        });
+//        final Button photoButton = (Button) findViewById(R.id.pictureButton);
+//        photoButton.setOnClickListener(new View.OnClickListener() {
+//            @RequiresApi(api = Build.VERSION_CODES.M)
+//            public void onClick(View v) {
+//                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                if (takePictureIntent.resolveActivity(MainActivity.this.getPackageManager()) != null) {
+//                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+//                }
+//            }
+//        });
     }
 
     // mettre la photo dans le cadre specifie et l encoder pour la sauvegarder sur firebase

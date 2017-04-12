@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">PROJET_INF8405</string>
     <string name="title_activity_maps">Map</string>
+    <string-array name="sexe_option">
+        <item>Homme</item>
+        <item>Femme</item>
+    </string-array>
+
+
 </resources>
