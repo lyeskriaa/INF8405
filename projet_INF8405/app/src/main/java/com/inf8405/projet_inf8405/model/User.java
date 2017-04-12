@@ -33,6 +33,10 @@ public class User {
         return description;
     }
 
+    public Coordinate getCoordinate() {return coordinate;}
+
+    public String getSexe() {return "none"; } //TODO}
+
     public void setDescription(String description) {
         this.description = description;
     }

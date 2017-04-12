@@ -11,7 +11,7 @@ import com.inf8405.projet_inf8405.model.User;
  * Created by LyesKriaa on 17-04-09.
  */
 
-class UserDBHelper {
+public class UserDBHelper {
     private final String TAG = "USER_DB_HELPER";
     private DatabaseReference usersRef = null;
     private User currentUser;

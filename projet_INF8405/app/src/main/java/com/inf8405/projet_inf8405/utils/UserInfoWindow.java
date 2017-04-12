@@ -16,6 +16,8 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 import com.inf8405.projet_inf8405.R;
+import com.inf8405.projet_inf8405.fireBaseHelper.UserDBHelper;
+
 /**
  * Created by Louise on 2017-04-09.
  */
@@ -52,10 +54,10 @@ public class UserInfoWindow implements GoogleMap.InfoWindowAdapter {
         TextView txt3 = ((TextView)myContentsView.findViewById(R.id.user_description));
         txt3.setText(attributes[DESCRIPTION_INDEX]);
 
-        // if (current user TODO) {
-        //View b = myContentsView.findViewById(R.id.user_chat_button);
-        //b.setVisibility(View.GONE);
-        // }
+         if (UserDBHelper.getInstance().getCurrentUser().getUsername().equals(marker.getTitle())) {
+             View b = myContentsView.findViewById(R.id.user_chat_button);
+             b.setVisibility(View.GONE);
+         }
         return myContentsView;
 
     }

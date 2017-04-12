@@ -7,9 +7,16 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.inf8405.projet_inf8405.R;
+import com.inf8405.projet_inf8405.model.User;
+import com.inf8405.projet_inf8405.model.Coordinate;
+import com.inf8405.projet_inf8405.fireBaseHelper.UserDBHelper;
+
+import java.util.List;
+import java.util.ArrayList;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -44,15 +51,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void refresh() {
         mMap.clear();
-        // for each user add marker
-        //for (User user : users){
-        //    LatLng userPosition = new LatLng(user.getCoordinate().latitude, user.getCoordinate().longitude);
-        //    MarkerOptions marker = new MarkerOptions();
-        //    marker.position(userPosition);
-        //    marker.title(user.getUsername());
-        //    marker.snippet("user:image:"+user.getPicture());
-        //    mMap.addMarker(marker);
-        //    TODO if current user, change color. if conversation, change to a third color.
-        //}
+        List<User> users = new ArrayList<User>();
+        for (User user : users) {
+            LatLng userPosition = new LatLng(user.getCoordinate().latitude, user.getCoordinate().longitude);
+            MarkerOptions marker = new MarkerOptions();
+            marker.position(userPosition);
+            marker.title(user.getUsername());
+            marker.snippet(user.getPicture() + ":::::" + user.getSexe() + ":::::" + user.getDescription());
+            mMap.addMarker(marker);
+            if (UserDBHelper.getInstance().getCurrentUser() == user) {
+                marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+            }
+            //else if (coversation)
+             //    marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+            //}
+        }
     }
 }
