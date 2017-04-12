@@ -12,4 +12,8 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
     }
+
+    public void refresh(){
+
+    }
 }
