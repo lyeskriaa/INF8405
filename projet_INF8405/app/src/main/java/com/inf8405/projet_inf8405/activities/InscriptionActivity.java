@@ -97,6 +97,7 @@ public class InscriptionActivity extends AppCompatActivity implements View.OnCli
                     .setMessage("Il faut remplir les informations manquantes !")
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
+            return;
         }
         else {
             progressDialog.setMessage("Création du profile...");
@@ -105,6 +106,7 @@ public class InscriptionActivity extends AppCompatActivity implements View.OnCli
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
+                            progressDialog.dismiss();
                             if(task.isSuccessful()) {
                                 String desc = description.getText().toString().trim();
                                 String imageURI = encodeBitmap(capturedImage);
@@ -113,14 +115,11 @@ public class InscriptionActivity extends AppCompatActivity implements View.OnCli
                                 UserDBHelper.getInstance().setUserProfileRef(userName.getText().toString());
                                 UserDBHelper.getInstance().setCurrentUser(user);
                                 UserDBHelper.getInstance().addUserChild(user);
-                                // user is successfully registered and logged in
-                                // we will start the profile activity here
-                                // right now lets display a toast only
-                                progressDialog.hide();
+
                                 Toast.makeText(InscriptionActivity.this, "Céation du profile avec succès !", Toast.LENGTH_SHORT).show();
                             }
                             else {
-                                progressDialog.hide();
+
                                 Toast.makeText(InscriptionActivity.this, "Échec de la céation du profile, veuillez reéssayer !", Toast.LENGTH_SHORT).show();
                             }
                         }

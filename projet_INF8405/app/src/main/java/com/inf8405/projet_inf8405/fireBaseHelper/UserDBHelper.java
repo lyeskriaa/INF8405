@@ -27,8 +27,8 @@ public class UserDBHelper {
 
 
     private UserDBHelper() {
-        usersRef = FirebaseDatabase.getInstance().getReference(Enum.USERS.toString());
-        usersRef.addChildEventListener(new ChildEventListener() {
+        usersRef = FirebaseDatabase.getInstance().getReference().child(Enum.USERS.toString()).getRef();
+        usersRef.child(Enum.USERS.toString()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
@@ -93,7 +93,7 @@ public class UserDBHelper {
         userToAdd.put("description", user.getDescription());
         userToAdd.put("sexe", user.getSexe());
 
-        usersRef.push().setValue(userToAdd);
+        usersRef.child(Enum.USERS.toString()).push().setValue(userToAdd);
     }
 
     private void readData(DataSnapshot dataSnapshot) {
