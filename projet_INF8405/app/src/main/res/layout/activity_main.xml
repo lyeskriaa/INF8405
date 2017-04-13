@@ -24,7 +24,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
+        android:inputType="textPassword"
         android:hint="Entrez votre mot de passe"
         android:ems="12"
         android:id="@+id/userMdpasseLogin"

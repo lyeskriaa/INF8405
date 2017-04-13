@@ -1,9 +1,9 @@
 package com.inf8405.projet_inf8405.activities;
 
-import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -14,41 +14,46 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-
 import com.inf8405.projet_inf8405.R;
-import com.inf8405.projet_inf8405.model.User;
-import com.inf8405.projet_inf8405.model.Coordinate;
 import com.inf8405.projet_inf8405.fireBaseHelper.UserDBHelper;
+import com.inf8405.projet_inf8405.model.ListeUsers;
+import com.inf8405.projet_inf8405.model.User;
 import com.inf8405.projet_inf8405.utils.DirectionsJSONParser;
 import com.inf8405.projet_inf8405.utils.UserInfoWindow;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.HashMap;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
+    public static MapsActivity mapsActivity = null ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        mapsActivity = this;
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
     }
 
-
+    public static MapsActivity getMapsActivity() {return mapsActivity;}
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -63,25 +68,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         mMap.setInfoWindowAdapter(new UserInfoWindow(this));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(45.5, -73.6), 12.0f));
-        //TODO add markers
+        refresh();
     }
 
     public void refresh() {
         mMap.clear();
-        List<User> users = new ArrayList<User>();
-        for (User user : users) {
-            LatLng userPosition = new LatLng(user.getCoordinate().latitude, user.getCoordinate().longitude);
-            MarkerOptions marker = new MarkerOptions();
-            marker.position(userPosition);
-            marker.title(user.getUsername());
-            marker.snippet(user.getId());
-            mMap.addMarker(marker);
-            if (UserDBHelper.getInstance().getCurrentUser() == user) {
-                marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+        //List<User> users = new ArrayList<User>();
+        if(!ListeUsers.getInstance().getUserList().isEmpty()) {
+            Log.d("MAAAAAPS !!!!! ", "USERS LIST NOT EMPTY :" + ListeUsers.getInstance().getUserList().size());
+            for (User user : ListeUsers.getInstance().getUserList()) {
+                LatLng userPosition = new LatLng(user.getCoordinate().latitude, user.getCoordinate().longitude);
+                MarkerOptions marker = new MarkerOptions();
+                marker.position(userPosition);
+                marker.title(user.getUsername());
+                marker.snippet(user.getId());
+                mMap.addMarker(marker);
+                if (UserDBHelper.getInstance().getCurrentUser() == user) {
+                    marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+
+                }
+                //else if (coversation)
+                //    marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                //}
             }
-            //else if (coversation)
-             //    marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-            //}
         }
         //if path?
         //showPath();
@@ -147,7 +156,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             br.close();
 
         }catch(Exception e){
-            Log.d("Exception while downloading url", e.toString());
+            Log.d("Exception on url", e.toString());
         }finally{
             iStream.close();
             urlConnection.disconnect();

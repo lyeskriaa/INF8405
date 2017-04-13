@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,7 +16,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.inf8405.projet_inf8405.R;
+import com.inf8405.projet_inf8405.fireBaseHelper.UserDBHelper;
+import com.inf8405.projet_inf8405.utils.Enum;
 
 public class MainActivity extends AppCompatActivity implements  View.OnClickListener {
 
@@ -91,7 +100,30 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             public void onComplete(@NonNull Task<AuthResult> task) {
                 progressDialog.dismiss();
                 if(task.isSuccessful()) {
-                    Toast.makeText(MainActivity.this,"Connexion réussie !",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,"Connexion réussie ! ",Toast.LENGTH_SHORT).show();
+                    String userID = firebaseAuth.getCurrentUser().getUid();
+
+                    final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Enum.USERS.toString());
+                    Query query = reference.getRef();
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot snapshot) {
+                            Log.e("MAIN ACTIVITY ", " DATA CHANGE: " + snapshot.getKey());
+
+                            if (snapshot.hasChildren()) {
+                                Log.e("HAS CHILDREN ", " DATA CHANGE: " + snapshot.getKey());
+                                for (DataSnapshot child : snapshot.getChildren()) {
+                                    Log.e("MAIN ACTIVITY ", " child : " + child.getKey());
+                                    UserDBHelper.getInstance().readData(child);
+                                }
+                            }
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            // nothing here
+                        }
+                    });
+                    UserDBHelper.getInstance().setUserProfileRef(firebaseAuth.getCurrentUser().getUid());
                     finish();
                     startActivity(new Intent(MainActivity.this, MapsActivity.class));
                 }

@@ -8,6 +8,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.inf8405.projet_inf8405.activities.MapsActivity;
+import com.inf8405.projet_inf8405.model.ListeUsers;
 import com.inf8405.projet_inf8405.model.User;
 import com.inf8405.projet_inf8405.utils.Enum;
 
@@ -35,12 +37,12 @@ public class UserDBHelper {
                 for (DataSnapshot user : dataSnapshot.getChildren()) {
                     readData(user);
                 }
-                //if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();
+                if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
-
+                Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
             }
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
@@ -77,7 +79,7 @@ public class UserDBHelper {
 
     public void setUserProfileRef(String user) {
         usersRef = FirebaseDatabase.getInstance().getReference();
-        Log.e(TAG, "refUser set to : " + usersRef.getRef());
+        Log.e(TAG, "refUser set to : " + usersRef.child(user).getRef());
     }
 
     public void updateUserLocation(Location location, String userName) {
@@ -96,14 +98,20 @@ public class UserDBHelper {
         usersRef.child(Enum.USERS.toString()).child(user.getId()).setValue(userToAdd);
     }
 
-    private void readData(DataSnapshot dataSnapshot) {
+    public void readData(DataSnapshot dataSnapshot) {
         if(dataSnapshot.hasChildren()) {
             String username      = dataSnapshot.child("username").getValue() != null ? dataSnapshot.child("username").getValue().toString() : null;
             String picture       = dataSnapshot.child("pictureURI").getValue() != null ? dataSnapshot.child("pictureURI").getValue().toString() : null;
             String description   = dataSnapshot.child("description").getValue() != null ? dataSnapshot.child("description").getValue().toString() : null;
             double lon           = dataSnapshot.child("coordinate").getValue() != null ? Double.valueOf(dataSnapshot.child("coordinate").child("longitude").getValue().toString()) : 0;
             double lat           = dataSnapshot.child("coordinate").getValue() != null ? Double.valueOf(dataSnapshot.child("coordinate").child("latitude").getValue().toString()) : 0;
-// TODO: 17-04-12
+            String sexe          = dataSnapshot.child("sexe").getValue() != null ? dataSnapshot.child("sexe").getValue().toString() : null;
+
+            // put the user in usersList of the MapsActivity
+            if(ListeUsers.getInstance().findUser(username) == null) {
+                User user = new User(dataSnapshot.getKey(), username, picture, description, lon, lat, sexe);
+                ListeUsers.getInstance().addUser(user);
+            }
         }
     }
 
