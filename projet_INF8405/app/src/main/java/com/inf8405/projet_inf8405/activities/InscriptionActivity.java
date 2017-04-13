@@ -112,7 +112,7 @@ public class InscriptionActivity extends AppCompatActivity implements View.OnCli
                                 String desc = description.getText().toString().trim();
                                 String imageURI = encodeBitmap(capturedImage);
                                 // TODO: 17-04-12  location
-                                User user = new User(userId,userName.getText().toString().trim(), desc, imageURI, 45.5045971, -73.6146566, itemSpinner);
+                                User user = new User(userId,userName.getText().toString().trim(), desc, imageURI, -73.6146566, 45.5045971, itemSpinner);
                                 UserDBHelper.getInstance().setUserProfileRef(userName.getText().toString());
                                 UserDBHelper.getInstance().setCurrentUser(user);
                                 UserDBHelper.getInstance().addUserChild(user);
