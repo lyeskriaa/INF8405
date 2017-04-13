@@ -93,7 +93,7 @@ public class UserDBHelper {
         userToAdd.put("description", user.getDescription());
         userToAdd.put("sexe", user.getSexe());
 
-        usersRef.child(Enum.USERS.toString()).push().setValue(userToAdd);
+        usersRef.child(Enum.USERS.toString()).child(user.getId()).setValue(userToAdd);
     }
 
     private void readData(DataSnapshot dataSnapshot) {

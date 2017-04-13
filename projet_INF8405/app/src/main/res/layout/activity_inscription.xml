@@ -45,12 +45,10 @@
         android:id="@+id/spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/sexeText"
-        android:layout_toEndOf="@+id/sexeText"
-        android:layout_toRightOf="@+id/sexeText"
-        android:layout_alignRight="@id/userMdpasseRegister"
 
-        />
+        android:layout_alignTop="@+id/sexeText"
+        android:layout_alignEnd="@+id/userMdpasseRegister"
+        android:layout_alignStart="@+id/photoIcon" />
 
     <EditText
         android:layout_width="wrap_content"
