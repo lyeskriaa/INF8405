@@ -17,15 +17,14 @@ import java.io.InputStream;
 
 import com.inf8405.projet_inf8405.R;
 import com.inf8405.projet_inf8405.fireBaseHelper.UserDBHelper;
+import com.inf8405.projet_inf8405.model.User;
 
 /**
  * Created by Louise on 2017-04-09.
  */
 
 public class UserInfoWindow implements GoogleMap.InfoWindowAdapter {
-    public static final int IMAGE_INDEX = 0;
-    public static final int SEX_INDEX = 1;
-    public static final int DESCRIPTION_INDEX = 2;
+
     private final Context context;
 
     public UserInfoWindow(Context context){
@@ -37,22 +36,25 @@ public class UserInfoWindow implements GoogleMap.InfoWindowAdapter {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         View myContentsView = inflater.inflate(R.layout.marker_user, null);
 
-        String[] attributes = marker.getSnippet().split(":::::");
+        User user = new User("test", "test", "test", "test", 0, 0, "test"); //TODO find user from list
 
         TextView txt = ((TextView)myContentsView.findViewById(R.id.user_name));
         txt.setText(marker.getTitle());
 
         ImageView img = ((ImageView)myContentsView.findViewById(R.id.user_photo));
-        byte[] decodedString = Base64.decode(attributes[IMAGE_INDEX],Base64.NO_WRAP);
+        byte[] decodedString = Base64.decode(user.getPicture(),Base64.NO_WRAP);
         InputStream inputStream  = new ByteArrayInputStream(decodedString);
         Bitmap bitmap  = BitmapFactory.decodeStream(inputStream);
         img.setImageBitmap(bitmap);
 
         TextView txt2 = ((TextView)myContentsView.findViewById(R.id.user_sexe));
-        txt2.setText("sexe : " + attributes[SEX_INDEX]);
+        txt2.setText("sexe : " + user.getSexe());
 
         TextView txt3 = ((TextView)myContentsView.findViewById(R.id.user_description));
-        txt3.setText(attributes[DESCRIPTION_INDEX]);
+        txt3.setText("description: " + user.getDescription());
+
+        TextView txt4 = ((TextView)myContentsView.findViewById(R.id.user_temperature));
+        txt4.setText("temperature: " + user.getTemperature());
 
          if (UserDBHelper.getInstance().getCurrentUser().getUsername().equals(marker.getTitle())) {
              View b = myContentsView.findViewById(R.id.user_chat_button);
