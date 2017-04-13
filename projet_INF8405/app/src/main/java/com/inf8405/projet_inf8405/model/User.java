@@ -72,4 +72,6 @@ public class User {
     public void setCoordinate(Coordinate coordinate) {
         this.coordinate = coordinate;
     }
+
+    public int getTemperature() { return 20; }
 }
