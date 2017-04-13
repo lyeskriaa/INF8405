@@ -43,6 +43,7 @@ public class UserDBHelper {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
                 Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
+                if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();
             }
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
