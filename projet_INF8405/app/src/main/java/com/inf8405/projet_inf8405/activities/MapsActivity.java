@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -19,6 +20,7 @@ import com.inf8405.projet_inf8405.model.User;
 import com.inf8405.projet_inf8405.model.Coordinate;
 import com.inf8405.projet_inf8405.fireBaseHelper.UserDBHelper;
 import com.inf8405.projet_inf8405.utils.DirectionsJSONParser;
+import com.inf8405.projet_inf8405.utils.UserInfoWindow;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -59,7 +61,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
+        mMap.setInfoWindowAdapter(new UserInfoWindow(this));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(45.5, -73.6), 12.0f));
         //TODO add markers
     }
 
