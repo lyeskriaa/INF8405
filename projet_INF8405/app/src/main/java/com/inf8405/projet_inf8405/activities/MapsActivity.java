@@ -78,13 +78,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 MarkerOptions marker = new MarkerOptions();
                 marker.position(userPosition);
                 marker.title(user.getUsername());
-                marker.snippet(user.getPicture() + ":::::" + user.getSexe() + ":::::" + user.getDescription());
+                marker.snippet(user.getId());
                 mMap.addMarker(marker);
                 if (UserDBHelper.getInstance().getCurrentUser() == user) {
                     marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+
                 }
                 //else if (coversation)
-                 //    marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                //    marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                 //}
             }
         }
@@ -152,7 +153,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             br.close();
 
         }catch(Exception e){
-            Log.d("Exception while downloading url", e.toString());
+            Log.d("Exception on url", e.toString());
         }finally{
             iStream.close();
             urlConnection.disconnect();
