@@ -14,6 +14,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.inf8405.projet_inf8405.R;
 import com.inf8405.projet_inf8405.fireBaseHelper.UserDBHelper;
 import com.inf8405.projet_inf8405.model.User;
+import com.inf8405.projet_inf8405.model.ListeUsers;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -35,7 +36,8 @@ public class UserInfoWindow implements GoogleMap.InfoWindowAdapter {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         View myContentsView = inflater.inflate(R.layout.marker_user, null);
 
-        User user = new User("test", "test", "test", "test", 0, 0, "test"); //TODO find user from list
+        User user = ListeUsers.getInstance().findUser(marker.getTitle());
+        //User user = new User("test", "test", "test", "test", 0, 0, "test"); //TODO find user from list
 
         TextView txt = ((TextView)myContentsView.findViewById(R.id.user_name));
         txt.setText(marker.getTitle());
