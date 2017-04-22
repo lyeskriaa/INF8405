@@ -14,6 +14,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.inf8405.projet_inf8405.R;
+import com.inf8405.projet_inf8405.fireBaseHelper.UserDBHelper;
+import com.inf8405.projet_inf8405.model.ListeUsers;
+import com.inf8405.projet_inf8405.utils.ChatUtils;
+import com.inf8405.projet_inf8405.utils.Path;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -26,6 +30,8 @@ import java.util.Map;
 public class ChatRoomActivity extends AppCompatActivity{
 
     private Button btn_send_msg;
+    private Button automessage;
+    private Button find;
     private EditText input_msg;
     private TextView chat_conversation;
 
@@ -63,7 +69,21 @@ public class ChatRoomActivity extends AppCompatActivity{
                 map2.put("msg",input_msg.getText().toString());
 
                 massage_root.updateChildren(map2);
+                input_msg.setText("");
 
+            }
+        });
+        automessage = (Button) findViewById(R.id.auto_message);
+        automessage.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                input_msg.setText(ChatUtils.randomMessage(UserDBHelper.getInstance().getCurrentUser(), ListeUsers.getInstance().findUserById(user_id)));
+            }
+        });
+        find = (Button) findViewById(R.id.find_interlocuteur);
+        automessage.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Path.setDestination(user_id);
+                finish();
             }
         });
 
