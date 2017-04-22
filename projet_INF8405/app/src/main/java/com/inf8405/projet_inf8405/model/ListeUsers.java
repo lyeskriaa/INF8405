@@ -35,6 +35,12 @@ public class ListeUsers {
         }
         return null;
     }
+    public User findUserById(String id){
+        for (User user : userList) {
+            if (user.getId().equals(id)) return user;
+        }
+        return null;
+    }
 
     public void addUser(User newUser) {
         if (userList == null)userList = new ArrayList<User>();

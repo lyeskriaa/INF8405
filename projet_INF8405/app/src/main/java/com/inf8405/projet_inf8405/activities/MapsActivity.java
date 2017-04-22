@@ -100,8 +100,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 LatLng userPosition = new LatLng(user.getCoordinate().latitude, user.getCoordinate().longitude);
                 MarkerOptions marker = new MarkerOptions();
                 marker.position(userPosition);
-                marker.title(user.getUsername());
-                marker.snippet(user.getId());
+                marker.title(user.getId());
+                marker.snippet(user.getUsername());
                 mMap.addMarker(marker);
                 if (UserDBHelper.getInstance().getCurrentUser() == user) {
                     marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
