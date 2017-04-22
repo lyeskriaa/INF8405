@@ -111,9 +111,7 @@ public class UserDBHelper {
 
             // put the user in usersList of the MapsActivity
             user = new User(dataSnapshot.getKey(), username, picture, description, lon, lat, sexe);
-            if(ListeUsers.getInstance().findUser(username) == null) {
-                ListeUsers.getInstance().addUser(user);
-            }
+            ListeUsers.getInstance().addUser(user);
         }
 
         return user;
