@@ -43,7 +43,7 @@ public class ChatRoomActivity extends AppCompatActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
+        setContentView(R.layout.activity_chat_room);
 
         btn_send_msg = (Button) findViewById(R.id.btn_send);
         input_msg = (EditText) findViewById(R.id.msg_input);
@@ -69,7 +69,7 @@ public class ChatRoomActivity extends AppCompatActivity{
                 map2.put("msg",input_msg.getText().toString());
 
                 massage_root.updateChildren(map2);
-                input_msg.setText("");
+                //input_msg.setText("");
 
             }
         });
