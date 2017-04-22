@@ -115,6 +115,7 @@ public class UserDBHelper {
                 ListeUsers.getInstance().addUser(user);
             }
         }
+
         return user;
     }
 

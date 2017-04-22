@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                 progressDialog.dismiss();
                 if(task.isSuccessful()) {
                     Toast.makeText(MainActivity.this,"Connexion réussie ! ",Toast.LENGTH_SHORT).show();
-                    String userID = firebaseAuth.getCurrentUser().getUid();
+                    final String userID = firebaseAuth.getCurrentUser().getUid().toString();
 
                     final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Enum.USERS.toString());
                     Query query = reference.getRef();
@@ -110,10 +110,11 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                                 for (DataSnapshot child : snapshot.getChildren()) {
                                     Log.e("MAIN ACTIVITY ", " child : " + child.getKey());
                                     User user = UserDBHelper.getInstance().readData(child);
-                                    if(user.getUsername() != null && user.getId() == firebaseAuth.getCurrentUser().getUid()) {
+                                    if(user.getUsername() != null && user.getId().equals(userID)) {
                                         UserDBHelper.getInstance().setCurrentUser(user);
                                     }
                                 }
+                                if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();
                             }
                         }
                         @Override
