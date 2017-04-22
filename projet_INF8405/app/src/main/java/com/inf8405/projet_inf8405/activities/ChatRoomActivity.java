@@ -80,9 +80,10 @@ public class ChatRoomActivity extends AppCompatActivity{
             }
         });
         find = (Button) findViewById(R.id.find_interlocuteur);
-        automessage.setOnClickListener(new View.OnClickListener() {
+        find.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Path.setDestination(user_id);
+                MapsActivity.getMapsActivity().refresh();
                 finish();
             }
         });
