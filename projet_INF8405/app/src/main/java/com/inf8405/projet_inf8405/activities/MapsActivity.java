@@ -1,5 +1,6 @@
 package com.inf8405.projet_inf8405.activities;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.inf8405.projet_inf8405.R;
 import com.inf8405.projet_inf8405.fireBaseHelper.UserDBHelper;
 import com.inf8405.projet_inf8405.model.ListeUsers;
@@ -36,7 +38,7 @@ import java.util.List;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-
+    private FirebaseAuth firebaseAuth;
     public static MapsActivity mapsActivity = null ;
 
     @Override
@@ -45,6 +47,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
 
         mapsActivity = this;
+        firebaseAuth = FirebaseAuth.getInstance();
+        if(firebaseAuth.getCurrentUser() == null ) {
+            finish();
+            startActivity(new Intent(MapsActivity.this, MainActivity.class));
+        }
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()

@@ -24,8 +24,10 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.inf8405.projet_inf8405.R;
 import com.inf8405.projet_inf8405.fireBaseHelper.UserDBHelper;
+import com.inf8405.projet_inf8405.model.User;
 import com.inf8405.projet_inf8405.utils.Enum;
 
+//login activity
 public class MainActivity extends AppCompatActivity implements  View.OnClickListener {
 
     private Button btnInscription;
@@ -43,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         firebaseAuth = FirebaseAuth.getInstance();
         if (firebaseAuth.getCurrentUser() != null) {
             //appel a maps activity ou profileActivity avec les bonnes donnes
+            //finish();
+            //startActivity(new Intent(MainActivity.this, MapsActivity.class));
         }
 
         btnInscription = (Button) findViewById(R.id.InscriptionButton);
@@ -54,16 +58,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         btnInscription.setOnClickListener(this);
 
         progressDialog = new ProgressDialog(this);
-//        final Button photoButton = (Button) findViewById(R.id.pictureButton);
-//        photoButton.setOnClickListener(new View.OnClickListener() {
-//            @RequiresApi(api = Build.VERSION_CODES.M)
-//            public void onClick(View v) {
-//                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                if (takePictureIntent.resolveActivity(MainActivity.this.getPackageManager()) != null) {
-//                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-//                }
-//            }
-//        });
+
     }
 
 
@@ -114,7 +109,10 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                                 Log.e("HAS CHILDREN ", " DATA CHANGE: " + snapshot.getKey());
                                 for (DataSnapshot child : snapshot.getChildren()) {
                                     Log.e("MAIN ACTIVITY ", " child : " + child.getKey());
-                                    UserDBHelper.getInstance().readData(child);
+                                    User user = UserDBHelper.getInstance().readData(child);
+                                    if(user.getUsername() != null && user.getId() == firebaseAuth.getCurrentUser().getUid()) {
+                                        UserDBHelper.getInstance().setCurrentUser(user);
+                                    }
                                 }
                             }
                         }

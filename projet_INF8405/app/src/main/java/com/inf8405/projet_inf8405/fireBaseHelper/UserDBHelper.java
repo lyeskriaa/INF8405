@@ -99,7 +99,8 @@ public class UserDBHelper {
         usersRef.child(Enum.USERS.toString()).child(user.getId()).setValue(userToAdd);
     }
 
-    public void readData(DataSnapshot dataSnapshot) {
+    public User readData(DataSnapshot dataSnapshot) {
+        User user = new User();
         if(dataSnapshot.hasChildren()) {
             String username      = dataSnapshot.child("username").getValue() != null ? dataSnapshot.child("username").getValue().toString() : null;
             String picture       = dataSnapshot.child("pictureURI").getValue() != null ? dataSnapshot.child("pictureURI").getValue().toString() : null;
@@ -109,11 +110,12 @@ public class UserDBHelper {
             String sexe          = dataSnapshot.child("sexe").getValue() != null ? dataSnapshot.child("sexe").getValue().toString() : null;
 
             // put the user in usersList of the MapsActivity
+            user = new User(dataSnapshot.getKey(), username, picture, description, lon, lat, sexe);
             if(ListeUsers.getInstance().findUser(username) == null) {
-                User user = new User(dataSnapshot.getKey(), username, picture, description, lon, lat, sexe);
                 ListeUsers.getInstance().addUser(user);
             }
         }
+        return user;
     }
 
     public void destroy() {
