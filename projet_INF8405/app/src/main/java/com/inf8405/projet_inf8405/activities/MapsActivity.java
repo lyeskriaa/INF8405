@@ -6,6 +6,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -36,11 +40,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, SensorEventListener  {
 
     private GoogleMap mMap;
     private FirebaseAuth firebaseAuth;
     public static MapsActivity mapsActivity = null ;
+    private SensorManager mSensorManager;
+    private Sensor mPressure;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +65,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        mPressure = mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
+
 
     }
 
@@ -102,6 +113,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //if path?
         //showPath();
     }
+
+    @Override
+    public final void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // Do nothing
+    }
+
+    @Override
+    public final void onSensorChanged(SensorEvent event) {
+        float millibars_of_pressure = event.values[0];
+        // Do something with this sensor data.
+    }
+
 
     // from http://wptrafficanalyzer.in/blog/drawing-driving-route-directions-between-two-locations-using-google-directions-in-google-map-android-api-v2/
     public void showPath(LatLng origin,LatLng dest){
