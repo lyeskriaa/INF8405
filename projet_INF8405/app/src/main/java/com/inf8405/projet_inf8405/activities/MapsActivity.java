@@ -26,6 +26,7 @@ import com.inf8405.projet_inf8405.model.ListeUsers;
 import com.inf8405.projet_inf8405.model.User;
 import com.inf8405.projet_inf8405.utils.DirectionsJSONParser;
 import com.inf8405.projet_inf8405.utils.InfoWindowOnClickListener;
+import com.inf8405.projet_inf8405.utils.Path;
 import com.inf8405.projet_inf8405.utils.UserInfoWindow;
 
 import org.json.JSONObject;
@@ -109,9 +110,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         }
-        showPath(new LatLng(45.5,-73.7), new LatLng(45.5,-73.76));
-        //if path?
-        //showPath();
+        if (Path.isSet()) {
+            showPath(Path.getStart(), Path.getDest());
+        }
     }
 
     @Override
