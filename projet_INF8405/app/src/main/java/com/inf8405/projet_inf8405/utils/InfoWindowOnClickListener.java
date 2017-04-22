@@ -1,9 +1,12 @@
 package com.inf8405.projet_inf8405.utils;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
+import com.inf8405.projet_inf8405.activities.ChatRoomActivity;
+import com.inf8405.projet_inf8405.fireBaseHelper.UserDBHelper;
 import com.inf8405.projet_inf8405.model.ListeUsers;
 import com.inf8405.projet_inf8405.model.User;
 
@@ -17,10 +20,14 @@ public class InfoWindowOnClickListener implements GoogleMap.OnInfoWindowClickLis
         this.context = context;
     }
     public void onInfoWindowClick(Marker marker) {
-        User interlocuteur = ListeUsers.getInstance().findUser(marker.getTitle());
+        User interlocuteur = ListeUsers.getInstance().findUserById(marker.getTitle());
+        if (interlocuteur.equals(UserDBHelper.getInstance().getCurrentUser())){
+            return;
+        }
 
-        //find user
-        // if current user return and do nothing
-        // else start conversation
+        Intent intent = new Intent(context, ChatRoomActivity.class);
+        intent.putExtra("user_id", interlocuteur.getId());
+        intent.putExtra("user_name", interlocuteur.getUsername());
+        context.startActivity(intent);
     }
 }

@@ -29,7 +29,7 @@ public class ChatRoomActivity extends AppCompatActivity{
     private EditText input_msg;
     private TextView chat_conversation;
 
-    private String user_name,room_name;
+    private String user_name,user_id;
     private DatabaseReference root;
     private String temp_key;
 
@@ -44,10 +44,10 @@ public class ChatRoomActivity extends AppCompatActivity{
         chat_conversation = (TextView) findViewById(R.id.textView);
 
         user_name = getIntent().getExtras().get("user_name").toString();
-        room_name = getIntent().getExtras().get("room_name").toString();
-        setTitle("Room - "+room_name);
+        user_id = getIntent().getExtras().get("user_id").toString();
+        setTitle(user_name);
 
-        root = FirebaseDatabase.getInstance().getReference().child(room_name);
+        root = FirebaseDatabase.getInstance().getReference().child(user_id);
 
         btn_send_msg.setOnClickListener(new View.OnClickListener() {
             @Override

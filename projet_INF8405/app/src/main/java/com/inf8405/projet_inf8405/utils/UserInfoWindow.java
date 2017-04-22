@@ -36,7 +36,7 @@ public class UserInfoWindow implements GoogleMap.InfoWindowAdapter {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         View myContentsView = inflater.inflate(R.layout.marker_user, null);
 
-        User user = ListeUsers.getInstance().findUser(marker.getTitle());
+        User user = ListeUsers.getInstance().findUserById(marker.getTitle());
 
         TextView txt = ((TextView)myContentsView.findViewById(R.id.user_name));
         txt.setText(user.getUsername());
