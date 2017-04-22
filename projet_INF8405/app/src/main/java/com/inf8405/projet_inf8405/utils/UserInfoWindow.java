@@ -56,7 +56,7 @@ public class UserInfoWindow implements GoogleMap.InfoWindowAdapter {
         TextView txt4 = ((TextView)myContentsView.findViewById(R.id.user_temperature));
         txt4.setText("temperature: " + user.getTemperature());
 
-         if (UserDBHelper.getInstance().getCurrentUser().getUsername().equals(marker.getTitle())) {
+         if (marker.getTitle().equals(UserDBHelper.getInstance().getCurrentUser().getUsername())) {
              View b = myContentsView.findViewById(R.id.user_chat_button);
              b.setVisibility(View.GONE);
          }
