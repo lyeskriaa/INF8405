@@ -21,11 +21,11 @@ public class ListeChatsCurrentUser {
 
     }
 
-    public List<Chat> getUserList() {
+    public List<Chat> getChatList() {
         return chatList;
     }
 
-    public void setUserList(List<Chat> chats) {
+    public void setChatList(List<Chat> chats) {
         chatList = chats;
     }
 
