@@ -21,6 +21,7 @@ import com.inf8405.projet_inf8405.fireBaseHelper.UserDBHelper;
 import com.inf8405.projet_inf8405.model.ListeUsers;
 import com.inf8405.projet_inf8405.model.User;
 import com.inf8405.projet_inf8405.utils.DirectionsJSONParser;
+import com.inf8405.projet_inf8405.utils.InfoWindowOnClickListener;
 import com.inf8405.projet_inf8405.utils.UserInfoWindow;
 
 import org.json.JSONObject;
@@ -75,6 +76,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         mMap.setInfoWindowAdapter(new UserInfoWindow(this));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(45.5, -73.6), 12.0f));
+        mMap.setOnInfoWindowClickListener(new InfoWindowOnClickListener(this));
         refresh();
     }
 
@@ -94,11 +96,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
 
                 }
-                //else if (coversation)
-                //    marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                //}
             }
         }
+        showPath(new LatLng(45.5,-73.7), new LatLng(45.5,-73.76));
         //if path?
         //showPath();
     }
@@ -251,7 +251,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 // Adding all the points in the route to LineOptions
                 lineOptions.addAll(points);
-                lineOptions.width(2);
+                lineOptions.width(5);
                 lineOptions.color(Color.RED);
             }
 
