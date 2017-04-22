@@ -1,191 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.inf8405.projet_inf8405.activities.ChatActivity">
+    tools:context="com.inf8405.projet_inf8405.activities.ChatRoomActivity">
 
-    <ScrollView android:id="@+id/scrollView1"
-        android:layout_height="fill_parent"
-        android:layout_width="fill_parent"
-        android:weightSum="1">
-        <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
-            <TextView
-                android:id="@+id/history14"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12dp"
-                android:textStyle="bold"
-                android:text="history14"
-                android:layout_alignBottom="@+id/history13"
-                android:layout_margin ="5dp"/>
-            <TextView
-                android:id="@+id/history13"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12dp"
-                android:textStyle="bold"
-                android:text="history13"
-                android:layout_alignBottom="@+id/history12"
-                android:layout_margin ="5dp"/>
-            <TextView
-                android:id="@+id/history12"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12dp"
-                android:textStyle="bold"
-                android:text="history12"
-                android:layout_alignBottom="@+id/history11"
-                android:layout_margin ="5dp"/>
-            <TextView
-                android:id="@+id/history11"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12dp"
-                android:textStyle="bold"
-                android:text="history11"
-                android:layout_alignBottom="@+id/history10"
-                android:layout_margin ="5dp"/>
-            <TextView
-                android:id="@+id/history10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12dp"
-                android:textStyle="bold"
-                android:text="history10"
-                android:layout_alignBottom="@+id/history9"
-                android:layout_margin ="5dp"/>
-            <TextView
-                android:id="@+id/history9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12dp"
-                android:textStyle="bold"
-                android:text="history9"
-                android:layout_alignBottom="@+id/history8"
-                android:layout_margin ="5dp"/>
-            <TextView
-                android:id="@+id/history8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12dp"
-                android:textStyle="bold"
-                android:text="history8"
-                android:layout_alignBottom="@+id/history7"
-                android:layout_margin ="5dp"/>
-            <TextView
-                android:id="@+id/history7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12dp"
-                android:textStyle="bold"
-                android:text="history7"
-                android:layout_alignBottom="@+id/history6"
-                android:layout_margin ="5dp"/>
-            <TextView
-                android:id="@+id/history6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12dp"
-                android:textStyle="bold"
-                android:text="history6"
-                android:layout_alignBottom="@+id/history5"
-                android:layout_margin ="5dp"/>
-            <TextView
-                android:id="@+id/history5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12dp"
-                android:textStyle="bold"
-                android:text="history5"
-                android:layout_alignBottom="@+id/history4"
-                android:layout_margin ="5dp"/>
-            <TextView
-                android:id="@+id/history4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12dp"
-                android:textStyle="bold"
-                android:text="history4"
-                android:layout_alignBottom="@+id/history3"
-                android:layout_margin ="5dp"/>
-            <TextView
-                android:id="@+id/history3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12dp"
-                android:textStyle="bold"
-                android:text="history3"
-                android:layout_alignBottom="@+id/history2"
-                android:layout_margin ="5dp"/>
-            <TextView
-                android:id="@+id/history2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12dp"
-                android:textStyle="bold"
-                android:text="history2"
-                android:layout_alignBottom="@+id/history1"
-                android:layout_margin ="5dp"/>
-            <TextView
-                android:id="@+id/history1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12dp"
-                android:textStyle="bold"
-                android:text="history1"
-                android:layout_alignBottom="@+id/history0"
-                android:layout_margin ="5dp"/>
-            <TextView
-                android:id="@+id/history0"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12dp"
-                android:textStyle="bold"
-                android:text="history0"
-                android:layout_margin ="5dp"/>
 
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/scrollView2"
+                android:layout_below="@+id/linearLayout"
+                android:layout_alignParentStart="true">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="20dp"
+                    android:textSize="20sp" />
+            </ScrollView>
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <Button
-                    android:text="Envoyer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/send_message"
+                android:layout_height="wrap_content"
+                android:id="@+id/linearLayout">
 
-                    android:layout_centerHorizontal="true" />
 
-                <Button
-                    android:id="@+id/auto_message"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignRight="@+id/send_message"
-                    android:layout_centerHorizontal="true"
 
-                    android:text= "Sugestions" />
             </LinearLayout>
 
 
-            <EditText
-                android:inputType="textMultiLine"
-                android:lines="3"
-                android:minLines="1"
-                android:gravity="top|left"
-                android:maxLines="5"
-                android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:scrollbars="vertical"
-                android:id="@+id/message"
-                android:layout_alignTop="@+id/send_message"
-                android:layout_alignParentBottom="true" />
-        </LinearLayout>
-    </ScrollView>
 
-</android.support.constraint.ConstraintLayout>
+    <LinearLayout
+        android:id="@+id/bottom_control_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <EditText
+            android:inputType="textMultiLine"
+            android:lines="3"
+            android:minLines="1"
+            android:gravity="top|left"
+            android:maxLines="5"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:scrollbars="vertical"
+            android:id="@+id/msg_input"
+            android:layout_alignParentBottom="true" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/scrollView2"
+        >
+
+        <Button
+            android:id="@+id/btn_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Envoyer"
+            android:layout_marginStart="39dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:id="@+id/auto_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sugestions"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:id="@+id/find_interlocuteur"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trouver"
+            android:layout_marginStart="13dp"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/auto_message" />
+    </RelativeLayout>
+
+
+</RelativeLayout>

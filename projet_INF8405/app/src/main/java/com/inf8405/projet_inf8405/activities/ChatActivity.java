@@ -1,18 +1,18 @@
 package com.inf8405.projet_inf8405.activities;
 
-import java.util.List;
-import java.util.ArrayList;
-
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.view.View;
 
 import com.inf8405.projet_inf8405.R;
 import com.inf8405.projet_inf8405.model.User;
 import com.inf8405.projet_inf8405.utils.ChatUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -43,7 +43,7 @@ public class ChatActivity extends AppCompatActivity {
         Button automessage = (Button) findViewById(R.id.auto_message);
         automessage.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                EditText mEdit   = (EditText)findViewById(R.id.message);
+                EditText mEdit   = (EditText)findViewById(R.id.msg_input);
                 mEdit.setText(ChatUtils.randomMessage(null, null));
             }
         });
@@ -51,7 +51,7 @@ public class ChatActivity extends AppCompatActivity {
         Button sendMessage = (Button) findViewById(R.id.send_message);
         sendMessage.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                EditText mEdit   = (EditText)findViewById(R.id.message);
+                EditText mEdit   = (EditText)findViewById(R.id.msg_input);
                 String message = mEdit.getText().toString();
                 // TODO send message to database
             }

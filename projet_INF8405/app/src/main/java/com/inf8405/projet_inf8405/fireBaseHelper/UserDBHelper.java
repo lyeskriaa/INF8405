@@ -110,7 +110,7 @@ public class UserDBHelper {
             String sexe          = dataSnapshot.child("sexe").getValue() != null ? dataSnapshot.child("sexe").getValue().toString() : null;
 
             // put the user in usersList of the MapsActivity
-            user = new User(dataSnapshot.getKey(), username, picture, description, lon, lat, sexe);
+            user = new User(dataSnapshot.getKey(), username, description, picture, lon, lat, sexe);
             ListeUsers.getInstance().addUser(user);
         }
 
