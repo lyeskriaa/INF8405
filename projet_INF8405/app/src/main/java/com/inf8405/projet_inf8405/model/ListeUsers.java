@@ -44,7 +44,7 @@ public class ListeUsers {
 
     public void addUser(User newUser) {
         if (userList == null)userList = new ArrayList<User>();
-        if (newUser != null && findUser(newUser.getUsername()) == null) {
+        if (newUser != null && findUserById(newUser.getId()) == null) {
             userList.add(newUser);
         }
     }

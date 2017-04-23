@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.inf8405.projet_inf8405.R;
+import com.inf8405.projet_inf8405.fireBaseHelper.ChatDBHelper;
 import com.inf8405.projet_inf8405.fireBaseHelper.UserDBHelper;
 import com.inf8405.projet_inf8405.model.User;
 import com.inf8405.projet_inf8405.utils.Enum;
@@ -98,21 +99,24 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                     Toast.makeText(MainActivity.this,"Connexion réussie ! ",Toast.LENGTH_SHORT).show();
                     final String userID = firebaseAuth.getCurrentUser().getUid().toString();
 
-                    final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Enum.USERS.toString());
-                    Query query = reference.getRef();
+                    final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Enum.USERS.toString());//.push().getRef();
+                    final Query query = reference.getParent().getRef();
                     query.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot snapshot) {
                             Log.e("MAIN ACTIVITY ", " DATA CHANGE: " + snapshot.getKey());
 
-                            if (snapshot.hasChildren()) {
+                            if (snapshot.child(Enum.USERS.toString()).hasChildren()) {
                                 Log.e("HAS CHILDREN ", " DATA CHANGE: " + snapshot.getKey());
-                                for (DataSnapshot child : snapshot.getChildren()) {
+                                for (DataSnapshot child : snapshot.child(Enum.USERS.toString()).getChildren()) {
                                     Log.e("MAIN ACTIVITY ", " child : " + child.getKey());
                                     User user = UserDBHelper.getInstance().readData(child);
                                     if(user.getUsername() != null && user.getId().equals(userID)) {
                                         UserDBHelper.getInstance().setCurrentUser(user);
                                     }
+                                }
+                                for (DataSnapshot chat : snapshot.child(Enum.CHATS.toString()).getChildren()) {
+                                    ChatDBHelper.getInstance().readData(chat);
                                 }
                                 if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();
                             }

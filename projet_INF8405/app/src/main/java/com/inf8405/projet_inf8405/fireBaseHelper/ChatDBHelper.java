@@ -91,9 +91,7 @@ public class ChatDBHelper {
         chatToAdd.put("user1", chat.getIdFirstUser());
         chatToAdd.put("user2", chat.getIdSecondUser());
 
-        String id = chatsRef.child(Enum.CHATS.toString()).push().getKey();
-        chat.setId(id);
-        chatsRef.child(Enum.CHATS.toString()).child(id).setValue(chatToAdd);
+        chatsRef.child(chat.getId()).setValue(chatToAdd);
 
     }
 
@@ -101,7 +99,7 @@ public class ChatDBHelper {
         HashMap<String,String> messageToAdd = new HashMap<String, String>();
         messageToAdd.put("message", message);
         messageToAdd.put("user", username);
-        chatsRef.child(Enum.CHATS.toString()).child(idChat).child("history").push().setValue(messageToAdd);
+        chatsRef.child(idChat).child("history").push().setValue(messageToAdd);
     }
 
     public void readData(DataSnapshot dataSnapshot) {
@@ -111,7 +109,7 @@ public class ChatDBHelper {
             String user1         = dataSnapshot.child("user1").getValue() != null ? dataSnapshot.child("user1").getValue().toString() : null;
             String user2         = dataSnapshot.child("user2").getValue() != null ? dataSnapshot.child("user2").getValue().toString() : null;
 
-            if(UserDBHelper.getInstance().getCurrentUser().getUsername().equals(user1) || UserDBHelper.getInstance().getCurrentUser().getUsername().equals(user2)) {
+            if(UserDBHelper.getInstance().getCurrentUser().getId().equals(user1) || UserDBHelper.getInstance().getCurrentUser().getId().equals(user2)) {
                 List<Message> history = new ArrayList<Message>();
                 if (dataSnapshot.child("history").hasChildren()) {
                     for (DataSnapshot messageNode : dataSnapshot.child("history").getChildren()) {
