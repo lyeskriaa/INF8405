@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.inf8405.projet_inf8405.fireBaseHelper.UserDBHelper;
+
 /**
  * Created by LyesKriaa on 17-04-22.
  * service de update de la localisation en background (meme si lapplication est ferme)
@@ -36,15 +38,15 @@ public class LocationService extends Service {
         {
             Log.e(TAG, "onLocationChanged: " + location);
             mLastLocation.set(location);
-            // facon debile mais rapide dsl
-//            if(ProfileDao.getInstance().getUsersRef() != null) {
-//                String refLastWord = ProfileDao.getInstance().getUsersRef().toString().substring(ProfileDao.getInstance().getUsersRef().toString().length() - 6);
-//                if(refLastWord!= null && !refLastWord.equals(Enum.GROUPS.toString())) {
-//                    //   Log.e(TAG, "NOT EQUALS: " + refLastWord);
-//                    ProfileDao.getInstance().updateUserLocation(location, refLastWord);
-//                }
-//            }
-            // ptt update aussi directement l objet user en local
+
+            if(UserDBHelper.getInstance().getUsersRef() != null) {
+
+                if(UserDBHelper.getInstance().getCurrentUser() != null) {
+                       Log.e(TAG, "update LOCATION : " + location);
+                    UserDBHelper.getInstance().updateUserLocation(location, UserDBHelper.getInstance().getCurrentUser().getId());
+                }
+            }
+
         }
 
         @Override
@@ -105,7 +107,7 @@ public class LocationService extends Service {
     @Override
     public void onCreate()
     {
-        //Log.e(TAG, "onCreate");
+        Log.e(TAG, "onCreate");
         com.inf8405.projet_inf8405.services.NetworkStatusService.LOCATION_SERVICE_STARTED = true;
         initializeLocationManager();
         initConditionUpdateLocation();

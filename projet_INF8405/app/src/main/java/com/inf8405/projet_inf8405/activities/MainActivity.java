@@ -104,10 +104,10 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                     query.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot snapshot) {
-                            Log.e("MAIN ACTIVITY ", " DATA CHANGE: " + snapshot.getKey());
+                            //Log.e("MAIN ACTIVITY ", " DATA CHANGE: " + snapshot.getKey());
 
                             if (snapshot.child(Enum.USERS.toString()).hasChildren()) {
-                                Log.e("HAS CHILDREN ", " DATA CHANGE: " + snapshot.getKey());
+                               // Log.e("HAS CHILDREN ", " DATA CHANGE: " + snapshot.getKey());
                                 for (DataSnapshot child : snapshot.child(Enum.USERS.toString()).getChildren()) {
                                     Log.e("MAIN ACTIVITY ", " child : " + child.getKey());
                                     User user = UserDBHelper.getInstance().readData(child);

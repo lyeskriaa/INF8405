@@ -1,15 +1,20 @@
 package com.inf8405.projet_inf8405.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,10 +25,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.inf8405.projet_inf8405.R;
 import com.inf8405.projet_inf8405.fireBaseHelper.UserDBHelper;
 import com.inf8405.projet_inf8405.model.ListeUsers;
 import com.inf8405.projet_inf8405.model.User;
+import com.inf8405.projet_inf8405.services.LocationService;
 import com.inf8405.projet_inf8405.utils.DirectionsJSONParser;
 import com.inf8405.projet_inf8405.utils.InfoWindowOnClickListener;
 import com.inf8405.projet_inf8405.utils.Path;
@@ -85,18 +92,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        Button clickButton = (Button) findViewById(R.id.refresh);
+        clickButton.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MapsActivity.this.refresh();
+            }
+        });
+        FloatingActionButton preferencesButton = (FloatingActionButton) findViewById(R.id.preferencesBtn);
+        preferencesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MapsActivity.this, PreferencesActivity.class);
+                startActivity(intent);
+            }
+        });
+
         mMap = googleMap;
         mMap.setInfoWindowAdapter(new UserInfoWindow(this));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(45.5, -73.6), 12.0f));
         mMap.setOnInfoWindowClickListener(new InfoWindowOnClickListener(this));
         refresh();
+        FirebaseDatabase.getInstance().getReference("users").push();
     }
 
     public void refresh() {
         mMap.clear();
         //List<User> users = new ArrayList<User>();
         if(!ListeUsers.getInstance().getUserList().isEmpty()) {
-            Log.d("MAAAAAPS !!!!! ", "USERS LIST NOT EMPTY :" + ListeUsers.getInstance().getUserList().size());
+            Log.d("MAPS !!!!! ", "USERS LIST NOT EMPTY :" + ListeUsers.getInstance().getUserList().size());
             for (User user : ListeUsers.getInstance().getUserList()) {
                 LatLng userPosition = new LatLng(user.getCoordinate().latitude, user.getCoordinate().longitude);
                 MarkerOptions marker = new MarkerOptions();
@@ -282,5 +306,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             // Drawing polyline in the Google Map for the i-th route
             mMap.addPolyline(lineOptions);
         }
+    }
+
+    // notifier l utilisateur a propos de la batterie
+    public void notifySaveEnergy() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Batterie faible ! Activer mode économie ?");
+        //builder.setMessage("voulez-vous passer en mode économie de batterie ?");
+        builder.setIcon(android.R.drawable.ic_dialog_alert);
+        builder.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                LocationService.setLocationInterval(30);
+            }
+        });
+        builder.setNegativeButton("Non", null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

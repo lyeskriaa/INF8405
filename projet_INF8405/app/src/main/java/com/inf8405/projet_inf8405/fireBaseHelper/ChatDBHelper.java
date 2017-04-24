@@ -10,7 +10,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.inf8405.projet_inf8405.model.Chat;
 import com.inf8405.projet_inf8405.model.ListeChatsCurrentUser;
 import com.inf8405.projet_inf8405.model.Message;
-import com.inf8405.projet_inf8405.model.User;
 import com.inf8405.projet_inf8405.utils.Enum;
 
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ import java.util.Map;
 public class ChatDBHelper {
     private final String TAG = "CHAT_DB_HELPER";
     private DatabaseReference chatsRef = null;
-    private User currentUser;
+    private Chat currentChat;
     private static ChatDBHelper INSTANCE = null;
     private ChildEventListener childEventListener = null;
 
@@ -68,19 +67,19 @@ public class ChatDBHelper {
         return INSTANCE;
     }
 
-    public User getCurrentUser() {
-        return currentUser;
+    public Chat getCurrentChat() {
+        return currentChat;
     }
 
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
+    public void setCurrentChat(Chat currentChat) {
+        this.currentChat = currentChat;
     }
 
     public DatabaseReference getchatsRef() {
         return chatsRef;
     }
 
-    public void setUserProfileRef(String chat) {
+    public void setChatRef(String chat) {
         chatsRef = FirebaseDatabase.getInstance().getReference();
         Log.e(TAG, "refChat set to : " + chatsRef.child(chat).getRef());
     }
@@ -95,11 +94,13 @@ public class ChatDBHelper {
 
     }
 
-    public void addMessage(String idChat, String username, String message) {
+    public String addMessage(String idChat, String username, String message) {
         HashMap<String,String> messageToAdd = new HashMap<String, String>();
         messageToAdd.put("message", message);
         messageToAdd.put("user", username);
-        chatsRef.child(idChat).child("history").push().setValue(messageToAdd);
+        String msgId = chatsRef.child(idChat).child("history").push().getKey();
+        chatsRef.child(idChat).child("history").child(msgId).setValue(messageToAdd);
+        return msgId;
     }
 
     public void readData(DataSnapshot dataSnapshot) {
@@ -124,7 +125,7 @@ public class ChatDBHelper {
     }
 
     public void destroy() {
-        currentUser = null;
+        currentChat = null;
         chatsRef = null;
         INSTANCE = null;
     }

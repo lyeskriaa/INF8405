@@ -33,7 +33,7 @@ public class UserDBHelper {
         usersRef.child(Enum.USERS.toString()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
+                Log.e(TAG, "onChildAdded:" + dataSnapshot.getKey());
                 for (DataSnapshot user : dataSnapshot.getChildren()) {
                     readData(user);
                 }
@@ -79,11 +79,11 @@ public class UserDBHelper {
     }
 
     public void setUserProfileRef(String user) {
-        usersRef = FirebaseDatabase.getInstance().getReference();
-        Log.e(TAG, "refUser set to : " + usersRef.child(user).getRef());
+        usersRef = FirebaseDatabase.getInstance().getReference().child(Enum.USERS.toString()).getRef();
+        Log.e(TAG, "refUser set to : " + usersRef.getRef());
     }
 
-    public void updateUserLocation(Location location, String userName) {
+    public void updateUserLocation(Location location, String userId) {
         usersRef.child("coordinate").child("latitude").setValue(location.getLatitude());
         usersRef.child("coordinate").child("longitude").setValue(location.getLongitude());
     }
@@ -96,7 +96,7 @@ public class UserDBHelper {
         userToAdd.put("description", user.getDescription());
         userToAdd.put("sexe", user.getSexe());
 
-        usersRef.child(Enum.USERS.toString()).child(user.getId()).setValue(userToAdd);
+        usersRef.setValue(userToAdd);
     }
 
     public User readData(DataSnapshot dataSnapshot) {

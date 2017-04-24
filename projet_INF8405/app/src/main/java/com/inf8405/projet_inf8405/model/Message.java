@@ -6,17 +6,17 @@ package com.inf8405.projet_inf8405.model;
 
 public class Message {
     String id;
-    String userName;
+    String user;
     String message;
 
-    public Message(String id, String userName, String message) {
+    public Message(String id, String user, String message) {
         this.id = id;
-        this.userName = userName;
+        this.user = user;
         this.message = message;
     }
 
-    public Message(String userName, String message) {
-        this.userName = userName;
+    public Message(String user, String message) {
+        this.user = user;
         this.message = message;
     }
 
@@ -28,12 +28,12 @@ public class Message {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUser() {
+        return user;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUser(String user) {
+        this.user = user;
     }
 
     public String getMessage() {

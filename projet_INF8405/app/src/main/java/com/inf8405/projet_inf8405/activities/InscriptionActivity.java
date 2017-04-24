@@ -67,6 +67,7 @@ public class InscriptionActivity extends AppCompatActivity implements View.OnCli
     private LocationManager mLocationManager = null;
     boolean gps_enabled, network_enabled = false;
     private Location lastLocation;
+    private static final String TAG = "INSCRIPTION ACTIVITY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,8 +191,8 @@ public class InscriptionActivity extends AppCompatActivity implements View.OnCli
                                 String desc = description.getText().toString().trim();
                                 String imageURI = encodeBitmap(capturedImage);
                                 User user = new User(userId,userName.getText().toString().trim(), desc, imageURI, lastLocation.getLongitude(), lastLocation.getLatitude(), itemSpinner);
-                                UserDBHelper.getInstance().setUserProfileRef(userName.getText().toString());
                                 UserDBHelper.getInstance().setCurrentUser(user);
+                                UserDBHelper.getInstance().setUserProfileRef(userId);
                                 UserDBHelper.getInstance().addUserChild(user);
 
                                 Toast.makeText(InscriptionActivity.this, "Céation du profile avec succès !", Toast.LENGTH_SHORT).show();
@@ -254,7 +255,7 @@ public class InscriptionActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Log.e(MainActivity.class.getSimpleName(), "Connected to Google Play Services!");
+        Log.e(TAG, "Connected to Google Play Services!");
         initialiserLocationManager();
     }
 
@@ -281,13 +282,13 @@ public class InscriptionActivity extends AppCompatActivity implements View.OnCli
             try {
                 gps_enabled = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
             } catch (Exception ex) {
-                Log.e("MAIN ACTIVITY", "fail to request location via GPS", ex);
+                Log.e(TAG, "fail to request location via GPS", ex);
             }
 
             try {
                 network_enabled = mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
             } catch (Exception ex) {
-                Log.e("MAIN ACTIVITY", "fail to request location via NETWORK", ex);
+                Log.e(TAG, "fail to request location via NETWORK", ex);
             }
 
             if (!gps_enabled && !network_enabled) {
@@ -295,7 +296,7 @@ public class InscriptionActivity extends AppCompatActivity implements View.OnCli
             }
 
             lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-            Log.e(MainActivity.class.getSimpleName(), "Connected to Google Play Services!"+lastLocation);
+            Log.e(TAG, "Connected to Google Play Services!"+lastLocation);
         }
     }
 

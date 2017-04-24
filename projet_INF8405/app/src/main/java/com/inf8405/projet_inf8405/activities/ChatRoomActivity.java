@@ -21,6 +21,7 @@ import com.inf8405.projet_inf8405.R;
 import com.inf8405.projet_inf8405.fireBaseHelper.ChatDBHelper;
 import com.inf8405.projet_inf8405.fireBaseHelper.UserDBHelper;
 import com.inf8405.projet_inf8405.model.Chat;
+import com.inf8405.projet_inf8405.model.ListeChatsCurrentUser;
 import com.inf8405.projet_inf8405.model.ListeUsers;
 import com.inf8405.projet_inf8405.model.Message;
 import com.inf8405.projet_inf8405.model.User;
@@ -53,7 +54,9 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
     private User currentUser;
     private ScrollView scrollView;
     private boolean conversation_exists = false;
-
+    protected Query query;
+    List<Message> listHistory = new ArrayList<Message>();
+    List<String> listMessagesID = new ArrayList<String>();
 
 
     @Override
@@ -74,83 +77,62 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
         setTitle(user_name);
         currentUser = UserDBHelper.getInstance().getCurrentUser();
 
+        verifierConversation();
+
         btn_send_msg.setOnClickListener(this);
         automessage.setOnClickListener(this);
         find.setOnClickListener(this);
-
-        verifierConversation();
-
-
 
     }
 
 
     private void verifierConversation() {
 
-        Query query = FirebaseDatabase.getInstance().getReference().child(Enum.CHATS.toString());
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        query = FirebaseDatabase.getInstance().getReference().child(Enum.CHATS.toString()).getRef();
+        ValueEventListener listen = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-//                Log.e("CHAT ACTIVITY ", " DATA CHANGE: " + snapshot.getKey());
+                Log.e("CHAT ACTIVITY ", " DATA CHANGE: " + snapshot.getKey());
                 if (snapshot.hasChildren()) {
-//                    Log.e("HAS CHILDREN ", " DATA CHANGE: " + snapshot.getKey());
+                    Log.e("HAS CHILDREN ", " DATA CHANGE: " + snapshot.getKey());
                     for (DataSnapshot child : snapshot.getChildren()) {
-//                        Log.e("CHAT ACTIVITY ", " child : " + child.getKey());
+                        Log.e("CHAT ACTIVITY verification ", " child : " + child.getKey()+ " UID : "+user_id);
                         if(child.child("user1").getValue().toString().equals(user_id) && child.child("user2").getValue().toString().equals(currentUser.getId())
                                 || child.child("user1").getValue().toString().equals(currentUser.getId()) && child.child("user2").getValue().toString().equals(user_id)) {
 
                             chatID = child.getKey();
-                            //fillConversationHistory(ListeChatsCurrentUser.getInstance().findChat(chatID).getMessagesHistory());
+                            Log.e("CHAT ACTIVITY ", " exist chatID : " + child.getKey());
+                            fillConversationHistory(ListeChatsCurrentUser.getInstance().findChat(chatID).getMessagesHistory());
+                            listHistory = ListeChatsCurrentUser.getInstance().findChat(chatID).getMessagesHistory();
+                            for (Message message : listHistory) {
+                                listMessagesID.add(message.getId());
+                            }
+                            scrollView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    scrollView.fullScroll(View.FOCUS_DOWN);
+                                }
+                            });
                             conversation_exists = true;
-
+                            return;
                         }
                     }
-                    if (chatID == null) {
-                        chatID = FirebaseDatabase.getInstance().getReference().child(Enum.CHATS.toString()).push().getKey();
-                    }
-                    root =  FirebaseDatabase.getInstance().getReference().child(Enum.CHATS.toString()).child(chatID).child("history");
-                    Log.e("CHAT ACTIVITY ", " root : " + chatID);
-                    root.addChildEventListener(new ChildEventListener() {
-                        @Override
-                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                            Log.e("CHAT ACTIVITY ", " child : " + dataSnapshot.getKey() +s);
-                            appendChatConversation(dataSnapshot);
-                        }
-
-                        @Override
-                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                            appendChatConversation(dataSnapshot);
-                        }
-
-                        @Override
-                        public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                        }
-
-                        @Override
-                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
                 }
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 // nothing here
             }
-        });
+
+        };
+        query.addListenerForSingleValueEvent(listen);
+        query.removeEventListener(listen);
+
     }
 
     private void fillConversationHistory(List<Message> messagesHistory) {
         for(Message message : messagesHistory) {
-
-            chat_conversation.append(message.getUserName()+" : \n"+message.getMessage()+ "\n");
-
+            chat_conversation.append(message.getUser()+" : \n"+message.getMessage()+ "\n");
         }
     }
 
@@ -168,7 +150,7 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
                     scrollView.fullScroll(View.FOCUS_DOWN);
                 }
             });
-
+            listMessagesID.add(dataSnapshot.getKey());
         }
     }
 
@@ -176,18 +158,51 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         if (v == btn_send_msg) {
             if(conversation_exists) {
-                ChatDBHelper.getInstance().addMessage(chatID, currentUser.getUsername(), input_msg.getText().toString());
+                String msgId = ChatDBHelper.getInstance().addMessage(chatID, currentUser.getUsername(), input_msg.getText().toString());
+                listHistory.add(new Message(msgId, currentUser.getUsername(), input_msg.getText().toString()));
             }
             else {
                 String message = input_msg.getText().toString();
                 Message msg = new Message(currentUser.getUsername(), message);
-                List listHistory = new ArrayList<Message>();
-                listHistory.add(msg);
 
+                listHistory.add(msg);
+                chatID = FirebaseDatabase.getInstance().getReference().child(Enum.CHATS.toString()).push().getKey();
                 Chat chat = new Chat(chatID, currentUser.getId(), user_id, listHistory);
                 conversation_exists = true;
                 ChatDBHelper.getInstance().addChatChild(chat);
             }
+
+            root =  FirebaseDatabase.getInstance().getReference().child(Enum.CHATS.toString()).child(chatID).child("history");
+            Log.e("CHAT ACTIVITY ", " root : " + chatID);
+            root.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                  //  Log.e("CHAT ACTIVITY ", " child : " + dataSnapshot.getKey() +s);
+                    if(!listMessagesID.contains(dataSnapshot.getKey()))
+                    appendChatConversation(dataSnapshot);
+
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    Log.e("CHAT ACTIVITY ", " child Update: " + dataSnapshot.getKey() +s);
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
 
             input_msg.setText("");
         }
