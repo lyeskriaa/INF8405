@@ -1,15 +1,16 @@
 package com.inf8405.projet_inf8405.activities;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,7 +21,6 @@ import com.inf8405.projet_inf8405.R;
 import com.inf8405.projet_inf8405.fireBaseHelper.ChatDBHelper;
 import com.inf8405.projet_inf8405.fireBaseHelper.UserDBHelper;
 import com.inf8405.projet_inf8405.model.Chat;
-import com.inf8405.projet_inf8405.model.ListeChatsCurrentUser;
 import com.inf8405.projet_inf8405.model.ListeUsers;
 import com.inf8405.projet_inf8405.model.Message;
 import com.inf8405.projet_inf8405.model.User;
@@ -46,11 +46,12 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
 
     private String user_name,user_id;
     private DatabaseReference root;
-    private String chatID;
+    private String chatID = "";
     private String temp_key;
     private String chat_msg;
     private String chat_user_name;
     private User currentUser;
+    private ScrollView scrollView;
     private boolean conversation_exists = false;
 
 
@@ -63,7 +64,7 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
         btn_send_msg = (Button) findViewById(R.id.btn_send);
         automessage = (Button) findViewById(R.id.auto_message);
         find = (Button) findViewById(R.id.find_interlocuteur);
-
+        scrollView = (ScrollView) findViewById(R.id.scrollView2);
         input_msg = (EditText) findViewById(R.id.msg_input);
         chat_conversation = (TextView) findViewById(R.id.textView);
 
@@ -80,36 +81,9 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
         verifierConversation();
 
 
-//        root =  FirebaseDatabase.getInstance().getReference().child(Enum.CHATS.toString());
-//        root.addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                appendChatConversation(dataSnapshot);
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//                appendChatConversation(dataSnapshot);
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
+
     }
+
 
     private void verifierConversation() {
 
@@ -126,12 +100,43 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
                                 || child.child("user1").getValue().toString().equals(currentUser.getId()) && child.child("user2").getValue().toString().equals(user_id)) {
 
                             chatID = child.getKey();
-                            fillConversationOpening(ListeChatsCurrentUser.getInstance().findChat(chatID).getMessagesHistory());
-                           // ChatDBHelper.getInstance().readData(snapshot);
+                            //fillConversationHistory(ListeChatsCurrentUser.getInstance().findChat(chatID).getMessagesHistory());
                             conversation_exists = true;
 
                         }
                     }
+                    if (chatID == null) {
+                        chatID = FirebaseDatabase.getInstance().getReference().child(Enum.CHATS.toString()).push().getKey();
+                    }
+                    root =  FirebaseDatabase.getInstance().getReference().child(Enum.CHATS.toString()).child(chatID).child("history");
+                    Log.e("CHAT ACTIVITY ", " root : " + chatID);
+                    root.addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                            Log.e("CHAT ACTIVITY ", " child : " + dataSnapshot.getKey() +s);
+                            appendChatConversation(dataSnapshot);
+                        }
+
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                            appendChatConversation(dataSnapshot);
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
             }
             @Override
@@ -141,10 +146,11 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
         });
     }
 
-    private void fillConversationOpening(List<Message> messagesHistory) {
+    private void fillConversationHistory(List<Message> messagesHistory) {
         for(Message message : messagesHistory) {
 
-            chat_conversation.append(String.format(message.getUserName(), new StyleSpan(Typeface.BOLD))+" : "+message.getMessage()+ "\n\n");
+            chat_conversation.append(message.getUserName()+" : \n"+message.getMessage()+ "\n");
+
         }
     }
 
@@ -153,9 +159,15 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
         Iterator i = dataSnapshot.getChildren().iterator();
         while (i.hasNext()){
 
-//            chat_msg = (String)  ((DataSnapshot)i.next()).getValue();
-//            chat_user_name = (String)  ((DataSnapshot)i.next()).getValue();
-//            chat_conversation.append(chat_user_name +":"+chat_msg+"\n");
+            chat_msg = (String)  ((DataSnapshot)i.next()).getValue();
+            chat_user_name = (String)  ((DataSnapshot)i.next()).getValue();
+            chat_conversation.append(chat_user_name +" : \n"+chat_msg+"\n");
+            scrollView.post(new Runnable() {
+                @Override
+                public void run() {
+                    scrollView.fullScroll(View.FOCUS_DOWN);
+                }
+            });
 
         }
     }
@@ -171,21 +183,12 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
                 Message msg = new Message(currentUser.getUsername(), message);
                 List listHistory = new ArrayList<Message>();
                 listHistory.add(msg);
-                chatID = FirebaseDatabase.getInstance().getReference().child(Enum.CHATS.toString()).push().getKey();
+
                 Chat chat = new Chat(chatID, currentUser.getId(), user_id, listHistory);
                 conversation_exists = true;
                 ChatDBHelper.getInstance().addChatChild(chat);
             }
-//            Map<String,Object> map = new HashMap<String, Object>();
-//            temp_key = root.push().getKey();
-//            root.updateChildren(map);
-//
-//            DatabaseReference massage_root = root.child(temp_key);
-//            Map< String, Object> map2 = new HashMap<String,Object>();
-//            map2.put("name",user_name);
-//            map2.put("msg",input_msg.getText().toString());
-//
-//            massage_root.updateChildren(map2);
+
             input_msg.setText("");
         }
 

@@ -39,7 +39,7 @@ public class ChatDBHelper {
                 for (DataSnapshot chat : dataSnapshot.getChildren()) {
                     readData(chat);
                 }
-                //if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();
+
             }
 
             @Override
