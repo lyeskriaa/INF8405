@@ -62,7 +62,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        mapsActivity = this;
+
         firebaseAuth = FirebaseAuth.getInstance();
         if(firebaseAuth.getCurrentUser() == null ) {
             finish();
@@ -112,6 +112,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setInfoWindowAdapter(new UserInfoWindow(this));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(45.5, -73.6), 12.0f));
         mMap.setOnInfoWindowClickListener(new InfoWindowOnClickListener(this));
+        mapsActivity = this;
         refresh();
         FirebaseDatabase.getInstance().getReference("users").push();
     }

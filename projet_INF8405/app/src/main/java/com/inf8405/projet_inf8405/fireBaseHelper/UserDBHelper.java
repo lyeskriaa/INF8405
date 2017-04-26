@@ -35,9 +35,9 @@ public class UserDBHelper {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 Log.e(TAG, "onChildAdded:" + dataSnapshot.getKey());
-                for (DataSnapshot user : dataSnapshot.getChildren()) {
-                    readData(user);
-                }
+                //for (DataSnapshot user : dataSnapshot.getChildren()) {
+                    readData(dataSnapshot);
+                //}
                 if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();
             }
 
@@ -85,8 +85,8 @@ public class UserDBHelper {
     }
 
     public void updateUserLocation(Location location, String userId) {
-        usersRef.child("coordinate").child("latitude").setValue(location.getLatitude());
-        usersRef.child("coordinate").child("longitude").setValue(location.getLongitude());
+        usersRef.child(userId).child("coordinate").child("latitude").setValue(location.getLatitude());
+        usersRef.child(userId).child("coordinate").child("longitude").setValue(location.getLongitude());
     }
 
     public void addUserChild(User user) {
@@ -103,12 +103,12 @@ public class UserDBHelper {
     public User readData(DataSnapshot dataSnapshot) {
         User user = new User();
         if(dataSnapshot.hasChildren()) {
-            String username      = dataSnapshot.child("username").getValue() != null ? dataSnapshot.child("username").getValue().toString() : null;
-            String picture       = dataSnapshot.child("pictureURI").getValue() != null ? dataSnapshot.child("pictureURI").getValue().toString() : null;
-            String description   = dataSnapshot.child("description").getValue() != null ? dataSnapshot.child("description").getValue().toString() : null;
-            double lon           = dataSnapshot.child("coordinate").getValue() != null ? Double.valueOf(dataSnapshot.child("coordinate").child("longitude").getValue().toString()) : 0;
-            double lat           = dataSnapshot.child("coordinate").getValue() != null ? Double.valueOf(dataSnapshot.child("coordinate").child("latitude").getValue().toString()) : 0;
-            String sexe          = dataSnapshot.child("sexe").getValue() != null ? dataSnapshot.child("sexe").getValue().toString() : null;
+            String username      = dataSnapshot.child("username").getValue().toString();
+            String picture       = dataSnapshot.child("pictureURI").getValue().toString();
+            String description   = dataSnapshot.child("description").getValue().toString();
+            double lon           = Double.valueOf(dataSnapshot.child("coordinate").child("longitude").getValue().toString());
+            double lat           = Double.valueOf(dataSnapshot.child("coordinate").child("latitude").getValue().toString());
+            String sexe          = dataSnapshot.child("sexe").getValue().toString();
 
             // put the user in usersList of the MapsActivity
             user = new User(dataSnapshot.getKey(), username, description, picture, lon, lat, sexe);

@@ -1,9 +1,13 @@
 package com.inf8405.projet_inf8405.activities;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -26,6 +30,7 @@ import com.inf8405.projet_inf8405.R;
 import com.inf8405.projet_inf8405.fireBaseHelper.ChatDBHelper;
 import com.inf8405.projet_inf8405.fireBaseHelper.UserDBHelper;
 import com.inf8405.projet_inf8405.model.User;
+import com.inf8405.projet_inf8405.services.LocationService;
 import com.inf8405.projet_inf8405.utils.Enum;
 
 //login activity
@@ -37,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
     private EditText mdpLogin;
     private FirebaseAuth firebaseAuth;
     private ProgressDialog progressDialog;
+    private static final int PERMISSION_LOCATION = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +78,12 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         }
 
         if (v == btnConnexion) {
-            connecterUtilisateur();
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // You don't have the permission you need to request it
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_LOCATION);
+            } else {
+                connecterUtilisateur();
+            }
         }
     }
 
@@ -118,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                                 for (DataSnapshot chat : snapshot.child(Enum.CHATS.toString()).getChildren()) {
                                     ChatDBHelper.getInstance().readData(chat);
                                 }
-                                if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();
+                                //if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();
                             }
                         }
                         @Override
@@ -136,5 +147,19 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             }
         });
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_LOCATION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startService(new Intent(this, LocationService.class));
+                connecterUtilisateur();
+            }
+        } else {
+            //on a pas acces a la localisation (probleme)
+            Toast.makeText(this, "Nous avons besoin de votre localisation!", Toast.LENGTH_SHORT).show();
+        }
     }
 }
