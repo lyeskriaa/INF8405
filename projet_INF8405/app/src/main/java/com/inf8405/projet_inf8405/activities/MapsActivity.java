@@ -76,9 +76,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mPressure = mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
+        Log.e("TEMPERATURE", " : "+mPressure);
 
 
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mSensorManager.registerListener(this, mPressure, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mSensorManager.unregisterListener(this);
+    }
+
 
     public static MapsActivity getMapsActivity() {return mapsActivity;}
     /**
@@ -148,6 +161,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public final void onSensorChanged(SensorEvent event) {
         float millibars_of_pressure = event.values[0];
+        Log.e("OnSensorChanged", ": "+millibars_of_pressure);
         // Do something with this sensor data.
     }
 
