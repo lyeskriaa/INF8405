@@ -118,7 +118,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void refresh() {
         mMap.clear();
-        //List<User> users = new ArrayList<User>();
+        Log.d("MAPS !!!!! ", "size :" +ListeUsers.getInstance().getUserList().size());
         if(!ListeUsers.getInstance().getUserList().isEmpty()) {
             Log.d("MAPS !!!!! ", "USERS LIST NOT EMPTY :" + ListeUsers.getInstance().getUserList().size());
             for (User user : ListeUsers.getInstance().getUserList()) {
