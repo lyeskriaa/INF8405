@@ -49,7 +49,7 @@ public class UserDBHelper {
             public void onChildRemoved(DataSnapshot dataSnapshot) {
             }
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
+            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) { 
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
