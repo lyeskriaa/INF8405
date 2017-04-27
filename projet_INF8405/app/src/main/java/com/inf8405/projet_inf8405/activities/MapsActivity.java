@@ -133,9 +133,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void refresh() {
         mMap.clear();
         Log.d("MAPS !!!!! ", "size :" +ListeUsers.getInstance().getUserList().size());
-        if(!ListeUsers.getInstance().getUserList().isEmpty()) {
+        List<User> list = ListeUsers.getInstance().getUserList();
+        if(!list.isEmpty()) {
             Log.d("MAPS !!!!! ", "USERS LIST NOT EMPTY :" + ListeUsers.getInstance().getUserList().size());
-            for (User user : ListeUsers.getInstance().getUserList()) {
+            for (User user : list) {
                 LatLng userPosition = new LatLng(user.getCoordinate().latitude, user.getCoordinate().longitude);
                 MarkerOptions marker = new MarkerOptions();
                 marker.position(userPosition);
