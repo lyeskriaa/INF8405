@@ -57,6 +57,7 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
     protected Query query;
     List<Message> listHistory = new ArrayList<Message>();
     List<String> listMessagesID = new ArrayList<String>();
+    private static ChatRoomActivity chatRoomActivity = null;
 
 
     @Override
@@ -83,8 +84,13 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
         automessage.setOnClickListener(this);
         find.setOnClickListener(this);
 
+        chatRoomActivity= this;
+
     }
 
+    public static ChatRoomActivity getChatRoomActivity() {
+        return chatRoomActivity;
+    }
 
     private void verifierConversation() {
 
@@ -217,6 +223,13 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
             MapsActivity.getMapsActivity().refresh();
             finish();
         }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        chatRoomActivity = null;
+        finish();
     }
 }
 

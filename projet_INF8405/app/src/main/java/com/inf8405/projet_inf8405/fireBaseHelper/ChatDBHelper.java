@@ -7,6 +7,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.inf8405.projet_inf8405.activities.ChatRoomActivity;
+import com.inf8405.projet_inf8405.activities.MapsActivity;
 import com.inf8405.projet_inf8405.model.Chat;
 import com.inf8405.projet_inf8405.model.ListeChatsCurrentUser;
 import com.inf8405.projet_inf8405.model.Message;
@@ -31,13 +33,13 @@ public class ChatDBHelper {
 
     private ChatDBHelper() {
         chatsRef = FirebaseDatabase.getInstance().getReference().child(Enum.CHATS.toString()).getRef();
-        chatsRef.child(Enum.CHATS.toString()).addChildEventListener(new ChildEventListener() {
+        chatsRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
-                for (DataSnapshot chat : dataSnapshot.getChildren()) {
-                    readData(chat);
-                }
+                //for (DataSnapshot chat : dataSnapshot.getChildren()) {
+                    readData(dataSnapshot);
+                //}
 
             }
 
@@ -56,8 +58,9 @@ public class ChatDBHelper {
             public void onCancelled(DatabaseError databaseError) {
                 Log.w(TAG, "postComments:onCancelled", databaseError.toException());
             }
-        });
 
+        });
+        Log.e(TAG, "listener:" + "set: "+ chatsRef);
     }
 
     public static ChatDBHelper getInstance() {
@@ -121,7 +124,9 @@ public class ChatDBHelper {
                 ListeChatsCurrentUser.getInstance().addChat(new Chat(chatId, user1, user2, history));
             }
         }
-
+        if(MapsActivity.getMapsActivity() != null && ChatRoomActivity.getChatRoomActivity() == null) {
+            MapsActivity.getMapsActivity().notifyMsg();
+        }
     }
 
     public void destroy() {

@@ -143,7 +143,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 marker.title(user.getId());
                 marker.snippet(user.getUsername());
                 mMap.addMarker(marker);
-                if (UserDBHelper.getInstance().getCurrentUser().getId().equals(user.getId())) {
+                if (UserDBHelper.getInstance().getCurrentUser() != null &&
+                        UserDBHelper.getInstance().getCurrentUser().getId().equals(user.getId())) {
                     marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
 
                 }
@@ -234,6 +235,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             urlConnection.disconnect();
         }
         return data;
+    }
+
+    public void notifyMsg() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("message recu");
+        //builder.setMessage("voulez-vous passer en mode économie de batterie ?");
+        builder.setIcon(android.R.drawable.ic_dialog_alert);
+        builder.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                LocationService.setLocationInterval(30);
+            }
+        });
+        builder.setNegativeButton("Non", null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     // Fetches data from url passed
