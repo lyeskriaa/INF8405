@@ -102,6 +102,7 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
 
                             chatID = child.getKey();
                             Log.e("CHAT ACTIVITY ", " exist chatID : " + child.getKey());
+                            ChatDBHelper.getInstance().readData(child);
                             fillConversationHistory(ListeChatsCurrentUser.getInstance().findChat(chatID).getMessagesHistory());
                             listHistory = ListeChatsCurrentUser.getInstance().findChat(chatID).getMessagesHistory();
                             for (Message message : listHistory) {
