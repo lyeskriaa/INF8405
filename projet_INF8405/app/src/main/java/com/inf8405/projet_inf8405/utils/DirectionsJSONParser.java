@@ -14,6 +14,8 @@ import org.json.JSONObject;
 
 import com.google.android.gms.maps.model.LatLng;
 
+// adapted from
+// http://wptrafficanalyzer.in/blog/drawing-driving-route-directions-between-two-locations-using-google-directions-in-google-map-android-api-v2/
 public class DirectionsJSONParser {
 
     /** Receives a JSONObject and returns a list of lists containing latitude and longitude */

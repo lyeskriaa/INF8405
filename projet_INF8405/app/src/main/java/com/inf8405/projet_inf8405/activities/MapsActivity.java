@@ -166,7 +166,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    // from http://wptrafficanalyzer.in/blog/drawing-driving-route-directions-between-two-locations-using-google-directions-in-google-map-android-api-v2/
+    // adapted from
+    // http://wptrafficanalyzer.in/blog/drawing-driving-route-directions-between-two-locations-using-google-directions-in-google-map-android-api-v2/
     public void showPath(LatLng origin,LatLng dest){
         // Getting URL to the Google Directions API
         String url = getDirectionsUrl(origin, dest);
