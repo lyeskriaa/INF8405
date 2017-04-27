@@ -21,7 +21,7 @@ public class InfoWindowOnClickListener implements GoogleMap.OnInfoWindowClickLis
     }
     public void onInfoWindowClick(Marker marker) {
         User interlocuteur = ListeUsers.getInstance().findUserById(marker.getTitle());
-        if (interlocuteur.equals(UserDBHelper.getInstance().getCurrentUser())){
+        if (interlocuteur.getId().equals(UserDBHelper.getInstance().getCurrentUser().getId())){
             return;
         }
 
