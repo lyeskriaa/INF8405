@@ -40,7 +40,7 @@ public class LocationService extends Service {
             mLastLocation.set(location);
 
             if(UserDBHelper.getInstance().getUsersRef() != null) {
-
+                Log.e(TAG, "onLocationChanged: userRef not null " + location);
                 if(UserDBHelper.getInstance().getCurrentUser() != null) {
                        Log.e(TAG, "update LOCATION : " + location);
                     UserDBHelper.getInstance().updateUserLocation(location, UserDBHelper.getInstance().getCurrentUser().getId());

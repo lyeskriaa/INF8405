@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                 // You don't have the permission you need to request it
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_LOCATION);
             } else {
+                startService(new Intent(this, LocationService.class));
                 connecterUtilisateur();
             }
         }

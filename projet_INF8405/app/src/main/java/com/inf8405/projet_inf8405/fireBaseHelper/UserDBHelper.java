@@ -9,6 +9,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.inf8405.projet_inf8405.activities.MapsActivity;
+import com.inf8405.projet_inf8405.model.Coordinate;
 import com.inf8405.projet_inf8405.model.ListeUsers;
 import com.inf8405.projet_inf8405.model.User;
 import com.inf8405.projet_inf8405.utils.Enum;
@@ -35,15 +36,21 @@ public class UserDBHelper {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 Log.e(TAG, "onChildAdded:" + dataSnapshot.getKey());
-                //for (DataSnapshot user : dataSnapshot.getChildren()) {
-                    readData(dataSnapshot);
-                //}
+                readData(dataSnapshot);
+
                 if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
                 Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
+                    String id            = dataSnapshot.getKey();
+                    double lon           = Double.valueOf(dataSnapshot.child("coordinate").child("longitude").getValue().toString());
+                    double lat           = Double.valueOf(dataSnapshot.child("coordinate").child("latitude").getValue().toString());
+                    Coordinate location = new Coordinate(lon, lat);
+                    Log.e(TAG, "update LOCATION : " + location.toString());
+                    ListeUsers.getInstance().findUserById(id).setCoordinate(location);
+
                 if(MapsActivity.getMapsActivity() != null ) MapsActivity.getMapsActivity().refresh();
             }
             @Override
