@@ -31,8 +31,10 @@ public class BatteryStatusService extends BroadcastReceiver {
         this.batteryStatus = context.registerReceiver(null, ifilter);
         if(GetCurrentBatteryLevel() <= 16.0 && !notify) {
             //Log.e("BAAAAATTERRYY SLOW", String.valueOf(GetCurrentBatteryLevel()));
-            notify = true;
-            MapsActivity.getMapsActivity().notifySaveEnergy(); // afin de mettre un delai de 30 minutes
+            if(MapsActivity.getMapsActivity() != null) {
+                notify = true;
+                MapsActivity.getMapsActivity().notifySaveEnergy(); // afin de mettre un delai de 30 minutes
+            }
         }
         if(GetCurrentBatteryLevel() > 15.0) {
             //Log.e("BAAAAATTERRYY OK", String.valueOf(GetCurrentBatteryLevel()));

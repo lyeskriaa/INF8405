@@ -113,7 +113,9 @@ public class ChatDBHelper {
             String user1         = dataSnapshot.child("user1").getValue() != null ? dataSnapshot.child("user1").getValue().toString() : null;
             String user2         = dataSnapshot.child("user2").getValue() != null ? dataSnapshot.child("user2").getValue().toString() : null;
 
+            // verifier si le message concerne cet utilisateur
             if(UserDBHelper.getInstance().getCurrentUser().getId().equals(user1) || UserDBHelper.getInstance().getCurrentUser().getId().equals(user2)) {
+
                 List<Message> history = new ArrayList<Message>();
                 if (dataSnapshot.child("history").hasChildren()) {
                     for (DataSnapshot messageNode : dataSnapshot.child("history").getChildren()) {
@@ -122,10 +124,10 @@ public class ChatDBHelper {
                     }
                 }
                 ListeChatsCurrentUser.getInstance().addChat(new Chat(chatId, user1, user2, history));
+                if(MapsActivity.getMapsActivity() != null && ChatRoomActivity.getChatRoomActivity() == null) {
+                    MapsActivity.getMapsActivity().notifyMsg(user1, user2);
+                }
             }
-        }
-        if(MapsActivity.getMapsActivity() != null && ChatRoomActivity.getChatRoomActivity() == null) {
-            MapsActivity.getMapsActivity().notifyMsg();
         }
     }
 

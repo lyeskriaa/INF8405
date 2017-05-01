@@ -7,6 +7,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -237,15 +238,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return data;
     }
 
-    public void notifyMsg() {
+    // notification de l'utilisateur en proposant de repondre au message recu
+    public void notifyMsg(String user1, String user2) {
+        final String senderId = UserDBHelper.getInstance().getCurrentUser().getId().equals(user1) ? user2 : user1;
+        final String senderName = ListeUsers.getInstance().findUserById(senderId).getUsername();
+        MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.son);
+        mp.start();
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("message recu");
-        //builder.setMessage("voulez-vous passer en mode économie de batterie ?");
-        builder.setIcon(android.R.drawable.ic_dialog_alert);
+        builder.setMessage("voulez-vous répondre à "+ senderName +"?");
+        builder.setIcon(android.R.drawable.ic_dialog_email);
         builder.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                LocationService.setLocationInterval(30);
+                Intent intent = new Intent(MapsActivity.this, ChatRoomActivity.class);
+                intent.putExtra("user_id", senderId);
+                intent.putExtra("user_name", senderName);
+                startActivity(intent);
             }
         });
         builder.setNegativeButton("Non", null);
